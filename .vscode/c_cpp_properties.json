@@ -1,0 +1,41 @@
+{
+  "configurations": [
+      {
+          "name": "default",
+          "includePath": [
+              "${workspaceFolder}/**"
+          ],
+          "defines": [],
+          "compilerPath": "/usr/bin/gcc",
+          "cStandard": "c11",
+          "cppStandard": "c++17",
+          "intelliSenseMode": "clang-x64",
+          "configurationProvider": "go2sh.cmake-integration"
+      },
+      {
+          "name": "BuffGenerator",
+          "includePath": [
+              "${workspaceFolder}/BuffGenerator/**"
+          ],
+          "defines": [],
+          "compilerPath": "/usr/bin/gcc",
+          "cStandard": "c11",
+          "cppStandard": "c++17",
+          "intelliSenseMode": "clang-x64",
+          "configurationProvider": "go2sh.cmake-integration"
+      },
+      {
+          "name": "WLogMerger",
+          "includePath": [
+              "${workspaceFolder}/WLogMerger/**"
+          ],
+          "defines": [],
+          "compilerPath": "/usr/bin/gcc",
+          "cStandard": "c11",
+          "cppStandard": "c++17",
+          "intelliSenseMode": "clang-x64",
+          "configurationProvider": "go2sh.cmake-integration"
+      }
+  ],
+  "version": 4
+}
