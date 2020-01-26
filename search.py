@@ -6,36 +6,56 @@ from wlog import endsWith
 from wlog import WLogFile
 from wlog import Event
 
-KEYWORDS = ['UNIT_DIED', 'Lesley']
-# KEYWORDS = ['ENCOUNTER_END']
 
-file = WLogFile('cur/Lesley.txt')
-file.load()
+# KEYWORDS = ['UNIT_DIED', 'Lesley']
+# # KEYWORDS = ['ENCOUNTER_END']
+
+# file = WLogFile('cur/Lesley.txt')
+# file.load()
+
+# def bits(val: int) -> str:
+#     b = ''
+#     while val > 0:
+#         b += '0' if (val & 1) == 0 else '1'
+#         val = val >> 1
+#     return b[::-1]
+
+# r = list()
+# r1 = list()
+# r2 = list()
+# d = dict()
+# ex = dict()
+
+# r1 = [1000] * 4
+# r2 = [0] * 4
+
+# for enc in file.encounters:
+#     for e in enc.events:
+#         if endsWith(e.event, '_ENERGIZE'):
+#             assert(len(e.params) == 4)
+#             for i in range(2):
+#                 p = float(e.params[i])
+#                 if p < r1[i]:
+#                     r1[i] = p
+#                 if p > r2[i]:
+#                     r2[i] = p
+            
+#             if e.params[2] not in r:
+#                 r.append(e.params[2])
+            
+#             p = int(e.params[3])
+#             if p < r1[3]:
+#                 r1[3] = p
+#             if p > r2[3]:
+#                 r2[3] = p
+            
 
 
-def bits(val: int) -> str:
-    b = ''
-    while val > 0:
-        b += '0' if (val & 1) == 0 else '1'
-        val = val >> 1
-    return b[::-1]
-
-r1 = list()
-r2 = list()
-d = dict()
-
-for enc in file.encounters:
-    for e in enc.events:
-        if endsWith(e.event, '_MISSED'):
-            if e.params[0] not in d:
-                d[e.params[0]] = len(e.params)
-                print(e)
-            else:
-                assert(d[e.params[0]] == len(e.params))            
-
-print(r1)
-print(r2)
-print(d)
+# print(r)
+# print(r1)
+# print(r2)
+# print(d)
+# print(ex)
 
 # with open('cur/Lesley.txt') as file:
 #     line = file.readline()

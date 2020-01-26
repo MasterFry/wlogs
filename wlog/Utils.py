@@ -41,5 +41,9 @@ def wlog_split_line(line: str) -> list:
     return elements
 
 
+def startsWith(string, start):
+    return len(string) >= len(start) and string[:len(start)] == start
+
+
 def endsWith(string, end):
-    return string[-len(end):] == end
+    return len(string) >= len(end) and string[-len(end):] == end

@@ -7,7 +7,10 @@ from .UnitFlag import UnitFlag
 from .WLogFile import WLogFile
 
 from .Lua import LuaObjectError
-from .Lua import parseLuaObject
+from .Lua import parseLuaObjectsFromFile
+from .Lua import parseLuaObjects
+from .Lua import toLuaString
+from .Lua import saveAsLuaString
 
 from .Utils import CorruptionError
 from .Utils import AdvancedLoggingError

@@ -61,8 +61,8 @@ PREFIX_PARAM_COUNT = {
     'RANGE'                : 3 ,
     'SPELL'                : 3 ,
     'SWING'                : 0 ,
-    # 'UNIT_DESTROYED'       : 2 ,
+    'UNIT_DESTROYED'       : 2 ,
     'UNIT_DIED'            : 0 ,
-    # 'UNIT_DISSIPATES'      : 2 ,
+    'UNIT_DISSIPATES'      : 2 ,
     'UNIT_LOYALTY'         : 0 
 }

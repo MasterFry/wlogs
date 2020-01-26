@@ -1,6 +1,6 @@
 
 from .Time import Time
-from .Lua import parseLuaObject
+from .Lua import parseLuaObjects
 
         
 class BuffLog:
@@ -69,7 +69,7 @@ class BuffLogFile:
         print('Loading from %s...' % self.fname)
         with open(self.fname) as file:
             # luaData = { Time : { GUID : [spellIDs..], GUID : [spellIDs..] , .. } , ..}
-            name, luaData = parseLuaObject(file.read())
+            name, luaData = parseLuaObjects(file.read())
             assert(name == 'BuffLog_SavedBuffs')
 
             self.buffLogs = list()
