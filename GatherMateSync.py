@@ -102,4 +102,4 @@ def updateData(fname: str):
     putData(serverData)
 
 
-updateData('GM2.lua')
+updateData('/mnt/c//Program Files (x86)/World of Warcraft/_classic_/WTF/Account/133617675#2/SavedVariables/GatherMate2.lua')
