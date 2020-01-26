@@ -20,8 +20,8 @@ from .EventParser import EventParser
 #       0x0
 
 class EventBase(Event):
-    def __init__(self, time, parser: EventParser):
-        Event.__init__(time)
+    def __init__(self, time, eventType, parser: EventParser):
+        Event.__init__(self, time, eventType)
         self.srcGUID = parser.getGUID()
         self.srcName = parser.getString()
         self.srcFlags = parser.getInt(base=16)
@@ -32,16 +32,16 @@ class EventBase(Event):
         self.destRaidFlags = parser.getInt(base=16)
 
     def __str__(self):
-        return Event.__str__(self) + ',' + ','.join([
+        return Event.__str__(self) + ',{0:s},"{1:s}",{2:#05x},{3:#05x},{4:s},"{5:s}",{6:#05x},{7:#05x}'.format(
             str(self.srcGUID),
-            '"' + self.srcName + '"',
-            '%#05x' % self.srcFlags,
-            '%#05x' % self.srcRaidFlags,
+            self.srcName,
+            self.srcFlags,
+            self.srcRaidFlags,
             str(self.destGUID),
-            '"' + self.destName + '"',
-            '%#05x' % self.destFlags,
-            '%#05x' % self.destRaidFlags
-        ])
+            self.destName,
+            self.destFlags,
+            self.destRaidFlags
+        )
 
     def __eq__(self, other):
         return Event.__eq__(other) and \

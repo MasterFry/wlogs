@@ -1,30 +1,22 @@
 from .Event import Event
 from .EventType import EventType
-from .EventBase import EventBase
-from .EventAdvanced import EventAdvanced
+from .EventAdvancedSpell import EventAdvancedSpell
 from .EventParser import EventParser
 
 
-class EventDamageShield(EventAdvanced):
-    def __init__(self, time, parser: EventParser):
-        EventBase.__init__(self, time)
-
-        # Prefix Parameters are inbetween Base and Advanced Parameters
-        # e.g.: 11682,"Hellfire Effect",0x4
-        self.spellId = parser.getInt()
-        self.spellName = parser.getString()
-        self.spellSchool = parser.getInt(base=16)
-
-        EventAdvanced.__init__(self, time)
+class EventDamageShield(EventAdvancedSpell):
+    def __init__(self, time, eventType, parser: EventParser):
+        EventAdvancedSpell.__init__(self, time, eventType, parser)
 
     def getEventType(self) -> EventType:
         return EventType.DAMAGE_SHIELD
 
     def __str__(self):
-        return EventBase.__str__(self) + EventAdvanced.__str__(self)
+        return EventAdvancedSpell.__str__(self)
 
     def __eq__(self, other):
-        return EventAdvanced.__eq__(other) and 
+        return EventAdvancedSpell.__eq__(other) and 
+
     def __ne__(self, other):
         return not self.__eq__(other)
 

@@ -2,6 +2,8 @@ from .Event import Event
 
 from .EventType import EventType
 from .EventType import EVENT_NAMES
+from .AuraType import AuraType
+
 from ..GUID import GUID
 from ..Time import Time
 
@@ -40,6 +42,14 @@ class EventParser:
             value += c
             c = self.file.read(1)
         return value
+
+    def getAuraType(self) -> AuraType:
+        value = self.readValue()
+        if value == 'BUFF':
+            return AuraType.BUFF
+        if value == 'DEBUFF':
+            return AuraType.DEBUFF
+        raise EventParsingError('Invalid AuraType: ' + value)
 
     def getTime(self) -> Time:
         # "1/22 20:51:35.210  "

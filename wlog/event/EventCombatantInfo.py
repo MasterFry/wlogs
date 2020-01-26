@@ -67,7 +67,8 @@ from .EventParser import EventParser
 
 class EventCombatantInfo(Event):
     def __init__(self, time, parser: EventParser):
-        Event.__init__(self, time)
+        Event.__init__(self, time, EventType.COMBATANT_INFO)
+        
         self.playerGUID = parser.getGUID()  # 2
         self.strength = parser.getInt()     # 3
         self.agility = parser.getInt()      # 4
@@ -106,12 +107,12 @@ class EventCombatantInfo(Event):
         return Event.__str__(self) + \
             ',{0:s},{1:d},{2:d},{3:d},{4:d},{5:d},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{6:d},0,(),(0,0,0,0),[],{7:s},{8:s}'.format(
                 str(self.playerGUID),
-                str(self.strength),
-                str(self.agility),
-                str(self.stamina),
-                str(self.intellect),
-                str(self.spirit),
-                str(self.armor),
+                self.strength,
+                self.agility,
+                self.stamina,
+                self.intellect,
+                self.spirit,
+                self.armor,
                 self.gear,
                 self.buffs
             )

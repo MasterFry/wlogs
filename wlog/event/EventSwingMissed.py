@@ -3,9 +3,9 @@ from .EventType import EventType
 from .EventBase import EventBase
 from .EventParser import EventParser
 
-class EventEventSwingMissed(EventBase):
-    def __init__(self, time, parser: EventParser):
-        EventBase.__init__(self, time)
+class EventSwingMissed(EventBase):
+    def __init__(self, time, eventType, parser: EventParser):
+        EventBase.__init__(self, time, eventType, parser)
 
     def getEventType(self) -> EventType:
         return EventType.SWING_MISSED
@@ -15,6 +15,7 @@ class EventEventSwingMissed(EventBase):
 
     def __eq__(self, other):
         return EventBase.__eq__(other) and 
+        
     def __ne__(self, other):
         return not self.__eq__(other)
 

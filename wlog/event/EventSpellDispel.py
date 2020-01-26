@@ -1,27 +1,21 @@
 from .Event import Event
 from .EventType import EventType
-from .EventBase import EventBase
+from .EventBaseSpell import EventBaseSpell
 from .EventParser import EventParser
 
-class EventEventSpellDispel(EventBase):
-    def __init__(self, time, parser: EventParser):
-        EventBase.__init__(self, time)
-
-        # Prefix Parameters are inbetween Base and Advanced Parameters
-        # e.g.: 11682,"Hellfire Effect",0x4
-        self.spellId = parser.getInt()
-        self.spellName = parser.getString()
-        self.spellSchool = parser.getInt(base=16)
-        
+class EventSpellDispel(EventBaseSpell):
+    def __init__(self, time, eventType, parser: EventParser):
+        EventBaseSpell.__init__(self, time, eventType, parser)
 
     def getEventType(self) -> EventType:
         return EventType.SPELL_DISPEL
 
     def __str__(self):
-        return EventBase.__str__(self) +
+        return EventBaseSpell.__str__(self) +
 
     def __eq__(self, other):
-        return EventBase.__eq__(other) and 
+        return EventBaseSpell.__eq__(other) and 
+        
     def __ne__(self, other):
         return not self.__eq__(other)
 

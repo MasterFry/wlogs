@@ -7,7 +7,8 @@ from .EventParser import EventParsingError
 
 class EventCombatLogVersion(Event):
     def __init__(self, time, parser: EventParser):
-        Event.__init__(self, time)
+        Event.__init__(self, time, EventType.COMBAT_LOG_VERSION)
+        
         self.version = parser.getInt()
         if parser.readValue() != 'ADVANCED_LOG_ENABLED':
             raise EventParsingError('Field missing: ADVANCED_LOG_ENABLED')

@@ -7,7 +7,7 @@ from .EventEncounter import EventEncounter
 
 class EventEncounterEnd(EventEncounter):
     def __init__(self, time, parser: EventParser):
-        EventEncounter.__init__(self, time, parser)
+        EventEncounter.__init__(self, time, EventType.ENCOUNTER_END, parser)
         self.success = True if parser.readValue() == '1' else False
 
     def getEventType(self) -> EventType:
