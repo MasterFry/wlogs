@@ -14,7 +14,7 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         A2EventDamage.__init__(self, EventType.ENVIRONMENTAL_DAMAGE, parser)
 
     def __str__(self):
-        return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:%s}'.format(
+        return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(
             getEnvironmentalTypeName(self.environmentalType)
         ) + A2EventDamage.__str__(self)
 

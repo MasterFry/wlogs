@@ -97,7 +97,7 @@ class EventCombatantInfo(AEvent):
         remains = parser.readValue(delim='\n') # 26 - 30
         assert(remains[:16] == '(),(0,0,0,0),[],')
         assert(remains[-2:] == '[]') # TODO
-        self.gear = remains[16:-2]          # 29
+        self.gear = remains[16:-3]          # 29
         self.buffs = '[]'
 
     def getEventType(self) -> EventType:

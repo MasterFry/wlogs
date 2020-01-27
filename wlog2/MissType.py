@@ -1,5 +1,7 @@
 from enum import IntEnum
 
+from .Encode import encodeInt
+
 class MissType(IntEnum):
     ABSORB  = 0
     BLOCK   = 1
@@ -29,3 +31,7 @@ MISS_TYPE_NAMES = [
 
 def getMissTypeName(index) -> str:
     return MISS_TYPE_NAMES[int(index)]
+
+
+def encodeMissType(missType: MissType) -> bytes:
+    return encodeInt(int(missType), size=1)

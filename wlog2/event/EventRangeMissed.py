@@ -4,9 +4,9 @@ from .A2EventMissed import A2EventMissed
 from ..EventParser import EventParser
 
 class EventRangeMissed(AEventBaseSpell, A2EventMissed):
-    def __init__(self, time, eventType, parser: EventParser):
-        AEventBaseSpell.__init__(self, time, EventType.SPELL_MISSED, parser)
-        A2EventMissed.__init__(self, EventType.SPELL_MISSED, parser)
+    def __init__(self, time, parser: EventParser):
+        AEventBaseSpell.__init__(self, time, EventType.RANGE_MISSED, parser)
+        A2EventMissed.__init__(self, EventType.RANGE_MISSED, parser)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventMissed.__str__(self)

@@ -1,5 +1,6 @@
 from abc import ABC
 
+from .AEvent import string
 from ..EventType import EventType
 from ..EventParser import EventParser
 
@@ -20,9 +21,9 @@ class A2EventEnchant(ABC):
 
     def __str__(self):
         return ',{0:s},{1:d},{2:s}'.format(
-            self.spellName,
+            string(self.spellName),
             self.itemId,
-            self.itemName
+            string(self.itemName)
         )
 
     def __eq__(self, other):

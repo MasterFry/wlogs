@@ -3,6 +3,7 @@ from abc import ABC
 from ..EventType import EventType
 from ..EventParser import EventParser
 
+# 36.0000,0.0000,0,8319
 #  1:  amount
 #  2:  overEnergize
 #  3:  powerType
@@ -14,13 +15,13 @@ class A2EventEnergize(ABC):
             eventType == EventType.SPELL_ENERGIZE or \
             eventType == EventType.SPELL_PERIODIC_ENERGIZE
         )
-        self.amount = parser.getInt()
-        self.overEnergize = parser.getInt()
+        self.amount = parser.getFloat()
+        self.overEnergize = parser.getFloat()
         self.powerType = parser.getInt()
         self.alternatePowerType = parser.getInt()
 
     def __str__(self):
-        return ',{0:d},{1:d},{2:d},{3:d}'.format(
+        return ',{0:.04f},{1:.04f},{2:d},{3:d}'.format(
             self.amount,
             self.overEnergize,
             self.powerType,

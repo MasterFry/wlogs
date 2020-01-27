@@ -29,8 +29,7 @@ class GUID:
             # Corpse-0-4445-409-24916-0-0000067792
             self.type = GUID.TYPE.CORPSE
         else:
-            print(guid)
-            assert(False and 'Invalid GUID Type')
+            raise ValueError('Invalid GUID Type: ' + guid)
         
         # Read GUID IDs
         if self.type == GUID.TYPE.PLAYER:

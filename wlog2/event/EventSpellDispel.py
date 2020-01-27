@@ -2,6 +2,7 @@ from ..EventType import EventType
 from .AEventBaseSpell import AEventBaseSpell
 from .A2EventExtraSpell import A2EventExtraSpell
 from ..EventParser import EventParser
+from ..AuraType import getAuraTypeName
 
 class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
     def __init__(self, time, parser: EventParser):
@@ -10,7 +11,7 @@ class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
         self.auraType = parser.getAuraType()
 
     def __str__(self):
-        return AEventBaseSpell.__str__(self) + A2EventExtraSpell.__str__(self) + '{0:s}'.format(
+        return AEventBaseSpell.__str__(self) + A2EventExtraSpell.__str__(self) + ',{0:s}'.format(
             getAuraTypeName(self.auraType)
         )
 

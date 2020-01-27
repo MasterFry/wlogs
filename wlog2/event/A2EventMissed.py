@@ -8,10 +8,11 @@ from ..MissType import getMissTypeName
 class A2EventMissed(ABC):
     def __init__(self, eventType, parser: EventParser):
         assert(
-            eventType == EventType.SWING_MISSED or \
-            eventType == EventType.RANGE_MISSED or \
-            eventType == EventType.SPELL_MISSED or \
-            eventType == EventType.SPELL_PERIODIC_MISSED
+            eventType == EventType.SWING_MISSED          or \
+            eventType == EventType.RANGE_MISSED          or \
+            eventType == EventType.SPELL_MISSED          or \
+            eventType == EventType.SPELL_PERIODIC_MISSED or \
+            eventType == EventType.DAMAGE_SHIELD_MISSED
         )
         self.missType = parser.getMissType()
         self.isOffHand = parser.readValue() == '1'

@@ -23,7 +23,8 @@ class A2EventDamage(ABC):
             eventType == EventType.SPELL_DAMAGE          or \
             eventType == EventType.SPELL_PERIODIC_DAMAGE or \
             eventType == EventType.SWING_DAMAGE          or \
-            eventType == EventType.SWING_DAMAGE_LANDED
+            eventType == EventType.SWING_DAMAGE_LANDED   or \
+            eventType == EventType.DAMAGE_SHIELD
         )
         self.amount = parser.getInt()
         self.p2 = parser.getInt()

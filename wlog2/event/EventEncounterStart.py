@@ -7,17 +7,17 @@ from .AEventEncounter import AEventEncounter
 class EventEncounterStart(AEventEncounter):
     def __init__(self, time, parser: EventParser):
         AEventEncounter.__init__(self, time, EventType.ENCOUNTER_START, parser)
-        self.p6 = parser.getInt()
+        self.p4 = parser.getInt()
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START
 
     def __str__(self):
-        return AEventEncounter.__str__(self) + ',' + str(self.p6)
+        return AEventEncounter.__str__(self) + ',' + str(self.p4)
 
     def __eq__(self, other):
         return AEventEncounter.__eq__(other) and \
-               self.p6 == other.p6
+               self.p4 == other.p4
 
     def __ne__(self, other):
         return not self.__eq__(other)

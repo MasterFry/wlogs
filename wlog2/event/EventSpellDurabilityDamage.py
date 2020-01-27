@@ -1,3 +1,4 @@
+from .AEvent import string
 from ..EventType import EventType
 from .AEventBaseSpell import AEventBaseSpell
 from ..EventParser import EventParser
@@ -9,9 +10,9 @@ class EventSpellDurabilityDamage(AEventBaseSpell):
         self.itemName = parser.getString()
 
     def __str__(self):
-        return AEventBaseSpell.__str__(self) + ',{0:d},"{1:s}"'.format(
+        return AEventBaseSpell.__str__(self) + ',{0:d},{1:s}'.format(
             self.itemId,
-            self.itemName
+            string(self.itemName)
         )
 
     def __eq__(self, other):

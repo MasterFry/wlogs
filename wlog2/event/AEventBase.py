@@ -1,4 +1,5 @@
 from .AEvent import AEvent
+from .AEvent import string
 from ..EventType import EventType
 from ..EventParser import EventParser
 
@@ -32,13 +33,14 @@ class AEventBase(AEvent):
         self.destRaidFlags = parser.getInt(base=16)
 
     def __str__(self):
-        return AEvent.__str__(self) + ',{0:s},"{1:s}",{2:#05x},{3:#05x},{4:s},"{5:s}",{6:#05x},{7:#05x}'.format(
+        # return AEvent.__str__(self) + ',{0:s},{1:s},{2:#05x},{3:#05x},{4:s},{5:s},{6:#05x},{7:#05x}'.format(
+        return AEvent.__str__(self) + ',{0:s},{1:s},{2:#x},{3:#x},{4:s},{5:s},{6:#x},{7:#x}'.format(
             str(self.srcGUID),
-            self.srcName,
+            string(self.srcName),
             self.srcFlags,
             self.srcRaidFlags,
             str(self.destGUID),
-            self.destName,
+            string(self.destName),
             self.destFlags,
             self.destRaidFlags
         )

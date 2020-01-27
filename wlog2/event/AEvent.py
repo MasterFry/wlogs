@@ -1,8 +1,21 @@
 from abc import ABC
 from abc import abstractmethod
 
+from wlog import Time
 from ..EventType import EventType
 from ..EventType import EVENT_NAMES
+from ..EventType import encodeEventType
+
+# Unknown Parameters:
+# A2EventHeal: p1
+# A2EventDamage: p2, p3
+# EventEncounterStart: p4
+# EventSpellAbsorbed: p5
+
+
+def string(s: str):
+    return 'nil' if s is None else '"' + s + '"'
+
 
 class AEvent(ABC):
     def __init__(self, time, eventType):

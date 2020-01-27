@@ -7,7 +7,7 @@ class EventSpellCastSuccess(AEventAdvancedSpell):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_CAST_SUCCESS, parser)
 
     def __str__(self):
-        return AEventBase.__str__(self) + AEventAdvancedSpell.__str__(self)
+        return AEventAdvancedSpell.__str__(self)
 
     def __eq__(self, other):
         return AEventAdvancedSpell.__eq__(other)

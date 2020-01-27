@@ -14,18 +14,31 @@ class AEventSpellAura(AEventBaseSpell):
         )
         AEventBaseSpell.__init__(self, time, eventType, parser)
         self.auraType = parser.getAuraType()
-        self.amount = parser.getInt()
+        if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
+           self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
+            self.amount = parser.getInt()
 
     def __str__(self):
-        return AEventBaseSpell.__str__(self) + ',{0:s},{1:d}'.format(
-            getAuraTypeName(self.auraType),
-            self.amount
-        )
+        if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
+           self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
+            return AEventBaseSpell.__str__(self) + ',{0:s},{1:d}'.format(
+                getAuraTypeName(self.auraType),
+                self.amount
+            )
+        else:
+            return AEventBaseSpell.__str__(self) + ',{0:s}'.format(
+                getAuraTypeName(self.auraType)
+            )
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other) and \
-               self.auraType == other.auraType and \
-               self.amount == other.amount
+        if not AEventBaseSpell.__eq__(other):
+            return False
+        if self.amount != other.amount:
+            return False
+        if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
+           self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
+            return self.auraType == other.auraType
+        return True
 
     def __ne__(self, other):
         return not self.__eq__(other)

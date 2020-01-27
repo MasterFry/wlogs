@@ -1,4 +1,5 @@
 from .AEvent import AEvent
+from .AEvent import string
 from ..EventType import EventType
 from ..EventParser import EventParser
 
@@ -14,9 +15,9 @@ class AEventEncounter(AEvent):
         self.playerCount = parser.getInt()
 
     def __str__(self):
-        return AEvent.__str__(self) + ',{0:d},"{1:s}",{2:d},{3:d}'.format(
+        return AEvent.__str__(self) + ',{0:d},{1:s},{2:d},{3:d}'.format(
             self.encounterId,
-            self.encounterName,
+            string(self.encounterName),
             self.difficultyId,
             self.playerCount
         )

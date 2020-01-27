@@ -4,7 +4,7 @@ from .A2EventMissed import A2EventMissed
 from ..EventParser import EventParser
 
 class EventDamageShieldMissed(AEventBaseSpell, A2EventMissed):
-    def __init__(self, time, eventType, parser: EventParser):
+    def __init__(self, time, parser: EventParser):
         AEventBaseSpell.__init__(self, time, EventType.DAMAGE_SHIELD_MISSED, parser)
         A2EventMissed.__init__(self, EventType.DAMAGE_SHIELD_MISSED, parser)
 

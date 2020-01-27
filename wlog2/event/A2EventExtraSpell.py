@@ -1,5 +1,6 @@
 from abc import ABC
 
+from .AEvent import string
 from ..EventType import EventType
 from ..EventParser import EventParser
 
@@ -11,12 +12,12 @@ class A2EventExtraSpell(ABC):
         )
         self.extraSpellId = parser.getInt()
         self.extraSpellName = parser.getString()
-        self.extraSpellSchool = parser.getInt(base=16)
+        self.extraSpellSchool = parser.getInt()
 
     def __str__(self):
-        return AEventBaseSpell.__str__(self) + ',{0:d},"{1:s}",{2:#x}'.format(
+        return ',{0:d},{1:s},{2:d}'.format(
             self.extraSpellId,
-            self.extraSpellName,
+            string(self.extraSpellName),
             self.extraSpellSchool
         )
 

@@ -1,3 +1,4 @@
+from .AEvent import string
 from ..EventType import EventType
 from .AEventBase import AEventBase
 from .AEventAdvanced import AEventAdvanced
@@ -16,9 +17,9 @@ class AEventAdvancedSpell(AEventAdvanced):
         AEventAdvanced.__init__(self, parser)
 
     def __str__(self):
-        return AEventBase.__str__(self) + ',{0:d},"{1:s}",{2:#x}'.format(
+        return AEventBase.__str__(self) + ',{0:d},{1:s},{2:#x}'.format(
             self.spellId,
-            self.spellName,
+            string(self.spellName),
             self.spellSchool
         ) + AEventAdvanced.__str__(self)
 

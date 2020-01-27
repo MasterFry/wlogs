@@ -1,3 +1,4 @@
+from .AEvent import string
 from ..EventType import EventType
 from .AEventBase import AEventBase
 from ..EventParser import EventParser
@@ -5,16 +6,14 @@ from ..EventParser import EventParser
 class AEventBaseSpell(AEventBase):
     def __init__(self, time, eventType, parser: EventParser):
         AEventBase.__init__(self, time, eventType, parser)
-        
-        # e.g.: 11682,"Hellfire Effect",0x4
         self.spellId = parser.getInt()
         self.spellName = parser.getString()
         self.spellSchool = parser.getInt(base=16)
 
     def __str__(self):
-        return AEventBase.__str__(self) + ',{0:d},"{1:s}",{2:#x}'.format(
+        return AEventBase.__str__(self) + ',{0:d},{1:s},{2:#x}'.format(
             self.spellId,
-            self.spellName,
+            string(self.spellName),
             self.spellSchool
         )
 
