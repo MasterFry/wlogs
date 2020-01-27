@@ -524,11 +524,11 @@ class Encoder:
             code += self.spell(event.params[0], event.params[1], event.params[2])
             code += self.auraType(event.params[3])
 
-        elif endsWith(event.event, '_DISPEL_FAILED'):
+        elif endsWith(event.event, '_DISPEL_FAILED'): # TODO >
             # extraSpellId, extraSpellName, extraSchool
             code += self.spell(event.params[0], event.params[1], event.params[2])
 
-        elif endsWith(event.event, '_STOLEN'):
+        elif endsWith(event.event, '_STOLEN'): # TODO >
             # extraSpellId, extraSpellName, extraSchool, auraType
             code += self.spell(event.params[0], event.params[1], event.params[2])
             code += self.auraType(event.params[3])
