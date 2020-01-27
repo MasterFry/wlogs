@@ -7,6 +7,9 @@ class EventSpellCastFailed(AEventBaseSpell):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_CAST_FAILED, parser)
         self.failedType = parser.getString()
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + encoder.string(self.failedType)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',"{0:s}"'.format(
             self.failedType

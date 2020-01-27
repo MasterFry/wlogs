@@ -18,6 +18,16 @@ class AEventSpellAura(AEventBaseSpell):
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
             self.amount = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
+           self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
+            return AEventBaseSpell.encode(self, encoder) + \
+                   encoder.auraType(self.auraType) + \
+                   encoder.integer(self.amount, size=1)
+        else:
+            return AEventBaseSpell.encode(self, encoder) + \
+                   encoder.auraType(self.auraType)
+
     def __str__(self):
         if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:

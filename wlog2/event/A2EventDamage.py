@@ -37,6 +37,16 @@ class A2EventDamage(ABC):
         self.glancing = parser.readValue() == '1'
         self.crushing = parser.readValue() == '1'
 
+    def encode(self, encoder) -> bytes:
+        return encoder.integer(self.amount, size=1) + \
+               encoder.integer(self.p2, size=1) + \
+               encoder.integer(self.p3, size=1) + \
+               encoder.integer(self.school, size=1) + \
+               encoder.integer(self.resisted, size=1) + \
+               encoder.integer(self.blocked, size=1) + \
+               encoder.integer(self.absorbed, size=1) + \
+               encoder.boolean([self.critical, self.glancing, self.crushing])
+
     def __str__(self):
         return ',{0:d},{1:d},{2:d},{3:d},{4:d},{5:d},{6:d},{7:s},{8:s},{9:s}'.format(
             self.amount,

@@ -17,6 +17,9 @@ class A2EventDrain(ABC):
         assert(parser.getInt() == 0)
         assert(parser.getInt() == 1000000)
 
+    def encode(self, encoder) -> bytes:
+        return b''
+
     def __str__(self):
         return ',50,4,0,1000000'
 

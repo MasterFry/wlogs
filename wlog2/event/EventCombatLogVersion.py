@@ -20,8 +20,12 @@ class EventCombatLogVersion(AEvent):
             raise EventParsingError('Field missing: PROJECT_ID')
         self.projectId = parser.getInt()
 
-    def getEventType(self) -> EventType:
-        return EventType.COMBAT_LOG_VERSION
+    def encode(self, encoder) -> bytes:
+        return AEvent.encode(encoder) + \
+               encoder.integer(self.version, size=1) + \
+               encoder.boolean(self.advancedLogEnabled) + \
+               encoder.string(self.build) + \
+               encoder.integer(self.projectId, size=1)
 
     def __str__(self):
         return AEvent.__str__(self) + ',{0:d},ADVANCED_LOG_ENABLED,{1:s},BUILD_VERSION,{2:s},PROJECT_ID,{3:d}'.format(

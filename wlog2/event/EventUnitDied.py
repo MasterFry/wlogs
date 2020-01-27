@@ -8,6 +8,9 @@ class EventUnitDied(AEventBase):
         # self.recapId = parser.getInt(base=16)
         # self.unconsciousOnDeath = parser.getInt(base=16)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBase.encode(encoder)
+
     def __str__(self):
         return AEventBase.__str__(self)
         # return AEventBase.__str__(self) + ',{0:#x},{1:#x}'.format(

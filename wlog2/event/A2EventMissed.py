@@ -25,6 +25,23 @@ class A2EventMissed(ABC):
              self.missType == MissType.BLOCK:
             self.amountMissed = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        if self.missType == MissType.ABSORB:
+            return encoder.missType(self.missType) + \
+                   encoder.boolean(self.isOffHand) + \
+                   encoder.integer(self.amountMissed, size=1) + \
+                   encoder.integer(self.critical, size=1)
+
+        elif self.missType == MissType.RESIST or \
+             self.missType == MissType.BLOCK:
+            return encoder.missType(self.missType) + \
+                   encoder.boolean(self.isOffHand) + \
+                   encoder.integer(self.amountMissed, size=1)
+
+        else:
+            return encoder.missType(self.missType) + \
+                   encoder.boolean(self.isOffHand)
+
     def __str__(self):
         if self.missType == MissType.ABSORB:
             return ',{0:s},{1:s},{2:d},{3:d}'.format(

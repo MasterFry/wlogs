@@ -9,6 +9,9 @@ class EventEncounterEnd(AEventEncounter):
         AEventEncounter.__init__(self, time, EventType.ENCOUNTER_END, parser)
         self.success = True if parser.readValue() == '1' else False
 
+    def encode(self, encoder) -> bytes:
+        return AEventEncounter.encode(encoder) + encoder.boolean(self.success)
+
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_END
 

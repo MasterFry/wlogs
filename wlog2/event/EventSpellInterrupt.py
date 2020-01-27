@@ -8,6 +8,9 @@ class EventSpellInterrupt(AEventBaseSpell, A2EventExtraSpell):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_INTERRUPT, parser)
         A2EventExtraSpell.__init__(self, EventType.SPELL_INTERRUPT, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + A2EventExtraSpell.encode(encoder)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventExtraSpell.__str__(self)
 

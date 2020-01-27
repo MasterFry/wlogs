@@ -6,6 +6,9 @@ class EventSpellCreate(AEventBaseSpell):
     def __init__(self, time, parser: EventParser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_CREATE, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self)
 

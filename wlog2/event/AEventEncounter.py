@@ -14,6 +14,12 @@ class AEventEncounter(AEvent):
         self.difficultyId = parser.getInt()
         self.playerCount = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        return AEvent.encode(self, encoder) + \
+               encoder.integer(self.encounterId, size=1) + \
+               encoder.integer(self.difficultyId, size=1) + \
+               encoder.integer(self.playerCount, size=1)
+
     def __str__(self):
         return AEvent.__str__(self) + ',{0:d},{1:s},{2:d},{3:d}'.format(
             self.encounterId,

@@ -9,6 +9,9 @@ class EventEncounterStart(AEventEncounter):
         AEventEncounter.__init__(self, time, EventType.ENCOUNTER_START, parser)
         self.p4 = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        return AEventEncounter.encode(encoder) + encoder.integer(self.p4, size=1)
+
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START
 

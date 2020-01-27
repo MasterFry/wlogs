@@ -10,6 +10,9 @@ class EventSwingDamageLanded(AEventAdvanced, A2EventDamage):
         AEventAdvanced.__init__(self, parser)
         A2EventDamage.__init__(self, EventType.SWING_DAMAGE_LANDED, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBase.encode(encoder) + AEventAdvanced.encode(encoder) + A2EventDamage.encode(encoder)
+
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + A2EventDamage.__str__(self)
 

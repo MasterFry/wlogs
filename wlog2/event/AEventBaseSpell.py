@@ -10,6 +10,10 @@ class AEventBaseSpell(AEventBase):
         self.spellName = parser.getString()
         self.spellSchool = parser.getInt(base=16)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBase.encode(self, encoder) + \
+               encoder.spell(self.spellId, self.spellName, self.spellSchool)
+
     def __str__(self):
         return AEventBase.__str__(self) + ',{0:d},{1:s},{2:#x}'.format(
             self.spellId,

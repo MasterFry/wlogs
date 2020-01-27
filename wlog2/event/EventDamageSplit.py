@@ -8,6 +8,9 @@ class EventDamageSplit(AEventAdvancedSpell, A2EventDamage):
         AEventAdvancedSpell.__init__(self, time, EventType.DAMAGE_SPLIT, parser)
         A2EventDamage.__init__(self, EventType.DAMAGE_SPLIT, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventAdvancedSpell.encode(encoder) + A2EventDamage.encode(encoder)
+
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventDamage.__str__(self)
 

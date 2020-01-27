@@ -8,6 +8,9 @@ class EventSpellHeal(AEventAdvancedSpell, A2EventHeal):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_HEAL, parser)
         A2EventHeal.__init__(self, EventType.SPELL_HEAL, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + A2EventHeal.encode(encoder)
+
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventHeal.__str__(self)
 

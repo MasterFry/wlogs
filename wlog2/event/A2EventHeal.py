@@ -23,6 +23,14 @@ class A2EventHeal(ABC):
         self.p1 = parser.getInt()
         self.critical = parser.readValue() == '1'
 
+    def encode(self, encoder) -> bytes:
+        return encoder.floating(self.amount, size=2, digits=4) + \
+               encoder.floating(self.overEnergize, size=2, digits=4) + \
+               encoder.integer(self.powerType, size=1) + \
+               encoder.integer(self.p1, size=1) + \
+               encoder.boolean(self.critical)
+
+
     def __str__(self):
         return ',{0:d},{1:d},{2:d},{3:d},{4:s}'.format(
             self.amount,

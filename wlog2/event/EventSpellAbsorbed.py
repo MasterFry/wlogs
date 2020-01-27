@@ -31,6 +31,16 @@ class EventSpellAbsorbed(AEventBase):
         self.amount = parser.getInt()
         self.p5 = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        code = AEventBase.encode(encoder)
+        if self.hasBaseSpell:
+            code += encoder.spell(self.spellId, self.spellName, self.spellSchool)
+        return code + \
+               encoder.entity(self.extraGUID, self.extraName, self.extraFlags, self.extraRaidFlags) + \
+               encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool) + \
+               encoder.integer(self.amount, size=1) + \
+               encoder.integer(self.p5, size=1)
+
     def __str__(self):
         if self.hasBaseSpell:
             return AEventBase.__str__(self) + \

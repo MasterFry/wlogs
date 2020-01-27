@@ -19,6 +19,9 @@ class A2EventEnchant(ABC):
         self.itemName = parser.getString()
         assert(False and "Entry for confirmation required")
 
+    def encode(self, encoder) -> bytes:
+        return encoder.string(self.spellName) + encoder.item(self.itemId, self.itemName)
+
     def __str__(self):
         return ',{0:s},{1:d},{2:s}'.format(
             string(self.spellName),
@@ -33,4 +36,3 @@ class A2EventEnchant(ABC):
         
     def __ne__(self, other):
         return not self.__eq__(other)
-

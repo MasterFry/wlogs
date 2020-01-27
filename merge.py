@@ -5,11 +5,16 @@
 #
 from os import listdir
 from wlog import Merger
+from wlog import endsWith
 
 m = Merger()
-m.addWLogFile('cur/Qopy.txt')
-m.addWLogFile('cur/Lesley.txt')
-m.addBuffLogFile('cur/BuffLog.lua')
+
+for fname in listdir('cur/'):
+    if endsWith(fname, '.txt'):
+        m.addWLogFile('cur/' + fname)
+    elif endsWith(fname, '.lua'):
+        m.addBuffLogFile('cur/' + fname)
+
 m.setOutputPath('merge.txt')
 m.merge()
 ####################################################################################

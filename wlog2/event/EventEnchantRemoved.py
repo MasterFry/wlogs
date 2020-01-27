@@ -8,6 +8,9 @@ class EventEnchantRemoved(AEventBaseSpell, A2EventEnchant):
         AEventBaseSpell.__init__(self, time, EventType.ENCHANT_REMOVED, parser)
         A2EventEnchant.__init__(self, EventType.ENCHANT_REMOVED, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + A2EventEnchant.encode(encoder)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventEnchant.__str__(self)
 

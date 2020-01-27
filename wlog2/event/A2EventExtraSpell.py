@@ -14,6 +14,9 @@ class A2EventExtraSpell(ABC):
         self.extraSpellName = parser.getString()
         self.extraSpellSchool = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        return encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool)
+
     def __str__(self):
         return ',{0:d},{1:s},{2:d}'.format(
             self.extraSpellId,

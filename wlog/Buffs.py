@@ -69,8 +69,9 @@ class BuffLogFile:
         print('Loading from %s...' % self.fname)
         with open(self.fname) as file:
             # luaData = { Time : { GUID : [spellIDs..], GUID : [spellIDs..] , .. } , ..}
-            name, luaData = parseLuaObjects(file.read())
-            assert(name == 'BuffLog_SavedBuffs')
+            luaData = parseLuaObjects(file.read())
+            assert('BuffLog_SavedBuffs' in luaData)
+            luaData = luaData['BuffLog_SavedBuffs']
 
             self.buffLogs = list()
             for time in luaData:

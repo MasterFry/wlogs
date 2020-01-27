@@ -7,6 +7,9 @@ class EventSpellAuraRemoved(AEventSpellAura):
     def __init__(self, time, parser: EventParser):
         AEventSpellAura.__init__(self, time, EventType.SPELL_AURA_REMOVED, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventSpellAura.encode(encoder)
+
     def __str__(self):
         return AEventSpellAura.__str__(self)
 

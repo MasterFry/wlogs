@@ -13,6 +13,12 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         self.environmentalType = parser.getEnvironmentalType()
         A2EventDamage.__init__(self, EventType.ENVIRONMENTAL_DAMAGE, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventBase.encode(encoder) + \
+               AEventAdvanced.encode(encoder) + \
+               encoder.environmentalType(self.environmentalType) + \
+               A2EventDamage.encode(encoder)
+
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(
             getEnvironmentalTypeName(self.environmentalType)

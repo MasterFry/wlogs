@@ -7,6 +7,9 @@ class EventSpellPeriodicEnergize(AEventAdvancedSpell):
     def __init__(self, time, parser: EventParser):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_PERIODIC_ENERGIZE, parser)
         A2EventEnergize.__init__(self, EventType.SPELL_PERIODIC_ENERGIZE, parser)
+
+    def encode(self, encoder) -> bytes:
+        return AEventAdvancedSpell.encode(encoder) + A2EventEnergize.encode(encoder)
         
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventEnergize.__str__(self)

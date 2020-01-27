@@ -9,6 +9,9 @@ class EventSpellDurabilityDamage(AEventBaseSpell):
         self.itemId = parser.getInt()
         self.itemName = parser.getString()
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + encoder.item(self.itemId, self.itemName)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d},{1:s}'.format(
             self.itemId,

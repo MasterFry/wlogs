@@ -7,6 +7,9 @@ class EventSpellExtraAttacks(AEventBaseSpell):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_EXTRA_ATTACKS, parser)
         self.amount = parser.getInt()
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + encoder.integer(self.amount, size=1)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d}'.format(
             self.amount

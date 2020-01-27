@@ -56,6 +56,15 @@ class AEventAdvanced(AEventBase):
         self.facing = parser.getFloat()     # 15
         self.level = parser.getInt()        # 16
 
+    def encode(self, encoder) -> bytes:
+        return encoder.guid(self.unitGUID) + \
+               encoder.guid(self.ownerGUID) + \
+               encoder.integer(self.currHP, size=1) + \
+               encoder.floating(self.coord1, size=2, digits=2, signed=True) + \
+               encoder.floating(self.coord2, size=2, digits=2, signed=True) + \
+               encoder.floating(self.facing, size=2, digits=4) + \
+               encoder.integer(self.level, size=1)
+
     def __str__(self):
         return ',{0:s},{1:s},{2:d},100,0,0,0,-1,0,0,0,{3:06.02f},{4:06.02f},0,{5:06.04f},{6:d}'.format(
             str(self.unitGUID),

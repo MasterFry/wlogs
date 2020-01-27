@@ -1,7 +1,5 @@
 from enum import IntEnum
 
-from .Encode import encodeInt
-
 class EventType(IntEnum):
     COMBATANT_INFO          = 0
     COMBAT_LOG_VERSION      = 1
@@ -110,7 +108,3 @@ EVENT_NAMES = [
 
 def getEventName(index) -> str:
     return EVENT_NAMES[int(index)]
-
-
-def encodeEventType(eventType: EventType) -> bytes:
-    return encodeInt(int(eventType), size=1)

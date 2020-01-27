@@ -99,9 +99,18 @@ class EventCombatantInfo(AEvent):
         assert(remains[-2:] == '[]') # TODO
         self.gear = remains[16:-3]          # 29
         self.buffs = '[]'
-
-    def getEventType(self) -> EventType:
-        return EventType.COMBATANT_INFO
+        
+    def encode(self, encoder) -> bytes:
+        return AEvent.encode(encoder) + \
+               encoder.guid(self.playerGUID) + \
+               encoder.integer(self.strength, size=1) + \
+               encoder.integer(self.agility, size=1) + \
+               encoder.integer(self.stamina, size=1) + \
+               encoder.integer(self.intellect, size=1) + \
+               encoder.integer(self.spirit, size=1) + \
+               encoder.integer(self.armor, size=1) + \
+               encoder.string(self.gear) + \
+               encoder.string(self.buffs) # TODO gear and buffs
 
     def __str__(self):
         return AEvent.__str__(self) + \

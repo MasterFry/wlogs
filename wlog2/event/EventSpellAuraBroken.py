@@ -8,6 +8,9 @@ class EventSpellAuraBroken(AEventBaseSpell):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_AURA_BROKEN, parser)
         self.auraType = parser.getAuraType()
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + encoder.auraType(self.auraType)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',' + getAuraTypeName(self.auraType)
 

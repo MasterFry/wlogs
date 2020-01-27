@@ -6,6 +6,9 @@ class EventSpellCastSuccess(AEventAdvancedSpell):
     def __init__(self, time, parser: EventParser):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_CAST_SUCCESS, parser)
 
+    def encode(self, encoder) -> bytes:
+        return AEventAdvancedSpell.encode(encoder)
+
     def __str__(self):
         return AEventAdvancedSpell.__str__(self)
 

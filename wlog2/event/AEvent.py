@@ -5,13 +5,13 @@ from wlog import Time
 from ..EventType import EventType
 from ..EventType import EVENT_NAMES
 from ..EventType import encodeEventType
+from ..Encode import Encoder
 
 # Unknown Parameters:
 # A2EventHeal: p1
 # A2EventDamage: p2, p3
 # EventEncounterStart: p4
 # EventSpellAbsorbed: p5
-
 
 def string(s: str):
     return 'nil' if s is None else '"' + s + '"'
@@ -24,6 +24,9 @@ class AEvent(ABC):
 
     def getEventName(self) -> str:
         return EVENT_NAMES[int(self.eventType)]
+
+    def encode(self, encoder) -> bytes:
+        return encoder.time(self.time) + encoder.eventType(self.eventType)
 
     def __str__(self):
         return str(self.time) + '  ' + self.getEventName()

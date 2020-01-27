@@ -10,6 +10,11 @@ class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
         A2EventExtraSpell.__init__(self, EventType.SPELL_DISPEL, parser)
         self.auraType = parser.getAuraType()
 
+    def encode(self, encoder) -> bytes:
+        return AEventBaseSpell.encode(encoder) + \
+               A2EventExtraSpell.encode(encoder) + \
+               encoder.auraType(self.auraType)
+
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventExtraSpell.__str__(self) + ',{0:s}'.format(
             getAuraTypeName(self.auraType)
