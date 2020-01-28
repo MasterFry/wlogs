@@ -3,8 +3,7 @@ from abc import abstractmethod
 
 from wlog import Time
 from ..EventType import EventType
-from ..EventType import EVENT_NAMES
-from ..EventType import encodeEventType
+from ..EventType import getEventName
 from ..Encode import Encoder
 
 # Unknown Parameters:
@@ -23,7 +22,7 @@ class AEvent(ABC):
         self.eventType = eventType
 
     def getEventName(self) -> str:
-        return EVENT_NAMES[int(self.eventType)]
+        return getEventName(self.eventType)
 
     def encode(self, encoder) -> bytes:
         return encoder.time(self.time) + encoder.eventType(self.eventType)

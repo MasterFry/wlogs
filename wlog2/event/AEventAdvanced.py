@@ -52,7 +52,7 @@ class AEventAdvanced(AEventBase):
         assert(parser.getInt() == 0)        # 11
         self.coord1 = parser.getFloat()     # 12
         self.coord2 = parser.getFloat()     # 13
-        assert(parser.getInt() == 0)        # 14
+        self.mapId = parser.getInt()        # 14
         self.facing = parser.getFloat()     # 15
         self.level = parser.getInt()        # 16
 
@@ -62,16 +62,18 @@ class AEventAdvanced(AEventBase):
                encoder.integer(self.currHP, size=1) + \
                encoder.floating(self.coord1, size=2, digits=2, signed=True) + \
                encoder.floating(self.coord2, size=2, digits=2, signed=True) + \
+               encoder.integer(self.mapId, size=1) + \
                encoder.floating(self.facing, size=2, digits=4) + \
                encoder.integer(self.level, size=1)
 
     def __str__(self):
-        return ',{0:s},{1:s},{2:d},100,0,0,0,-1,0,0,0,{3:06.02f},{4:06.02f},0,{5:06.04f},{6:d}'.format(
+        return ',{0:s},{1:s},{2:d},100,0,0,0,-1,0,0,0,{3:06.02f},{4:06.02f},{5:d},{6:06.04f},{7:d}'.format(
             str(self.unitGUID),
             str(self.ownerGUID),
             self.currHP,
             self.coord1,
             self.coord2,
+            self.mapId,
             self.facing,
             self.level
         )
@@ -79,7 +81,8 @@ class AEventAdvanced(AEventBase):
     def __eq__(self, other):
         return AEventBase.__eq__(other) and \
                self.unitGUID == other.unitGUID and \
-               self.ownerGUID == other.ownerGUID
+               self.ownerGUID == other.ownerGUID and \
+               self.mapId == other.mapId
 
     def __ne__(self, other):
         return not self.__eq__(other)

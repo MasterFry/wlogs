@@ -1,9 +1,12 @@
+from abc import ABC
+from abc import abstractmethod
+
 from .EventType import *
 from .AuraType import *
 from .MissType import *
 from .EnvironmentalType import *
 
-from wlog.GUID import GUID
+# from wlog.GUID import GUID
 from wlog.Time import Time
 
 
@@ -12,12 +15,13 @@ class EventParsingError(Exception):
         Exception.__init__(self, message)
 
 
-class EventParser:
-    def __init__(self, fname=None):
+class EventParser(ABC):
+    def __init__(self, fname):
         self.fname = fname
         self.file = None
         self.buffer = None
         self.bufferIndex = 0
+        self.lineNumber = 0
 
     def open(self, fname) -> None:
         self.fname = fname
@@ -107,8 +111,8 @@ class EventParser:
         
         return EventType(index)
 
-    def getInt(self, base=10, nullable=False) -> int:
-        value = self.readValue()
+    def getInt(self, delim=',', base=10, nullable=False) -> int:
+        value = self.readValue(delim=delim)
         if nullable and value == 'nil':
             return None
         return int(value, base=base)
@@ -120,13 +124,18 @@ class EventParser:
         return float(value)
 
     def getString(self) -> str:
-        value = self.readValue()
+        value = self.getChar()
+        if value == '"':
+            value = self.readValue(delim='"')
+            self.getChar()
+            return value
+        value += self.readValue(delim=',')
         if value == 'nil':
             return None
-        if value[0] != '"' or value[-1] != '"':
-            raise EventParsingError('Invalid String value: ' + value)
-        return value[1:-1]
+        raise EventParsingError('Invalid String value: ' + value)
 
-    def getGUID(self) -> GUID:
-        value = self.readValue()
-        return GUID(value)  
+    @abstractmethod
+    def getGUID(self):
+        pass
+        # value = self.readValue()
+        # return GUID(value)  

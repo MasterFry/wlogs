@@ -11,5 +11,5 @@ AURA_TYPE_NAMES = [
 ]
 
 
-def getAuraTypeName(index) -> str:
-    return AURA_TYPE_NAMES[int(index)]
+def getAuraTypeName(auraType: AuraType) -> str:
+    return auraType.name

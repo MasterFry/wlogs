@@ -35,22 +35,22 @@ class GUID:
         if self.type == GUID.TYPE.PLAYER:
             assert(len(r) == 3)
             assert(len(r[2]) == 8)
-            self.serverID   = int(r[1], 16)
+            self.serverID   = int(r[1]) #, 16)
             self.playerUID  = int(r[2], 16)
         elif self.type == GUID.TYPE.ITEM:
             assert(len(r) == 4)
             assert(r[2] == '0')
             assert(len(r[3]) == 16)
-            self.serverID   = int(r[1], 16)
+            self.serverID   = int(r[1]) #, 16)
             self.spawnUID   = int(r[3], 16)
         elif self.type != GUID.TYPE.NULL:
             assert(len(r) == 7)
             assert(r[1] == '0')
             assert(len(r[6]) == 10)
-            self.serverID   = int(r[2], 16)
-            self.instanceID = int(r[3], 16)
-            self.zoneUID    = int(r[4], 16)
-            self.ID         = int(r[5], 16)
+            self.serverID   = int(r[2]) #, 16)
+            self.instanceID = int(r[3]) #, 16)
+            self.zoneUID    = int(r[4]) #, 16)
+            self.ID         = int(r[5]) #, 16)
             self.spawnUID   = int(r[6], 16)
         else:
             if self.type != GUID.TYPE.NULL:
@@ -61,21 +61,29 @@ class GUID:
         if self.type == GUID.TYPE.NULL:
             return '0000000000000000'
         if self.type == GUID.TYPE.PLAYER:
-            return 'Player-%X-%08X' % (self.serverID, self.playerUID)
+            # return 'Player-%X-%08X' % (self.serverID, self.playerUID)
+            return 'Player-%d-%08X' % (self.serverID, self.playerUID)
         if self.type == GUID.TYPE.CREATURE:
-            return 'Creature-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'Creature-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'Creature-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.PET:
-            return 'Pet-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'Pet-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'Pet-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.GAME_OBJECT:
-            return 'GameObject-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'GameObject-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'GameObject-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.VEHICLE:
-            return 'Vehicle-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'Vehicle-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'Vehicle-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.VIGNETTE:
-            return 'Vignette-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'Vignette-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'Vignette-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.CORPSE:
-            return 'Corpse-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            # return 'Corpse-0-%X-%X-%X-%X-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
+            return 'Corpse-0-%d-%d-%d-%d-%010X' % (self.serverID, self.instanceID, self.zoneUID, self.ID, self.spawnUID)
         if self.type == GUID.TYPE.ITEM:
-            return 'Item-%X-0-%016X' % (self.serverID, self.spawnUID)
+            # return 'Item-%X-0-%016X' % (self.serverID, self.spawnUID)
+            return 'Item-%d-0-%016X' % (self.serverID, self.spawnUID)
         print(self.type)
         assert(False and 'GUID has no or invalid Type?')
 

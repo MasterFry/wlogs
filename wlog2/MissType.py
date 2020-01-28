@@ -27,5 +27,5 @@ MISS_TYPE_NAMES = [
 ]
 
 
-def getMissTypeName(index) -> str:
-    return MISS_TYPE_NAMES[int(index)]
+def getMissTypeName(missType: MissType) -> str:
+    return missType.name

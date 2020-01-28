@@ -1,11 +1,10 @@
 from .EventParser import *
 from .event import *
+from .guid import *
 
 class WLogParser(EventParser):
     def __init__(self, fname=None):
-        self.fname = fname
-        self.file = None
-        self.lineNumber = 0
+        EventParser.__init__(self, fname)
 
     def __enter__(self):
         self.open(self.fname)
@@ -21,4 +20,12 @@ class WLogParser(EventParser):
     def getEvent(self) -> AEvent:
         time = self.getTime()
         eventType = self.getEventType()
-        return EVENT_TABLE[getEventName(eventType)](time, self)    
+        return EVENT_TABLE[getEventName(eventType)](time, self) 
+
+    def getGUID(self) -> AGUID:
+        value = self.getChar()
+        if value == '0':
+            value += self.readValue(delim=',')
+        else:
+            value += self.readValue(delim='-')
+        return GUID_TABLE[value](self)   

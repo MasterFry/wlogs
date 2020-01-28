@@ -52,6 +52,7 @@ class EventType(IntEnum):
     UNIT_DISSIPATES         = 48
     UNIT_LOYALTY            = 49
 
+
 EVENT_NAMES = [
     'COMBATANT_INFO'          , # 0
     'COMBAT_LOG_VERSION'      , # 1
@@ -106,5 +107,5 @@ EVENT_NAMES = [
 ]
 
 
-def getEventName(index) -> str:
-    return EVENT_NAMES[int(index)]
+def getEventName(eventType: EventType) -> str:
+    return eventType.name

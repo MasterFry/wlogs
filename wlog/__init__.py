@@ -16,6 +16,7 @@ from .Utils import CorruptionError
 from .Utils import AdvancedLoggingError
 from .Utils import wlog_split_line
 from .Utils import endsWith
+from .Utils import startsWith
 
 from .Constants import PARAM_COUNT
 from .Constants import PREFIX_PARAM_COUNT
