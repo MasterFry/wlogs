@@ -1,7 +1,7 @@
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 from .AEventEncounter import AEventEncounter
@@ -9,12 +9,22 @@ from .AEventEncounter import AEventEncounter
 # 1/22 19:39:52.829  ENCOUNTER_START,663,"Lucifron",9,40,409
 
 class EventEncounterStart(AEventEncounter):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventEncounter.__init__(self, time, EventType.ENCOUNTER_START, parser)
-        self.p4 = parser.getInt()
+        
+        if isinstance(parser, EventParser):
+            self.p4 = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventEncounter.encode(self, encoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
+    def decode(self, decoder: Decoder):
+        self.p4 = decoder.integer(size=SizeType.ENCOUNTER_START_P4)
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventEncounter.encode(self, encoder: Encoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START

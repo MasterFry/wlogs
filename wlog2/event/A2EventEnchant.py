@@ -11,17 +11,27 @@ from .AEvent import string
 #  3:  itemName
 
 class A2EventEnchant(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.ENCHANT_APPLIED or \
             eventType == EventType.ENCHANT_REMOVED
         )
-        self.spellName = parser.getString()
-        self.itemId = parser.getInt()
-        self.itemName = parser.getString()
-        assert(False and "Entry for confirmation required")
+        raise ValueError("Entry for confirmation required")
+        if isinstance(parser, EventParser):
+            self.spellName = parser.getString()
+            self.itemId = parser.getInt()
+            self.itemName = parser.getString()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+    def decode(self, decoder: Decoder):
+        self.spellName = decoder.string()
+        self.itemId, self.itemName = decoder.item()
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.string(self.spellName) + encoder.item(self.itemId, self.itemName)
 
     def __str__(self):

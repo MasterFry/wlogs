@@ -1,7 +1,7 @@
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 from ..EventParser import EventParsingError
 
@@ -10,22 +10,34 @@ from .AEvent import AEvent
 # 1/22 19:26:49.388  COMBAT_LOG_VERSION,9,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,1.13.3,PROJECT_ID,2
 
 class EventCombatLogVersion(AEvent):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEvent.__init__(self, time, EventType.COMBAT_LOG_VERSION)
         
-        self.version = parser.getInt()
-        if parser.readValue() != 'ADVANCED_LOG_ENABLED':
-            raise EventParsingError('Field missing: ADVANCED_LOG_ENABLED')
-        self.advancedLogEnabled = parser.readValue() == '1'
-        if parser.readValue() != 'BUILD_VERSION':
-            raise EventParsingError('Field missing: BUILD_VERSION')
-        self.build = parser.readValue()
-        if parser.readValue() != 'PROJECT_ID':
-            raise EventParsingError('Field missing: PROJECT_ID')
-        self.projectId = parser.getInt()
+        if isinstance(parser, EventParser):
+            self.version = parser.getInt()
+            if parser.readValue() != 'ADVANCED_LOG_ENABLED':
+                raise EventParsingError('Field missing: ADVANCED_LOG_ENABLED')
+            self.advancedLogEnabled = parser.readValue() == '1'
+            if parser.readValue() != 'BUILD_VERSION':
+                raise EventParsingError('Field missing: BUILD_VERSION')
+            self.build = parser.readValue()
+            if parser.readValue() != 'PROJECT_ID':
+                raise EventParsingError('Field missing: PROJECT_ID')
+            self.projectId = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEvent.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.version = decoder.integer(size=SizeType.COMBATLOG_VERSION)
+        self.advancedLogEnabled = decoder.boolean()
+        self.build = decoder.string()
+        self.projectId = decoder.integer(size=SizeType.COMBATLOG_PROJECT_ID)
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEvent.encode(self, encoder: Encoder) + \
                encoder.integer(self.version, size=SizeType.COMBATLOG_VERSION) + \
                encoder.boolean(self.advancedLogEnabled) + \
                encoder.string(self.build) + \

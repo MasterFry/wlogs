@@ -7,12 +7,22 @@ from ..EventParser import EventParser
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellAuraBroken(AEventBaseSpell):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_AURA_BROKEN, parser)
-        self.auraType = parser.getAuraType()
+        
+        if isinstance(parser, EventParser):
+            self.auraType = parser.getAuraType()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + encoder.auraType(self.auraType)
+    def decode(self, decoder: Decoder):
+        self.auraType = decoder.auraType()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + encoder.auraType(self.auraType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',' + getAuraTypeName(self.auraType)

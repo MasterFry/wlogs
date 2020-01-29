@@ -1,7 +1,7 @@
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 from .AEvent import AEvent
@@ -70,42 +70,59 @@ from .AEvent import AEvent
 #       []
 
 class EventCombatantInfo(AEvent):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEvent.__init__(self, time, EventType.COMBATANT_INFO)
         
-        self.playerGUID = parser.getGUID()  # 2
-        self.strength = parser.getInt()     # 3
-        self.agility = parser.getInt()      # 4
-        self.stamina = parser.getInt()      # 5
-        self.intellect = parser.getInt()    # 6
-        self.spirit = parser.getInt()       # 7
-        assert(parser.readValue() == '0')   # 8
-        assert(parser.readValue() == '0')   # 9
-        assert(parser.readValue() == '0')   # 10
-        assert(parser.readValue() == '0')   # 11
-        assert(parser.readValue() == '0')   # 12
-        assert(parser.readValue() == '0')   # 13
-        assert(parser.readValue() == '0')   # 14
-        assert(parser.readValue() == '0')   # 15
-        assert(parser.readValue() == '0')   # 16
-        assert(parser.readValue() == '0')   # 17
-        assert(parser.readValue() == '0')   # 18
-        assert(parser.readValue() == '0')   # 19
-        assert(parser.readValue() == '0')   # 20
-        assert(parser.readValue() == '0')   # 21
-        assert(parser.readValue() == '0')   # 22
-        assert(parser.readValue() == '0')   # 23
-        self.armor = parser.getInt()        # 24 Can be negative apparently
-        assert(parser.readValue() == '0')   # 25
+        if isinstance(parser, EventParser):
+            self.playerGUID = parser.getGUID()  # 2
+            self.strength = parser.getInt()     # 3
+            self.agility = parser.getInt()      # 4
+            self.stamina = parser.getInt()      # 5
+            self.intellect = parser.getInt()    # 6
+            self.spirit = parser.getInt()       # 7
+            assert(parser.readValue() == '0')   # 8
+            assert(parser.readValue() == '0')   # 9
+            assert(parser.readValue() == '0')   # 10
+            assert(parser.readValue() == '0')   # 11
+            assert(parser.readValue() == '0')   # 12
+            assert(parser.readValue() == '0')   # 13
+            assert(parser.readValue() == '0')   # 14
+            assert(parser.readValue() == '0')   # 15
+            assert(parser.readValue() == '0')   # 16
+            assert(parser.readValue() == '0')   # 17
+            assert(parser.readValue() == '0')   # 18
+            assert(parser.readValue() == '0')   # 19
+            assert(parser.readValue() == '0')   # 20
+            assert(parser.readValue() == '0')   # 21
+            assert(parser.readValue() == '0')   # 22
+            assert(parser.readValue() == '0')   # 23
+            self.armor = parser.getInt()        # 24 Can be negative apparently
+            assert(parser.readValue() == '0')   # 25
 
-        remains = parser.readValue(delim='\n') # 26 - 30
-        assert(remains[:16] == '(),(0,0,0,0),[],')
-        assert(remains[-2:] == '[]') # TODO
-        self.gear = remains[16:-3]          # 29
-        self.buffs = '[]'
+            remains = parser.readValue(delim='\n') # 26 - 30
+            assert(remains[:16] == '(),(0,0,0,0),[],')
+            assert(remains[-2:] == '[]') # TODO
+            self.gear = remains[16:-3]          # 29
+            self.buffs = '[]'
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
+
+    def decode(self, decoder: Decoder):
+        self.playerGUID = decoder.guid()
+        self.strength = decoder.integer(size=SizeType.COMBATANT_STATS)
+        self.agility = decoder.integer(size=SizeType.COMBATANT_STATS)
+        self.stamina = decoder.integer(size=SizeType.COMBATANT_STATS)
+        self.intellect = decoder.integer(size=SizeType.COMBATANT_STATS)
+        self.spirit = decoder.integer(size=SizeType.COMBATANT_STATS)
+        self.armor = decoder.integer(size=SizeType.COMBATANT_STATS, signed=True)
+        self.gear = decoder.string()
+        self.buffs = decoder.string()
         
-    def encode(self, encoder) -> bytes:
-        return AEvent.encode(self, encoder) + \
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEvent.encode(self, encoder: Encoder) + \
                encoder.guid(self.playerGUID) + \
                encoder.integer(self.strength, size=SizeType.COMBATANT_STATS) + \
                encoder.integer(self.agility, size=SizeType.COMBATANT_STATS) + \

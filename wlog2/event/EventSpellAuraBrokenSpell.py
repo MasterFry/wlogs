@@ -8,15 +8,26 @@ from .AEvent import string
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellAuraBrokenSpell(AEventBaseSpell):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_AURA_BROKEN_SPELL, parser)
-        self.extraSpellId = parser.getInt()
-        self.extraSpellName = parser.getString()
-        self.extraSpellSchool = parser.getInt()
-        self.auraType = parser.getAuraType()
+        
+        if isinstance(parser, EventParser):
+            self.extraSpellId = parser.getInt()
+            self.extraSpellName = parser.getString()
+            self.extraSpellSchool = parser.getInt()
+            self.auraType = parser.getAuraType()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.extraSpellId, self.extraSpellName, self.extraSpellSchool = decoder.spell()
+        self.auraType = decoder.auraType()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + \
                encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool) + \
                encoder.auraType(self.auraType)
 

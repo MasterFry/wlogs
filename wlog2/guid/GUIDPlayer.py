@@ -1,19 +1,29 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
+from ..encode import *
 
 from ..EventParser import EventParser
-from ..Encode import Encoder
-from ..Encode import SizeType
 
 from .AGUID import AGUID
 
 # For players: Player-[server ID]-[player UID] (Example: "Player-970-0002FD64")
 
 class GUIDPlayer(AGUID):
-    def __init__(self, parser: EventParser):
+    def __init__(self, parser):
         AGUID.__init__(self, GUIDType.PLAYER)
-        self.serverID = parser.getInt(delim='-')
-        self.playerUID = parser.getInt(delim=',', base=16)
+        
+        if isinstance(parser, EventParser):
+            self.serverID = parser.getInt(delim='-')
+            self.playerUID = parser.getInt(delim=',', base=16)
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
+
+    def decode(self, decoder: Decoder):
+        self.serverID = self.integer(size=SizeType.GUID_SERVER_ID)
+        self.playerUID = self.integer(size=SizeType.GUID_PLAYER_UID)
 
     def encode(self, encoder: Encoder):
         return encoder.guidType(self.guidType) + \

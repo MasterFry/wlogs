@@ -1,8 +1,8 @@
 
 from ..types import EventType
 from ..types import GUIDType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 from .AEventBase import AEventBase
@@ -43,26 +43,42 @@ from .AEventBase import AEventBase
 #       61
 
 class AEventAdvanced(AEventBase):
-    def __init__(self, parser: EventParser):
-        self.unitGUID = parser.getGUID()  # 1
-        self.ownerGUID = parser.getGUID() # 2
-        self.currHP = parser.getInt()     # 3
-        maxHP = parser.getInt()           # 4
-        assert(maxHP == 100 or (maxHP == 0 and self.unitGUID.guidType == GUIDType.NULL))
-        assert(parser.getInt() == 0)      # 5
-        assert(parser.getInt() == 0)      # 6
-        assert(parser.getInt() == 0)      # 7
-        assert(parser.getInt() == -1)     # 8
-        assert(parser.getInt() == 0)      # 9
-        assert(parser.getInt() == 0)      # 10
-        assert(parser.getInt() == 0)      # 11
-        self.coord1 = parser.getFloat()   # 12
-        self.coord2 = parser.getFloat()   # 13
-        self.mapId = parser.getInt()      # 14
-        self.facing = parser.getFloat()   # 15
-        self.level = parser.getInt()      # 16
+    def __init__(self, parser):
+        if isinstance(parser, EventParser):
+            self.unitGUID = parser.getGUID()  # 1
+            self.ownerGUID = parser.getGUID() # 2
+            self.currHP = parser.getInt()     # 3
+            maxHP = parser.getInt()           # 4
+            assert(maxHP == 100 or (maxHP == 0 and self.unitGUID.guidType == GUIDType.NULL))
+            assert(parser.getInt() == 0)      # 5
+            assert(parser.getInt() == 0)      # 6
+            assert(parser.getInt() == 0)      # 7
+            assert(parser.getInt() == -1)     # 8
+            assert(parser.getInt() == 0)      # 9
+            assert(parser.getInt() == 0)      # 10
+            assert(parser.getInt() == 0)      # 11
+            self.coord1 = parser.getFloat()   # 12
+            self.coord2 = parser.getFloat()   # 13
+            self.mapId = parser.getInt()      # 14
+            self.facing = parser.getFloat()   # 15
+            self.level = parser.getInt()      # 16
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+    def decode(self, decoder: Decoder):
+        self.unitGUID = decoder.guid()
+        self.ownerGUID = decoder.guid()
+        self.currHP = decoder.integer(size=SizeType.HP)
+        self.coord1 = decoder.floating(size=SizeType.COORDINATE, digits=2, signed=True)
+        self.coord2 = decoder.floating(size=SizeType.COORDINATE, digits=2, signed=True)
+        self.mapId = decoder.integer(size=SizeType.MAP_ID)
+        self.facing = decoder.floating(size=SizeType.FACING, digits=4)
+        self.level = decoder.integer(size=SizeType.LEVEL)
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.guid(self.unitGUID) + \
                encoder.guid(self.ownerGUID) + \
                encoder.integer(self.currHP, size=SizeType.HP) + \
@@ -73,10 +89,11 @@ class AEventAdvanced(AEventBase):
                encoder.integer(self.level, size=SizeType.LEVEL)
 
     def __str__(self):
-        return ',{0:s},{1:s},{2:d},100,0,0,0,-1,0,0,0,{3:06.02f},{4:06.02f},{5:d},{6:06.04f},{7:d}'.format(
+        return ',{0:s},{1:s},{2:d},{3:d},0,0,0,-1,0,0,0,{4:06.02f},{5:06.02f},{6:d},{7:06.04f},{8:d}'.format(
             str(self.unitGUID),
             str(self.ownerGUID),
             self.currHP,
+            '0' if self.unitGUID.guidType == GUIDType.NULL else '100', # maxHP
             self.coord1,
             self.coord2,
             self.mapId,

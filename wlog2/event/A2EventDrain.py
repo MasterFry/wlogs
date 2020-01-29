@@ -1,26 +1,38 @@
 from abc import ABC
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 
 # amount, powerType, extraAmount ?
 
 class A2EventDrain(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.SPELL_DRAIN or \
             eventType == EventType.SPELL_PERIODIC_DRAIN or \
             eventType == EventType.SPELL_PERIODIC_LEECH
         )
-        self.amount = parser.getInt()
-        self.powerType = parser.getInt()
-        self.extraAmount = parser.getInt()
-        self.p6 = parser.getInt()
+        if isinstance(parser, EventParser):
+            self.amount = parser.getInt()
+            self.powerType = parser.getInt()
+            self.extraAmount = parser.getInt()
+            self.p6 = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+    def decode(self, decoder: Decoder):
+        self.amount = decoder.integer(size=SizeType.DRAIN_AMOUNT)
+        self.powerType = decoder.integer(size=SizeType.POWER_TYPE)
+        self.extraAmount = decoder.integer(size=SizeType.DRAIN_AMOUNT)
+        self.p6 = decoder.integer(size=SizeType.DRAIN_P6)
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.integer(self.amount, size=SizeType.DRAIN_AMOUNT) + \
                encoder.integer(self.powerType, size=SizeType.POWER_TYPE) + \
                encoder.integer(self.extraAmount, size=SizeType.DRAIN_AMOUNT) + \

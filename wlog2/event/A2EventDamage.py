@@ -1,8 +1,8 @@
 from abc import ABC
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 986,896,-1,16,0,0,0,nil,nil,nil
@@ -18,7 +18,7 @@ from ..EventParser import EventParser
 # 10:  crushing: nil / 1
 
 class A2EventDamage(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.ENVIRONMENTAL_DAMAGE  or \
             eventType == EventType.RANGE_DAMAGE          or \
@@ -28,18 +28,42 @@ class A2EventDamage(ABC):
             eventType == EventType.SWING_DAMAGE_LANDED   or \
             eventType == EventType.DAMAGE_SHIELD
         )
-        self.amount = parser.getInt()
-        self.p2 = parser.getInt()
-        self.p3 = parser.getInt()
-        self.school = parser.getInt()
-        self.resisted = parser.getInt()
-        self.blocked = parser.getInt()
-        self.absorbed = parser.getInt()
-        self.critical = parser.readValue() == '1'
-        self.glancing = parser.readValue() == '1'
-        self.crushing = parser.readValue() == '1'
+        if isinstance(parser, EventParser):
+            self.amount = parser.getInt()
+            self.p2 = parser.getInt()
+            self.p3 = parser.getInt()
+            self.school = parser.getInt()
+            self.resisted = parser.getInt()
+            self.blocked = parser.getInt()
+            self.absorbed = parser.getInt()
+            self.critical = parser.readValue() == '1'
+            self.glancing = parser.readValue() == '1'
+            self.crushing = parser.readValue() == '1'
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
+
+    def decode(self, decoder: Decoder):
+        self.amount = decoder.integer(size=SizeType.DAMAGE_AMOUNT)
+        self.p2 = decoder.integer(size=SizeType.DAMAGE_P2)
+        self.p3 = decoder.integer(size=SizeType.DAMAGE_P3, signed=True)
+        self.school = decoder.integer(size=SizeType.SPELL_SCHOOL)
+        self.resisted = decoder.integer(size=SizeType.DAMAGE_AMOUNT, signed=True)
+        self.blocked = decoder.integer(size=SizeType.DAMAGE_AMOUNT)
+        self.absorbed = decoder.integer(size=SizeType.DAMAGE_AMOUNT)
+        b = decoder.boolean(count=3)
+        self.critical = b[0]
+        self.glancing = b[1]
+        self.crushing = b[2]
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.integer(self.amount, size=SizeType.DAMAGE_AMOUNT) + \
                encoder.integer(self.p2, size=SizeType.DAMAGE_P2) + \
                encoder.integer(self.p3, size=SizeType.DAMAGE_P3, signed=True) + \

@@ -3,12 +3,12 @@ from abc import ABC
 from ..types import EventType
 from ..types import MissType
 from ..types import getMissTypeName
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 class A2EventMissed(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.SWING_MISSED          or \
             eventType == EventType.RANGE_MISSED          or \
@@ -16,18 +16,36 @@ class A2EventMissed(ABC):
             eventType == EventType.SPELL_PERIODIC_MISSED or \
             eventType == EventType.DAMAGE_SHIELD_MISSED
         )
-        self.missType = parser.getMissType()
-        self.isOffHand = parser.readValue() == '1'
+        if isinstance(parser, EventParser):
+            self.missType = parser.getMissType()
+            self.isOffHand = parser.readValue() == '1'
 
+            if self.missType == MissType.ABSORB:
+                self.amountMissed = parser.getInt()
+                self.critical = parser.getInt()
+
+            elif self.missType == MissType.RESIST or \
+                self.missType == MissType.BLOCK:
+                self.amountMissed = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
+
+    def decode(self, decoder: Decoder):
+        self.missType = decoder.missType()
+        self.isOffHand = decoder.boolean()
+        
         if self.missType == MissType.ABSORB:
-            self.amountMissed = parser.getInt()
-            self.critical = parser.getInt()
+            self.amountMissed = decoder.integer(size=SizeType.MISSED_AMOUNT)
+            self.critical = decoder.integer(size=SizeType.MISSED_CRITICAL)
 
         elif self.missType == MissType.RESIST or \
              self.missType == MissType.BLOCK:
-            self.amountMissed = parser.getInt()
+            self.amountMissed = decoder.integer(size=SizeType.MISSED_AMOUNT)
 
-    def encode(self, encoder) -> bytes:
+    def encode(self, encoder: Encoder) -> bytes:
         if self.missType == MissType.ABSORB:
             return encoder.missType(self.missType) + \
                    encoder.boolean(self.isOffHand) + \

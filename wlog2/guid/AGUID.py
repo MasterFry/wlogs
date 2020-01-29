@@ -2,6 +2,7 @@ from abc import ABC
 from abc import abstractmethod
 
 from ..types import GUIDType
+from ..encode import *
 
 # For players: Player-[server ID]-[player UID] (Example: "Player-970-0002FD64")
 # For Unit Type Names: [Unit type]-0-[server ID]-[instance ID]-[zone UID]-[ID]-[spawn UID] 
@@ -16,7 +17,11 @@ class AGUID(ABC):
         self.guidType = guidType
 
     @abstractmethod
-    def encode(self, encoder):
+    def decode(self, decoder: Decoder):
+        pass
+
+    @abstractmethod
+    def encode(self, encoder: Encoder):
         pass
 
     @abstractmethod

@@ -1,8 +1,8 @@
 from abc import ABC
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 36.0000,0.0000,0,8319
@@ -12,17 +12,29 @@ from ..EventParser import EventParser
 #  4:  alternatePowerType
 
 class A2EventEnergize(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.SPELL_ENERGIZE or \
             eventType == EventType.SPELL_PERIODIC_ENERGIZE
         )
-        self.amount = parser.getFloat()
-        self.overEnergize = parser.getFloat()
-        self.powerType = parser.getInt()
-        self.alternatePowerType = parser.getInt()
+        if isinstance(parser, EventParser):
+            self.amount = parser.getFloat()
+            self.overEnergize = parser.getFloat()
+            self.powerType = parser.getInt()
+            self.alternatePowerType = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+    def decode(self, decoder: Decoder):
+        self.amount = decoder.floating(size=SizeType.ENERGIZE_AMOUNT, digits=4)
+        self.overEnergize = decoder.floating(size=SizeType.ENERGIZE_AMOUNT, digits=4)
+        self.powerType = decoder.integer(size=SizeType.POWER_TYPE)
+        self.alternatePowerType = decoder.integer(size=SizeType.ALTERNATE_POWER_TYPE)
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.floating(self.amount, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
                encoder.floating(self.overEnergize, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
                encoder.integer(self.powerType, size=SizeType.POWER_TYPE) + \

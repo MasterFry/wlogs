@@ -1,7 +1,7 @@
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 from .AEvent import AEvent
@@ -11,16 +11,30 @@ from .AEvent import string
 # 1/22 19:39:52.829  ENCOUNTER_END,663,"Lucifron",9,40,1
 
 class AEventEncounter(AEvent):
-    def __init__(self, time, eventType, parser: EventParser):
+    def __init__(self, time, eventType, parser):
         AEvent.__init__(self, time, eventType)
-        self.encounterId = parser.getInt()
-        self.encounterName = parser.getString()
-        self.difficultyId = parser.getInt()
-        self.playerCount = parser.getInt()
+        
+        if isinstance(parser, EventParser):
+            self.encounterId = parser.getInt()
+            self.encounterName = parser.getString()
+            self.difficultyId = parser.getInt()
+            self.playerCount = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEvent.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.encounterId = decoder.integer(size=SizeType.ENCOUNTER_ID)
+        self.encounterName = decoder.string()
+        self.difficultyId = decoder.integer(size=SizeType.DIFFICULTY_ID)
+        self.playerCount = decoder.integer(size=SizeType.PLAYER_COUNT)
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEvent.encode(self, encoder: Encoder) + \
                encoder.integer(self.encounterId, size=SizeType.ENCOUNTER_ID) + \
+               encoder.string(self.encounterName) + \
                encoder.integer(self.difficultyId, size=SizeType.DIFFICULTY_ID) + \
                encoder.integer(self.playerCount, size=SizeType.PLAYER_COUNT)
 

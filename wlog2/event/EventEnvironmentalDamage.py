@@ -9,17 +9,28 @@ from .AEventAdvanced import AEventAdvanced
 from .AEventBase import AEventBase
 
 class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBase.__init__(self, time, EventType.ENVIRONMENTAL_DAMAGE, parser)
         AEventAdvanced.__init__(self, parser)
-        self.environmentalType = parser.getEnvironmentalType()
+        
+        if isinstance(parser, EventParser):
+            self.environmentalType = parser.getEnvironmentalType()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
+
         A2EventDamage.__init__(self, EventType.ENVIRONMENTAL_DAMAGE, parser)
 
-    def encode(self, encoder) -> bytes:
-        return AEventBase.encode(self, encoder) + \
-               AEventAdvanced.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.environmentalType = decoder.environmentalType()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBase.encode(self, encoder: Encoder) + \
+               AEventAdvanced.encode(self, encoder: Encoder) + \
                encoder.environmentalType(self.environmentalType) + \
-               A2EventDamage.encode(self, encoder)
+               A2EventDamage.encode(self, encoder: Encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(

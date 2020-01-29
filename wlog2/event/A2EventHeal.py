@@ -1,8 +1,8 @@
 from abc import ABC
 
 from ..types import EventType
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 296,296,0,0,nil
@@ -14,20 +14,33 @@ from ..EventParser import EventParser
 #  5:  critical: nil / 1
 
 class A2EventHeal(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.SPELL_HEAL or \
             eventType == EventType.SPELL_PERIODIC_HEAL
         )
-        self.amount = parser.getInt()
-        self.overhealing = parser.getInt()
-        self.absorbed = parser.getInt()
-        self.p1 = parser.getInt()
-        self.critical = parser.readValue() == '1'
+        if isinstance(parser, EventParser):
+            self.amount = parser.getInt()
+            self.overhealing = parser.getInt()
+            self.absorbed = parser.getInt()
+            self.p1 = parser.getInt()
+            self.critical = parser.readValue() == '1'
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return encoder.floating(self.amount, size=SizeType.HEAL_AMOUNT, digits=4) + \
-               encoder.floating(self.overhealing, size=SizeType.HEAL_AMOUNT, digits=4) + \
+    def decode(self, decoder: Decoder):
+        self.amount = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
+        self.overhealing = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
+        self.absorbed = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
+        self.p1 = decoder.integer(size, size=SizeType.HEAL_P1)
+        self.critical = decoder.boolean()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return encoder.integer(self.amount, size=SizeType.HEAL_AMOUNT) + \
+               encoder.integer(self.overhealing, size=SizeType.HEAL_AMOUNT) + \
                encoder.integer(self.absorbed, size=SizeType.HEAL_AMOUNT) + \
                encoder.integer(self.p1, size=SizeType.HEAL_P1) + \
                encoder.boolean(self.critical)

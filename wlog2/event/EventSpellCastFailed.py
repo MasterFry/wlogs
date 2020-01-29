@@ -6,12 +6,22 @@ from ..EventParser import EventParser
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellCastFailed(AEventBaseSpell):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_CAST_FAILED, parser)
-        self.failedType = parser.getString()
+        
+        if isinstance(parser, EventParser):
+            self.failedType = parser.getString()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + encoder.string(self.failedType)
+    def decode(self, decoder: Decoder):
+        self.failedType = decoder.string()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + encoder.string(self.failedType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',"{0:s}"'.format(

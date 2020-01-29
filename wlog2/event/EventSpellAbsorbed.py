@@ -1,7 +1,7 @@
 from ..types import EventType
 from ..guid import isGUID
+from ..encode import *
 
-from ..Encode import SizeType
 from ..EventParser import EventParser
 
 from .AEvent import string
@@ -11,29 +11,44 @@ from .AEventBase import AEventBase
 # BASE, 21333,"Lava Breath",0x4, Player-4701-00B48D7F,"Qopy-Mograine",0x511,0x0,  13033,"Ice Barrier",0x10, 524,722
 
 class EventSpellAbsorbed(AEventBase):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBase.__init__(self, time, EventType.SPELL_ABSORBED, parser)
 
-        if isGUID(parser.peekValue()):
-            self.hasBaseSpell = False
+        if isinstance(parser, EventParser):
+            if isGUID(parser.peekValue()):
+                self.hasBaseSpell = False
+            else:
+                self.hasBaseSpell = True
+                self.spellId = parser.getInt()
+                self.spellName = parser.getString()
+                self.spellSchool = parser.getInt(base=16)
+
+            self.extraGUID = parser.getGUID()
+            self.extraName = parser.getString()
+            self.extraFlags = parser.getInt(base=16)
+            self.extraRaidFlags = parser.getInt(base=16)
+            self.extraSpellId = parser.getInt()
+            self.extraSpellName = parser.getString()
+            self.extraSpellSchool = parser.getInt(base=16)
+            self.amount = parser.getInt()
+            self.p5 = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
         else:
-            self.hasBaseSpell = True
-            self.spellId = parser.getInt()
-            self.spellName = parser.getString()
-            self.spellSchool = parser.getInt(base=16)
+            ValueError('Parser not supported: ' + type(parser))
 
-        self.extraGUID = parser.getGUID()
-        self.extraName = parser.getString()
-        self.extraFlags = parser.getInt(base=16)
-        self.extraRaidFlags = parser.getInt(base=16)
-        self.extraSpellId = parser.getInt()
-        self.extraSpellName = parser.getString()
-        self.extraSpellSchool = parser.getInt(base=16)
-        self.amount = parser.getInt()
-        self.p5 = parser.getInt()
+    def decode(self, decoder: Decoder):
+        self.hasBaseSpell = decoder.boolean()
+        if self.hasBaseSpell:
+            self.spellId, self.spellName, self.spellSchool = decoder.spell()
+        self.extraGUID, self.extraName, self.extraFlags, self.extraRaidFlags = decoder.entity()
+        self.extraSpellId, self.extraSpellName, self.extraSpellSchool = decoder.spell()
+        self.amount = decoder.integer(size=SizeType.SPELL_ABSORBED_AMOUNT)
+        self.p5 = decoder.integer(size=SizeType.SPELL_ABSORBED_P5)
 
-    def encode(self, encoder) -> bytes:
-        code = AEventBase.encode(self, encoder)
+    def encode(self, encoder: Encoder) -> bytes:
+        code = AEventBase.encode(self, encoder: Encoder) + encoder.boolean(self.hasBaseSpell)
         if self.hasBaseSpell:
             code += encoder.spell(self.spellId, self.spellName, self.spellSchool)
         return code + \

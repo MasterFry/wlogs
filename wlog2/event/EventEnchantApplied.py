@@ -7,12 +7,12 @@ from .A2EventEnchant import A2EventEnchant
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventEnchantApplied(AEventBaseSpell, A2EventEnchant):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.ENCHANT_APPLIED, parser)
         A2EventEnchant.__init__(self, EventType.ENCHANT_APPLIED, parser)
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + A2EventEnchant.encode(self, encoder)
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + A2EventEnchant.encode(self, encoder: Encoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventEnchant.__str__(self)

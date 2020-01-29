@@ -8,13 +8,13 @@ from .AEventAdvanced import AEventAdvanced
 from .AEventBase import AEventBase
 
 class EventSwingDamageLanded(AEventAdvanced, A2EventDamage):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBase.__init__(self, time, EventType.SWING_DAMAGE_LANDED, parser)
         AEventAdvanced.__init__(self, parser)
         A2EventDamage.__init__(self, EventType.SWING_DAMAGE_LANDED, parser)
 
-    def encode(self, encoder) -> bytes:
-        return AEventBase.encode(self, encoder) + AEventAdvanced.encode(self, encoder) + A2EventDamage.encode(self, encoder)
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBase.encode(self, encoder: Encoder) + AEventAdvanced.encode(self, encoder: Encoder) + A2EventDamage.encode(self, encoder: Encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + A2EventDamage.__str__(self)

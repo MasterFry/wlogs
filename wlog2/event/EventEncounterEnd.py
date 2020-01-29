@@ -8,12 +8,22 @@ from .AEventEncounter import AEventEncounter
 # 1/22 19:39:52.829  ENCOUNTER_END,663,"Lucifron",9,40,1
 
 class EventEncounterEnd(AEventEncounter):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventEncounter.__init__(self, time, EventType.ENCOUNTER_END, parser)
-        self.success = True if parser.readValue() == '1' else False
+        
+        if isinstance(parser, EventParser):
+            self.success = True if parser.readValue() == '1' else False
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventEncounter.encode(self, encoder) + encoder.boolean(self.success)
+    def decode(self, decoder: Decoder):
+        self.success = decoder.boolean()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventEncounter.encode(self, encoder: Encoder) + encoder.boolean(self.success)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_END

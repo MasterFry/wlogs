@@ -8,14 +8,24 @@ from .A2EventExtraSpell import A2EventExtraSpell
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_DISPEL, parser)
         A2EventExtraSpell.__init__(self, EventType.SPELL_DISPEL, parser)
-        self.auraType = parser.getAuraType()
+        
+        if isinstance(parser, EventParser):
+            self.auraType = parser.getAuraType()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + \
-               A2EventExtraSpell.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.auraType = decoder.auraType()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + \
+               A2EventExtraSpell.encode(self, encoder: Encoder) + \
                encoder.auraType(self.auraType)
 
     def __str__(self):

@@ -7,12 +7,12 @@ from .A2EventMissed import A2EventMissed
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventRangeMissed(AEventBaseSpell, A2EventMissed):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.RANGE_MISSED, parser)
         A2EventMissed.__init__(self, EventType.RANGE_MISSED, parser)
 
-    def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + A2EventMissed.encode(self, encoder)
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: Encoder) + A2EventMissed.encode(self, encoder: Encoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventMissed.__str__(self)

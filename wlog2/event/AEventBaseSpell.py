@@ -7,14 +7,24 @@ from .AEvent import string
 from .AEventBase import AEventBase
 
 class AEventBaseSpell(AEventBase):
-    def __init__(self, time, eventType, parser: EventParser):
+    def __init__(self, time, eventType, parser):
         AEventBase.__init__(self, time, eventType, parser)
-        self.spellId = parser.getInt()
-        self.spellName = parser.getString()
-        self.spellSchool = parser.getInt(base=16)
+        
+        if isinstance(parser, EventParser):
+            self.spellId = parser.getInt()
+            self.spellName = parser.getString()
+            self.spellSchool = parser.getInt(base=16)
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
-        return AEventBase.encode(self, encoder) + \
+    def decode(self, decoder: Decoder):
+        self.spellId, self.spellName, self.spellSchool = decoder.spell()
+
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBase.encode(self, encoder: Encoder) + \
                encoder.spell(self.spellId, self.spellName, self.spellSchool)
 
     def __str__(self):

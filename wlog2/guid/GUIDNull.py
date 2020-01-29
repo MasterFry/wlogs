@@ -7,7 +7,7 @@ from ..Encode import Encoder
 from .AGUID import AGUID
 
 class GUIDNull(AGUID):
-    def __init__(self, parser: EventParser):
+    def __init__(self, parser):
         AGUID.__init__(self, GUIDType.NULL)
 
     def encode(self, encoder):

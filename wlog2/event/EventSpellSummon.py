@@ -6,5 +6,5 @@ from ..EventParser import EventParser
 from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellSummon(AEventBaseSpell):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_SUMMON, parser)

@@ -7,16 +7,25 @@ from ..EventParser import EventParser
 from .AEvent import string
 
 class A2EventExtraSpell(ABC):
-    def __init__(self, eventType, parser: EventParser):
+    def __init__(self, eventType, parser):
         assert(
             eventType == EventType.SPELL_DISPEL or \
             eventType == EventType.SPELL_INTERRUPT
         )
-        self.extraSpellId = parser.getInt()
-        self.extraSpellName = parser.getString()
-        self.extraSpellSchool = parser.getInt()
+        if isinstance(parser, EventParser):
+            self.extraSpellId = parser.getInt()
+            self.extraSpellName = parser.getString()
+            self.extraSpellSchool = parser.getInt()
+            
+        elif isinstance(parser, Decoder):
+            self.decode(decode)
+        else:
+            ValueError('Parser not supported: ' + type(parser))
 
-    def encode(self, encoder) -> bytes:
+    def decode(self, decoder: Decoder):
+        self.extraSpellName, self.extraSpellId, self.extraSpellName = decoder.spell()
+
+    def encode(self, encoder: Encoder) -> bytes:
         return encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool)
 
     def __str__(self):

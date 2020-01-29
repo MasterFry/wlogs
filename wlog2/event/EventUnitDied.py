@@ -6,13 +6,13 @@ from ..EventParser import EventParser
 from .AEventBase import AEventBase
 
 class EventUnitDied(AEventBase):
-    def __init__(self, time, parser: EventParser):
+    def __init__(self, time, parser):
         AEventBase.__init__(self, time, EventType.UNIT_DIED, parser)
         # self.recapId = parser.getInt(base=16)
         # self.unconsciousOnDeath = parser.getInt(base=16)
 
-    def encode(self, encoder) -> bytes:
-        return AEventBase.encode(self, encoder)
+    def encode(self, encoder: Encoder) -> bytes:
+        return AEventBase.encode(self, encoder: Encoder)
 
     def __str__(self):
         return AEventBase.__str__(self)
