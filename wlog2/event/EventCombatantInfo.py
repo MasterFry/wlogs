@@ -1,3 +1,4 @@
+from wlog import Time
 
 from ..types import EventType
 from ..encode import AEncoder, ADecoder, SizeType
@@ -103,12 +104,13 @@ class EventCombatantInfo(AEvent):
             assert(remains[:16] == '(),(0,0,0,0),[],')
             assert(remains[-2:] == '[]') # TODO
             self.gear = remains[16:-3]          # 29
-            self.buffs = '[]'
+            self.buffs = dict() # = { spellId: (time, srcGUID), ..}
             
         elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
+
 
     def decode(self, decoder: ADecoder):
         self.playerGUID = decoder.guid()
@@ -119,9 +121,20 @@ class EventCombatantInfo(AEvent):
         self.spirit = decoder.integer(size=SizeType.COMBATANT_STATS)
         self.armor = decoder.integer(size=SizeType.COMBATANT_STATS, signed=True)
         self.gear = decoder.string()
-        self.buffs = decoder.string()
+        
+        self.buffs = dict()
+        buffCount = decoder.integer(size=SizeType.BUFF_COUNT)
+        for _ in range(buffCount):
+            guid = decoder.guid()
+            spellId = decoder.integer(size=SizeType.SPELL_ID)
+            self.buffs[spellId] = (Time.MIN(), guid)
         
     def encode(self, encoder: AEncoder) -> bytes:
+        buffs = encoder.integer(len(self.buffs), size=SizeType.BUFF_COUNT)
+        for spellId in self.buffs:
+            buffs += encoder.guid(self.buffs[spellId][1]) + encoder.integer(spellId, size=SizeType.SPELL_ID)
+
+        # TODO gear
         return AEvent.encode(self, encoder: AEncoder) + \
                encoder.guid(self.playerGUID) + \
                encoder.integer(self.strength, size=SizeType.COMBATANT_STATS) + \
@@ -131,11 +144,18 @@ class EventCombatantInfo(AEvent):
                encoder.integer(self.spirit, size=SizeType.COMBATANT_STATS) + \
                encoder.integer(self.armor, size=SizeType.COMBATANT_STATS, signed=True) + \
                encoder.string(self.gear) + \
-               encoder.string(self.buffs) # TODO gear and buffs
+               buffs
+
+    def mergeBuffs(self, other):
+        assert(isinstance(other, EventCombatantInfo))
+        for spellId in other.buffs:
+            if spellId not in self.buffs or \
+                self.buffs[spellId][0] < other.buffs[spellId]:
+                self.buffs[spellId] = other.buffs[spellId]
 
     def __str__(self):
         return AEvent.__str__(self) + \
-            ',{0:s},{1:d},{2:d},{3:d},{4:d},{5:d},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{6:d},0,(),(0,0,0,0),[],{7:s},{8:s}'.format(
+            ',{0:s},{1:d},{2:d},{3:d},{4:d},{5:d},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{6:d},0,(),(0,0,0,0),[],{7:s},[{8:s}]'.format(
                 str(self.playerGUID),
                 self.strength,
                 self.agility,
@@ -144,7 +164,7 @@ class EventCombatantInfo(AEvent):
                 self.spirit,
                 self.armor,
                 self.gear,
-                self.buffs
+                ','.join(['{0:s},{1:d}'.format(self.buffs[spellId][1], spellId) for spellId in self.buffs])
             )
 
     def __eq__(self, other):

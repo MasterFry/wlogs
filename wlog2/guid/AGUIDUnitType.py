@@ -24,6 +24,14 @@ class AGUIDUnitType(AGUID):
             
         elif isinstance(parser, ADecoder):
             self.decode(decode)
+
+        elif isinstance(parser, list):
+            self.serverID   = int(parser[0])
+            self.instanceID = int(parser[1])
+            self.zoneUID    = int(parser[2])
+            self.ID         = int(parser[3])
+            self.spawnUID   = int(parser[4])
+
         else:
             ValueError('Parser not supported: ' + type(parser))
 

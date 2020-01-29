@@ -4,7 +4,7 @@
 #                           FOR MERGING / WRITING BUFFS
 #
 from os import listdir
-from wlog import Merger
+from wlog2 import Merger
 from wlog import endsWith
 
 m = Merger()

@@ -18,6 +18,11 @@ class GUIDPlayer(AGUID):
             
         elif isinstance(parser, ADecoder):
             self.decode(decode)
+
+        elif isinstance(parser, list):
+            self.serverID = int(parser[0])
+            self.playerUID = int(parser[1])
+
         else:
             ValueError('Parser not supported: ' + type(parser))
 

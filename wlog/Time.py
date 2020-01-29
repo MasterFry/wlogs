@@ -42,6 +42,14 @@ class Time:
         t = (self.month * 31 + self.day) * 24 * 60 * 60000 + self.time
         return t.to_bytes(length=5, byteorder='little')
 
+    @staticmethod
+    def MAX() -> Time:
+        return Time([12, 31, 23, 59, 59])
+        
+    @staticmethod
+    def MIN() -> Time:
+        return Time([1, 1, 0, 0, 0])
+
     def __lt__(self, other):
         assert(isinstance(other, Time))
         if self.month == other.month:

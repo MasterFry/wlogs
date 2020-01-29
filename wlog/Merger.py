@@ -62,11 +62,11 @@ class Merger:
         wLog.save(self.outPath)
 
     @staticmethod
-    def checkFile(file: str):
-        if not isinstance(file, str):
+    def checkFile(fname: str):
+        if not isinstance(fname, str):
             raise ValueError('The file path must be given as a string')
-        if not exists(file):
-            raise ValueError('File does not exist: %s' % file)
-        if isdir(file):
-            raise ValueError('File is a directory: %s' % file)
+        if not exists(fname):
+            raise ValueError('File does not exist: %s' % fname)
+        if isdir(fname):
+            raise ValueError('File is a directory: %s' % fname)
 

@@ -28,4 +28,4 @@ class WLogParser(EventParser):
             value += self.readValue(delim=',')
         else:
             value += self.readValue(delim='-')
-        return GUID_TABLE[value](self)   
+        return GUID_TABLE[value](self)

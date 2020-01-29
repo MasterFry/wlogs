@@ -25,27 +25,28 @@ class SizeType(IntEnum):
     MISSED_AMOUNT         = 21
     MISSED_CRITICAL       = 22
     PLAYER_COUNT          = 23
-    POWER_TYPE            = 24
-    RAID_FLAGS            = 25
-    SPELL_ABSORBED_AMOUNT = 26
-    SPELL_ABSORBED_P5     = 27
-    SPELL_ID              = 28
-    SPELL_SCHOOL          = 29
-    MAP_ID                = 30
-    TYPE_EVENT            = 31
-    TYPE_ENVIRONMENT      = 32
-    TYPE_AURA             = 33
-    TYPE_MISS             = 34
-    TYPE_GUID             = 35
-    GUID_ID               = 36
-    GUID_SERVER_ID        = 37
-    GUID_INSTANCE_ID      = 38
-    GUID_ZONE_UID         = 39
-    GUID_SPAWN_UID        = 40
-    GUID_ITEM_SPAWN_UID   = 41
-    GUID_PLAYER_UID       = 42
-    DRAIN_AMOUNT          = 43
-    DRAIN_P6              = 44
+    BUFF_COUNT            = 24
+    POWER_TYPE            = 25
+    RAID_FLAGS            = 26
+    SPELL_ABSORBED_AMOUNT = 27
+    SPELL_ABSORBED_P5     = 28
+    SPELL_ID              = 29
+    SPELL_SCHOOL          = 30
+    MAP_ID                = 31
+    TYPE_EVENT            = 32
+    TYPE_ENVIRONMENT      = 33
+    TYPE_AURA             = 34
+    TYPE_MISS             = 35
+    TYPE_GUID             = 36
+    GUID_ID               = 37
+    GUID_SERVER_ID        = 38
+    GUID_INSTANCE_ID      = 39
+    GUID_ZONE_UID         = 40
+    GUID_SPAWN_UID        = 41
+    GUID_ITEM_SPAWN_UID   = 42
+    GUID_PLAYER_UID       = 43
+    DRAIN_AMOUNT          = 44
+    DRAIN_P6              = 45
 
 SIZE_TYPE_VALUES = [
     1, #        ALTERNATE_POWER_TYPE  
@@ -71,7 +72,8 @@ SIZE_TYPE_VALUES = [
     1, # 1-S    LEVEL                 
     1, #        MISSED_AMOUNT         
     1, #        MISSED_CRITICAL       
-    1, # 1-S    PLAYER_COUNT          
+    1, # 1-S    PLAYER_COUNT
+    1, # 1-S    BUFF_COUNT          
     1, #        POWER_TYPE            
     1, # 4      RAID_FLAGS            
     1, #        SPELL_ABSORBED_AMOUNT 

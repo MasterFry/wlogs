@@ -27,3 +27,7 @@ REGEX_GUID = compile('(0{16})|(Player-[0-9]+-[0-9A-F]{8})|(Item-[0-9]+-0-[0-9A-F
 
 def isGUID(string) -> bool:
     return REGEX_GUID.match(string) is not None
+
+def parseGUID(string: str) -> AGUID:
+    params = string.split('-')
+    return GUID_TABLE[params[0]](params[1:])
