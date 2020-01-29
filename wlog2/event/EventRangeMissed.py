@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventRangeMissed(AEventBaseSpell, A2EventMissed):
         A2EventMissed.__init__(self, EventType.RANGE_MISSED, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: AEncoder) + A2EventMissed.encode(self, encoder: AEncoder)
+        return AEventBaseSpell.encode(self, encoder) + A2EventMissed.encode(self, encoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventMissed.__str__(self)

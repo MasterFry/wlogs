@@ -48,7 +48,7 @@ class EventSpellAbsorbed(AEventBase):
         self.p5 = decoder.integer(size=SizeType.SPELL_ABSORBED_P5)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        code = AEventBase.encode(self, encoder: AEncoder) + encoder.boolean(self.hasBaseSpell)
+        code = AEventBase.encode(self, encoder) + encoder.boolean(self.hasBaseSpell)
         if self.hasBaseSpell:
             code += encoder.spell(self.spellId, self.spellName, self.spellSchool)
         return code + \

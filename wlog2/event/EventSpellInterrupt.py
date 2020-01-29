@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventSpellInterrupt(AEventBaseSpell, A2EventExtraSpell):
         A2EventExtraSpell.__init__(self, EventType.SPELL_INTERRUPT, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: AEncoder) + A2EventExtraSpell.encode(self, encoder: AEncoder)
+        return AEventBaseSpell.encode(self, encoder) + A2EventExtraSpell.encode(self, encoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventExtraSpell.__str__(self)

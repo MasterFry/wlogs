@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder, ADecoder
 
 from ..EventParser import EventParser
 
@@ -23,7 +24,7 @@ class EventSpellDurabilityDamage(AEventBaseSpell):
         self.itemId, self.itemName = decoder.item()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: AEncoder) + encoder.item(self.itemId, self.itemName)
+        return AEventBaseSpell.encode(self, encoder) + encoder.item(self.itemId, self.itemName)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d},{1:s}'.format(

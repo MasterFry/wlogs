@@ -2,7 +2,7 @@ from wlog import Time
 
 from ..types import *
 
-from .SizeTypes import *
+from .SizeType import *
 
 class AEncoder:
     def __init__(self):

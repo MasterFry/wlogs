@@ -32,7 +32,7 @@ class AEventEncounter(AEvent):
         self.playerCount = decoder.integer(size=SizeType.PLAYER_COUNT)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEvent.encode(self, encoder: AEncoder) + \
+        return AEvent.encode(self, encoder) + \
                encoder.integer(self.encounterId, size=SizeType.ENCOUNTER_ID) + \
                encoder.string(self.encounterName) + \
                encoder.integer(self.difficultyId, size=SizeType.DIFFICULTY_ID) + \

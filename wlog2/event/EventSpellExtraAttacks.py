@@ -22,7 +22,7 @@ class EventSpellExtraAttacks(AEventBaseSpell):
         self.amount = decoder.integer(size=SizeType.EXTRA_ATTACK_AMOUNT)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: AEncoder) + encoder.integer(self.amount, size=SizeType.EXTRA_ATTACK_AMOUNT)
+        return AEventBaseSpell.encode(self, encoder) + encoder.integer(self.amount, size=SizeType.EXTRA_ATTACK_AMOUNT)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d}'.format(

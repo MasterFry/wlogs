@@ -4,7 +4,7 @@ from abc import abstractmethod
 from .types import *
 
 # from wlog.GUID import GUID
-from wlog.Time import Time
+from wlog import Time
 
 
 class EventParsingError(Exception):

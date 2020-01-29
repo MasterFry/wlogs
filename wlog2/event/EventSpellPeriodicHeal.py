@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventSpellPeriodicHeal(AEventAdvancedSpell, A2EventHeal):
         A2EventHeal.__init__(self, EventType.SPELL_PERIODIC_HEAL, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventAdvancedSpell.encode(self, encoder: AEncoder) + A2EventHeal.encode(self, encoder: AEncoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventHeal.encode(self, encoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventHeal.__str__(self)

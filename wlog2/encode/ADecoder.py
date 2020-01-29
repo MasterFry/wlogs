@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 from ..types import *
 
-from .SizeTypes import *
+from .SizeType import *
 
 class ADecoder(ABC):
     def __init__(self, fname: str=None):
@@ -53,7 +53,7 @@ class ADecoder(ABC):
 
     def floating(self, size: SizeType, digits: int) -> float:
         value = float(self.integer(size=size, signed=signed, dynamic=dynamic))
-        for _ in range(digits)
+        for _ in range(digits):
             value /= 10
         return value
     

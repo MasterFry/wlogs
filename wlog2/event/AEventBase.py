@@ -50,7 +50,7 @@ class AEventBase(AEvent):
         self.destGUID, self.destName, self.destFlags, self.destRaidFlags = decoder.entity()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEvent.encode(self, encoder: AEncoder) + \
+        return AEvent.encode(self, encoder) + \
             encoder.entity(self.srcGUID, self.srcName, self.srcFlags, self.srcRaidFlags) + \
             encoder.entity(self.destGUID, self.destName, self.destFlags, self.destRaidFlags)
 

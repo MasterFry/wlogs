@@ -37,7 +37,7 @@ class EventCombatLogVersion(AEvent):
         self.projectId = decoder.integer(size=SizeType.COMBATLOG_PROJECT_ID)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEvent.encode(self, encoder: AEncoder) + \
+        return AEvent.encode(self, encoder) + \
                encoder.integer(self.version, size=SizeType.COMBATLOG_VERSION) + \
                encoder.boolean(self.advancedLogEnabled) + \
                encoder.string(self.build) + \

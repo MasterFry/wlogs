@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventDamageSplit(AEventAdvancedSpell, A2EventDamage):
         A2EventDamage.__init__(self, EventType.DAMAGE_SPLIT, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventAdvancedSpell.encode(self, encoder: AEncoder) + A2EventDamage.encode(self, encoder: AEncoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventDamage.encode(self, encoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventDamage.__str__(self)

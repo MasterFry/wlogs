@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventSpellPeriodicEnergize(AEventAdvancedSpell):
         A2EventEnergize.__init__(self, EventType.SPELL_PERIODIC_ENERGIZE, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventAdvancedSpell.encode(self, encoder: AEncoder) + A2EventEnergize.encode(self, encoder: AEncoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventEnergize.encode(self, encoder)
         
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventEnergize.__str__(self)

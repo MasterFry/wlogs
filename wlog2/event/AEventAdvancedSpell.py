@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder, ADecoder
 
 from ..EventParser import EventParser
 
@@ -29,9 +30,9 @@ class AEventAdvancedSpell(AEventAdvanced):
         self.spellId, self.spellName, self.spellSchool = decoder.spell()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBase.encode(self, encoder: AEncoder) + \
+        return AEventBase.encode(self, encoder) + \
                encoder.spell(self.spellId, self.spellName, self.spellSchool) + \
-               AEventAdvanced.encode(self, encoder: AEncoder)
+               AEventAdvanced.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + ',{0:d},{1:s},{2:#x}'.format(

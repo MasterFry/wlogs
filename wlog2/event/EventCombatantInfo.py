@@ -135,7 +135,7 @@ class EventCombatantInfo(AEvent):
             buffs += encoder.guid(self.buffs[spellId][1]) + encoder.integer(spellId, size=SizeType.SPELL_ID)
 
         # TODO gear
-        return AEvent.encode(self, encoder: AEncoder) + \
+        return AEvent.encode(self, encoder) + \
                encoder.guid(self.playerGUID) + \
                encoder.integer(self.strength, size=SizeType.COMBATANT_STATS) + \
                encoder.integer(self.agility, size=SizeType.COMBATANT_STATS) + \

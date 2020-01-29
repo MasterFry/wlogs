@@ -1,6 +1,7 @@
 
 from ..types import EventType
 from ..types import getEnvironmentalTypeName
+from ..encode import AEncoder, ADecoder
 
 from ..EventParser import EventParser
 
@@ -27,10 +28,10 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         self.environmentalType = decoder.environmentalType()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBase.encode(self, encoder: AEncoder) + \
-               AEventAdvanced.encode(self, encoder: AEncoder) + \
+        return AEventBase.encode(self, encoder) + \
+               AEventAdvanced.encode(self, encoder) + \
                encoder.environmentalType(self.environmentalType) + \
-               A2EventDamage.encode(self, encoder: AEncoder)
+               A2EventDamage.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(

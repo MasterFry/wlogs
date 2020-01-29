@@ -45,11 +45,6 @@ class A2EventDamage(ABC):
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-        elif isinstance(parser, ADecoder):
-            self.decode(decode)
-        else:
-            ValueError('Parser not supported: ' + type(parser))
-
     def decode(self, decoder: ADecoder):
         self.amount = decoder.integer(size=SizeType.DAMAGE_AMOUNT)
         self.p2 = decoder.integer(size=SizeType.DAMAGE_P2)

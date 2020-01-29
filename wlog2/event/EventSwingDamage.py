@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -14,7 +15,7 @@ class EventSwingDamage(AEventAdvanced, A2EventDamage):
         A2EventDamage.__init__(self, EventType.SWING_DAMAGE, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBase.encode(self, encoder: AEncoder) + AEventAdvanced.encode(self, encoder: AEncoder) + A2EventDamage.encode(self, encoder: AEncoder)
+        return AEventBase.encode(self, encoder) + AEventAdvanced.encode(self, encoder) + A2EventDamage.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + A2EventDamage.__str__(self)

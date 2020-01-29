@@ -24,7 +24,7 @@ class EventEncounterStart(AEventEncounter):
         self.p4 = decoder.integer(size=SizeType.ENCOUNTER_START_P4)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventEncounter.encode(self, encoder: AEncoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
+        return AEventEncounter.encode(self, encoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START

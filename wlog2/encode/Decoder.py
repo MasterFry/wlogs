@@ -4,7 +4,7 @@ from ..types import *
 from ..guid import *
 from ..event import *
 
-from .SizeTypes import SizeType
+from .SizeType import SizeType
 from .ADecoder import ADecoder
 
 class Decoder(ADecoder):

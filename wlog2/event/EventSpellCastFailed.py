@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder, ADecoder
 
 from ..EventParser import EventParser
 
@@ -21,7 +22,7 @@ class EventSpellCastFailed(AEventBaseSpell):
         self.failedType = decoder.string()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: AEncoder) + encoder.string(self.failedType)
+        return AEventBaseSpell.encode(self, encoder) + encoder.string(self.failedType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',"{0:s}"'.format(

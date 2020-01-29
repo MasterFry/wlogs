@@ -1,3 +1,4 @@
+from wlog import Time
 from wlog2.encode import ADecoder
 
 TIME_EPSILON_INIT = 5000

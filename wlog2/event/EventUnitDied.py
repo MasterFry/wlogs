@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder
 
 from ..EventParser import EventParser
 
@@ -12,7 +13,7 @@ class EventUnitDied(AEventBase):
         # self.unconsciousOnDeath = parser.getInt(base=16)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBase.encode(self, encoder: AEncoder)
+        return AEventBase.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self)

@@ -1,4 +1,4 @@
 
 from .WLogParser import WLogParser
 
-from .Encode import Encoder
+from .encode import Encoder

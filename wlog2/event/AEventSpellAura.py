@@ -38,11 +38,11 @@ class AEventSpellAura(AEventBaseSpell):
     def encode(self, encoder: AEncoder) -> bytes:
         if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
-            return AEventBaseSpell.encode(self, encoder: AEncoder) + \
+            return AEventBaseSpell.encode(self, encoder) + \
                    encoder.auraType(self.auraType) + \
                    encoder.integer(self.amount, size=SizeType.AURA_AMOUNT)
         else:
-            return AEventBaseSpell.encode(self, encoder: AEncoder) + \
+            return AEventBaseSpell.encode(self, encoder) + \
                    encoder.auraType(self.auraType)
 
     def __str__(self):

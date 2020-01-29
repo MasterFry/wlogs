@@ -1,5 +1,6 @@
 
 from ..types import EventType
+from ..encode import AEncoder, ADecoder
 
 from ..EventParser import EventParser
 
@@ -23,7 +24,7 @@ class EventEncounterEnd(AEventEncounter):
         self.success = decoder.boolean()
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventEncounter.encode(self, encoder: AEncoder) + encoder.boolean(self.success)
+        return AEventEncounter.encode(self, encoder) + encoder.boolean(self.success)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_END
