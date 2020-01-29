@@ -2,7 +2,7 @@ from ..types import GUIDType
 from ..types import getGUIDTypeName
 
 from ..EventParser import EventParser
-from ..Encode import Encoder
+from ..Encode import AEncoder
 
 from .AGUID import AGUID
 

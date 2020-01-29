@@ -1,6 +1,6 @@
 from ..types import EventType
 from ..guid import isGUID
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -33,12 +33,12 @@ class EventSpellAbsorbed(AEventBase):
             self.amount = parser.getInt()
             self.p5 = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.hasBaseSpell = decoder.boolean()
         if self.hasBaseSpell:
             self.spellId, self.spellName, self.spellSchool = decoder.spell()
@@ -47,8 +47,8 @@ class EventSpellAbsorbed(AEventBase):
         self.amount = decoder.integer(size=SizeType.SPELL_ABSORBED_AMOUNT)
         self.p5 = decoder.integer(size=SizeType.SPELL_ABSORBED_P5)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        code = AEventBase.encode(self, encoder: Encoder) + encoder.boolean(self.hasBaseSpell)
+    def encode(self, encoder: AEncoder) -> bytes:
+        code = AEventBase.encode(self, encoder: AEncoder) + encoder.boolean(self.hasBaseSpell)
         if self.hasBaseSpell:
             code += encoder.spell(self.spellId, self.spellName, self.spellSchool)
         return code + \

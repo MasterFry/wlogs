@@ -1,7 +1,7 @@
 
 from ..types import EventType
 from ..types import GUIDType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -63,12 +63,12 @@ class AEventAdvanced(AEventBase):
             self.facing = parser.getFloat()   # 15
             self.level = parser.getInt()      # 16
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.unitGUID = decoder.guid()
         self.ownerGUID = decoder.guid()
         self.currHP = decoder.integer(size=SizeType.HP)
@@ -78,7 +78,7 @@ class AEventAdvanced(AEventBase):
         self.facing = decoder.floating(size=SizeType.FACING, digits=4)
         self.level = decoder.integer(size=SizeType.LEVEL)
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.guid(self.unitGUID) + \
                encoder.guid(self.ownerGUID) + \
                encoder.integer(self.currHP, size=SizeType.HP) + \

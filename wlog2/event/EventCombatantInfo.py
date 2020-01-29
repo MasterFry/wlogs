@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -105,12 +105,12 @@ class EventCombatantInfo(AEvent):
             self.gear = remains[16:-3]          # 29
             self.buffs = '[]'
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.playerGUID = decoder.guid()
         self.strength = decoder.integer(size=SizeType.COMBATANT_STATS)
         self.agility = decoder.integer(size=SizeType.COMBATANT_STATS)
@@ -121,8 +121,8 @@ class EventCombatantInfo(AEvent):
         self.gear = decoder.string()
         self.buffs = decoder.string()
         
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEvent.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEvent.encode(self, encoder: AEncoder) + \
                encoder.guid(self.playerGUID) + \
                encoder.integer(self.strength, size=SizeType.COMBATANT_STATS) + \
                encoder.integer(self.agility, size=SizeType.COMBATANT_STATS) + \

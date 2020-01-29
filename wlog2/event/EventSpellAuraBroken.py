@@ -13,16 +13,16 @@ class EventSpellAuraBroken(AEventBaseSpell):
         if isinstance(parser, EventParser):
             self.auraType = parser.getAuraType()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.auraType = decoder.auraType()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: Encoder) + encoder.auraType(self.auraType)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: AEncoder) + encoder.auraType(self.auraType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',' + getAuraTypeName(self.auraType)

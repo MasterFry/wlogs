@@ -1,7 +1,7 @@
 from abc import ABC
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -40,17 +40,17 @@ class A2EventDamage(ABC):
             self.glancing = parser.readValue() == '1'
             self.crushing = parser.readValue() == '1'
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.amount = decoder.integer(size=SizeType.DAMAGE_AMOUNT)
         self.p2 = decoder.integer(size=SizeType.DAMAGE_P2)
         self.p3 = decoder.integer(size=SizeType.DAMAGE_P3, signed=True)
@@ -63,7 +63,7 @@ class A2EventDamage(ABC):
         self.glancing = b[1]
         self.crushing = b[2]
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.integer(self.amount, size=SizeType.DAMAGE_AMOUNT) + \
                encoder.integer(self.p2, size=SizeType.DAMAGE_P2) + \
                encoder.integer(self.p3, size=SizeType.DAMAGE_P3, signed=True) + \

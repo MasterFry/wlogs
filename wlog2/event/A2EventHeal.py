@@ -1,7 +1,7 @@
 from abc import ABC
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -26,19 +26,19 @@ class A2EventHeal(ABC):
             self.p1 = parser.getInt()
             self.critical = parser.readValue() == '1'
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.amount = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
         self.overhealing = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
         self.absorbed = decoder.integer(size, size=SizeType.HEAL_AMOUNT)
         self.p1 = decoder.integer(size, size=SizeType.HEAL_P1)
         self.critical = decoder.boolean()
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.integer(self.amount, size=SizeType.HEAL_AMOUNT) + \
                encoder.integer(self.overhealing, size=SizeType.HEAL_AMOUNT) + \
                encoder.integer(self.absorbed, size=SizeType.HEAL_AMOUNT) + \

@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 from ..EventParser import EventParsingError
@@ -25,19 +25,19 @@ class EventCombatLogVersion(AEvent):
                 raise EventParsingError('Field missing: PROJECT_ID')
             self.projectId = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.version = decoder.integer(size=SizeType.COMBATLOG_VERSION)
         self.advancedLogEnabled = decoder.boolean()
         self.build = decoder.string()
         self.projectId = decoder.integer(size=SizeType.COMBATLOG_PROJECT_ID)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEvent.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEvent.encode(self, encoder: AEncoder) + \
                encoder.integer(self.version, size=SizeType.COMBATLOG_VERSION) + \
                encoder.boolean(self.advancedLogEnabled) + \
                encoder.string(self.build) + \

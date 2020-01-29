@@ -1,3 +1,4 @@
+from wlog2.encode import ADecoder
 
 TIME_EPSILON_INIT = 5000
 TIME_EPSILON_CMP_ENCOUNTER = 10000
@@ -13,12 +14,29 @@ TIME_EPSILON = TIME_EPSILON_INIT
 
 class Time:
     def __init__(self, params):
-        self.month  = int(params[0])
-        self.day    = int(params[1])
-        self.hour   = int(params[2])
-        self.minute = int(params[3])
-        self.second = float(params[4])
-        self.time   = int(self.second * 1000) + 60000 * (self.minute + 60 * self.hour)
+        if isinstance(params, list):
+            self.month  = int(params[0])
+            self.day    = int(params[1])
+            self.hour   = int(params[2])
+            self.minute = int(params[3])
+            self.second = float(params[4])
+            self.time   = int(self.second * 1000) + 60000 * (self.minute + 60 * self.hour)
+        elif isinstance(params, ADecoder):
+            self.decode(params)
+        else:
+            raise ValueError('Invalid argument for Time.__init__(params): ' + str(params))
+
+    def decode(self, decoder):
+        time = int.from_bytes(decoder.read(5), byteorder='little')
+        self.time = time % (24 * 60 * 60000)
+        stime = self.time
+        time //= 24 * 60 * 60000
+        self.second = float(stime % 60000) / 1000
+        stime //= 60000
+        self.minute = stime % 60
+        self.hour = (stime // 60) % 60
+        self.day = time % 31
+        self.month = time // 31
 
     def encode(self) -> bytes:
         t = (self.month * 31 + self.day) * 24 * 60 * 60000 + self.time

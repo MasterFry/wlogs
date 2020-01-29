@@ -1,6 +1,6 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -18,19 +18,19 @@ class GUIDItem(AGUID):
             assert(parser.readValue(delim='-') == '0')
             self.spawnUID = parser.getInt(delim=',', base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.serverID = self.integer(size=SizeType.GUID_SERVER_ID)
-        self.spawnUID = self.integer(size=SizeType.GUID_SPAWN_UID)
+        self.spawnUID = self.integer(size=SizeType.GUID_ITEM_SPAWN_UID)
 
-    def encode(self, encoder: Encoder):
+    def encode(self, encoder: AEncoder):
         return encoder.guidType(self.guidType) + \
                encoder.integer(self.serverID, size=SizeType.GUID_SERVER_ID) + \
-               encoder.integer(self.spawnUID, size=SizeType.GUID_SPAWN_UID)
+               encoder.integer(self.spawnUID, size=SizeType.GUID_ITEM_SPAWN_UID)
 
     def __str__(self):
         return 'Item-{0:d}-0-{1:016X}'.format(

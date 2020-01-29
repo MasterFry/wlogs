@@ -1,7 +1,7 @@
 from abc import ABC
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -21,18 +21,18 @@ class A2EventDrain(ABC):
             self.extraAmount = parser.getInt()
             self.p6 = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.amount = decoder.integer(size=SizeType.DRAIN_AMOUNT)
         self.powerType = decoder.integer(size=SizeType.POWER_TYPE)
         self.extraAmount = decoder.integer(size=SizeType.DRAIN_AMOUNT)
         self.p6 = decoder.integer(size=SizeType.DRAIN_P6)
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.integer(self.amount, size=SizeType.DRAIN_AMOUNT) + \
                encoder.integer(self.powerType, size=SizeType.POWER_TYPE) + \
                encoder.integer(self.extraAmount, size=SizeType.DRAIN_AMOUNT) + \

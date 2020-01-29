@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -15,16 +15,16 @@ class EventEncounterStart(AEventEncounter):
         if isinstance(parser, EventParser):
             self.p4 = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.p4 = decoder.integer(size=SizeType.ENCOUNTER_START_P4)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventEncounter.encode(self, encoder: Encoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventEncounter.encode(self, encoder: AEncoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START

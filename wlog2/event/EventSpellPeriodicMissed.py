@@ -11,8 +11,8 @@ class EventSpellPeriodicMissed(AEventBaseSpell, A2EventMissed):
         AEventBaseSpell.__init__(self, time, EventType.SPELL_PERIODIC_MISSED, parser)
         A2EventMissed.__init__(self, EventType.SPELL_PERIODIC_MISSED, parser)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: Encoder) + A2EventMissed.encode(self, encoder: Encoder)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: AEncoder) + A2EventMissed.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventMissed.__str__(self)

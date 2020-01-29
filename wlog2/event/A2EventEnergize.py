@@ -1,7 +1,7 @@
 from abc import ABC
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -23,18 +23,18 @@ class A2EventEnergize(ABC):
             self.powerType = parser.getInt()
             self.alternatePowerType = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.amount = decoder.floating(size=SizeType.ENERGIZE_AMOUNT, digits=4)
         self.overEnergize = decoder.floating(size=SizeType.ENERGIZE_AMOUNT, digits=4)
         self.powerType = decoder.integer(size=SizeType.POWER_TYPE)
         self.alternatePowerType = decoder.integer(size=SizeType.ALTERNATE_POWER_TYPE)
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.floating(self.amount, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
                encoder.floating(self.overEnergize, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
                encoder.integer(self.powerType, size=SizeType.POWER_TYPE) + \

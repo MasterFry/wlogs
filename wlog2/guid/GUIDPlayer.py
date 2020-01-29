@@ -1,6 +1,6 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -16,16 +16,16 @@ class GUIDPlayer(AGUID):
             self.serverID = parser.getInt(delim='-')
             self.playerUID = parser.getInt(delim=',', base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.serverID = self.integer(size=SizeType.GUID_SERVER_ID)
         self.playerUID = self.integer(size=SizeType.GUID_PLAYER_UID)
 
-    def encode(self, encoder: Encoder):
+    def encode(self, encoder: AEncoder):
         return encoder.guidType(self.guidType) + \
                encoder.integer(self.serverID, size=SizeType.GUID_SERVER_ID) + \
                encoder.integer(self.playerUID, size=SizeType.GUID_PLAYER_UID)

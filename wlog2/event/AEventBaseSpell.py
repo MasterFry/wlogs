@@ -15,16 +15,16 @@ class AEventBaseSpell(AEventBase):
             self.spellName = parser.getString()
             self.spellSchool = parser.getInt(base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.spellId, self.spellName, self.spellSchool = decoder.spell()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBase.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBase.encode(self, encoder: AEncoder) + \
                encoder.spell(self.spellId, self.spellName, self.spellSchool)
 
     def __str__(self):

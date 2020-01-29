@@ -1,8 +1,8 @@
 
 from ..types import EventType
 
-from ..encode import Encoder
-from ..encode import *
+from ..encode import AEncoder
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -40,17 +40,17 @@ class AEventBase(AEvent):
             self.destFlags = parser.getInt(base=16)
             self.destRaidFlags = parser.getInt(base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.srcGUID, self.srcName, self.srcFlags, self.srcRaidFlags = decoder.entity()
         self.destGUID, self.destName, self.destFlags, self.destRaidFlags = decoder.entity()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEvent.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEvent.encode(self, encoder: AEncoder) + \
             encoder.entity(self.srcGUID, self.srcName, self.srcFlags, self.srcRaidFlags) + \
             encoder.entity(self.destGUID, self.destName, self.destFlags, self.destRaidFlags)
 

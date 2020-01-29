@@ -3,7 +3,7 @@ from abc import ABC
 from ..types import EventType
 from ..types import MissType
 from ..types import getMissTypeName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -28,12 +28,12 @@ class A2EventMissed(ABC):
                 self.missType == MissType.BLOCK:
                 self.amountMissed = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.missType = decoder.missType()
         self.isOffHand = decoder.boolean()
         
@@ -45,7 +45,7 @@ class A2EventMissed(ABC):
              self.missType == MissType.BLOCK:
             self.amountMissed = decoder.integer(size=SizeType.MISSED_AMOUNT)
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         if self.missType == MissType.ABSORB:
             return encoder.missType(self.missType) + \
                    encoder.boolean(self.isOffHand) + \

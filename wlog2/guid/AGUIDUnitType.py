@@ -1,6 +1,6 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -22,19 +22,19 @@ class AGUIDUnitType(AGUID):
             self.ID = parser.getInt(delim='-')
             self.spawnUID = parser.getInt(delim=',', base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.serverID = self.integer(size=SizeType.GUID_SERVER_ID)
         self.instanceID = self.integer(size=SizeType.GUID_INSTANCE_ID)
         self.zoneUID = self.integer(size=SizeType.GUID_ZONE_UID)
         self.ID = self.integer(size=SizeType.GUID_ID)
         self.spawnUID = self.integer(size=SizeType.GUID_SPAWN_UID)
 
-    def encode(self, encoder: Encoder):
+    def encode(self, encoder: AEncoder):
         return encoder.guidType(self.guidType) + \
                encoder.integer(self.serverID, size=SizeType.GUID_SERVER_ID) + \
                encoder.integer(self.instanceID, size=SizeType.GUID_INSTANCE_ID) + \

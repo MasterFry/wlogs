@@ -17,17 +17,17 @@ class EventSpellAuraBrokenSpell(AEventBaseSpell):
             self.extraSpellSchool = parser.getInt()
             self.auraType = parser.getAuraType()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.extraSpellId, self.extraSpellName, self.extraSpellSchool = decoder.spell()
         self.auraType = decoder.auraType()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: AEncoder) + \
                encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool) + \
                encoder.auraType(self.auraType)
 

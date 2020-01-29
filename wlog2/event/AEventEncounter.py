@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -20,19 +20,19 @@ class AEventEncounter(AEvent):
             self.difficultyId = parser.getInt()
             self.playerCount = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.encounterId = decoder.integer(size=SizeType.ENCOUNTER_ID)
         self.encounterName = decoder.string()
         self.difficultyId = decoder.integer(size=SizeType.DIFFICULTY_ID)
         self.playerCount = decoder.integer(size=SizeType.PLAYER_COUNT)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEvent.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEvent.encode(self, encoder: AEncoder) + \
                encoder.integer(self.encounterId, size=SizeType.ENCOUNTER_ID) + \
                encoder.string(self.encounterName) + \
                encoder.integer(self.difficultyId, size=SizeType.DIFFICULTY_ID) + \

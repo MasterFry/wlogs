@@ -14,16 +14,16 @@ class EventEncounterEnd(AEventEncounter):
         if isinstance(parser, EventParser):
             self.success = True if parser.readValue() == '1' else False
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.success = decoder.boolean()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventEncounter.encode(self, encoder: Encoder) + encoder.boolean(self.success)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventEncounter.encode(self, encoder: AEncoder) + encoder.boolean(self.success)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_END

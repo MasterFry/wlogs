@@ -4,7 +4,7 @@ from wlog import Time
 
 from ..types import EventType
 from ..types import getEventName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 # Unknown Parameters:
 # A2EventHeal: p1
@@ -26,10 +26,10 @@ class AEvent(ABC):
         return getEventName(self.eventType)
         
     @abstractmethod
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         pass
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.time(self.time) + encoder.eventType(self.eventType)
 
     def __str__(self):

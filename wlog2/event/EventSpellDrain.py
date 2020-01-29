@@ -11,8 +11,8 @@ class EventSpellDrain(AEventAdvancedSpell, A2EventDrain):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_DRAIN, parser)
         A2EventDrain.__init__(self, EventType.SPELL_DRAIN, parser)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventAdvancedSpell.encode(self, encoder: Encoder) + A2EventDrain.encode(self, encoder: Encoder)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventAdvancedSpell.encode(self, encoder: AEncoder) + A2EventDrain.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventDrain.__str__(self)

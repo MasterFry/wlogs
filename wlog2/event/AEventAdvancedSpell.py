@@ -18,20 +18,20 @@ class AEventAdvancedSpell(AEventAdvanced):
             self.spellName = parser.getString()
             self.spellSchool = parser.getInt(base=16)
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
         
         AEventAdvanced.__init__(self, parser)
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.spellId, self.spellName, self.spellSchool = decoder.spell()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBase.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBase.encode(self, encoder: AEncoder) + \
                encoder.spell(self.spellId, self.spellName, self.spellSchool) + \
-               AEventAdvanced.encode(self, encoder: Encoder)
+               AEventAdvanced.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + ',{0:d},{1:s},{2:#x}'.format(

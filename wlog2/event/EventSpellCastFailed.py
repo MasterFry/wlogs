@@ -12,16 +12,16 @@ class EventSpellCastFailed(AEventBaseSpell):
         if isinstance(parser, EventParser):
             self.failedType = parser.getString()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.failedType = decoder.string()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder: Encoder) + encoder.string(self.failedType)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBaseSpell.encode(self, encoder: AEncoder) + encoder.string(self.failedType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',"{0:s}"'.format(

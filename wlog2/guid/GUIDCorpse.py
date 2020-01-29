@@ -1,7 +1,7 @@
 from .AGUIDUnitType import AGUIDUnitType
 
 from ..types import GUIDType
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 

@@ -11,8 +11,8 @@ class EventSpellPeriodicHeal(AEventAdvancedSpell, A2EventHeal):
         AEventAdvancedSpell.__init__(self, time, EventType.SPELL_PERIODIC_HEAL, parser)
         A2EventHeal.__init__(self, EventType.SPELL_PERIODIC_HEAL, parser)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventAdvancedSpell.encode(self, encoder: Encoder) + A2EventHeal.encode(self, encoder: Encoder)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventAdvancedSpell.encode(self, encoder: AEncoder) + A2EventHeal.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventHeal.__str__(self)

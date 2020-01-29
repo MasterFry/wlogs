@@ -1,56 +1,33 @@
+from wlog import Time
+
 from ..types import *
+from ..guid import *
+from ..event import *
 
 from .SizeTypes import SizeType
+from .ADecoder import ADecoder
 
-class Decoder:
-    def __init__(self):
-        pass
-
-    def integer(self, size: SizeType, signed: bool=False, dynamic: bool=False) -> int:
-        pass
-
-    def floating(self, size: SizeType, digits: int, dynamic: bool=False) -> float:
-        pass
-    
-    def dynamic(self, size: int) -> int:
-        assert(False)
-
-    def boolean(self, count: int=1):
-        # bool or [bool,...]
-        pass
-
-    def string(self) -> str:
-        pass
-
-    def eventType(self) -> EventType:
-        pass
-
-    def environmentalType(self) -> EnvironmentalType:
-        pass
-
-    def auraType(self) -> AuraType:
-        pass
-
-    def missType(self) -> MissType:
-        pass
-
-    def guidType(self) -> GUIDType:
-        pass
-
-    def time(self) -> Time:
-        pass
+class Decoder(ADecoder):
+    def __init__(self, fname: str):
+        ADecoder.__init__(self, fname)
 
     def guid(self):
-        pass
+        gType = self.guidType()
+        return GUID_TABLE[gType](self)
 
-    def entity(self):
-        # guid, name, flags, raidFlags
-        pass
+    def event(self):
+        eTime = self.time()
+        eType = self.eventType()
+        return EVENT_TABLE[eType](eTime, self)
 
-    def spell(self):
-        # spellName, spellId, spellName
-        pass
+    def time(self):
+        return Time(self)
 
-    def item(self):
-        # itemId, itemName
-        pass
+    def __enter__(self):
+        self.open(self.fname)
+        return self
+
+    def __exit__(self, ex_type, ex_value, ex_traceback):
+        if ex_type is not None:
+            raise
+        self.close()

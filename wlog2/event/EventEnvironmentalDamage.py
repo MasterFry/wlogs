@@ -16,21 +16,21 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         if isinstance(parser, EventParser):
             self.environmentalType = parser.getEnvironmentalType()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
         A2EventDamage.__init__(self, EventType.ENVIRONMENTAL_DAMAGE, parser)
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.environmentalType = decoder.environmentalType()
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBase.encode(self, encoder: Encoder) + \
-               AEventAdvanced.encode(self, encoder: Encoder) + \
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBase.encode(self, encoder: AEncoder) + \
+               AEventAdvanced.encode(self, encoder: AEncoder) + \
                encoder.environmentalType(self.environmentalType) + \
-               A2EventDamage.encode(self, encoder: Encoder)
+               A2EventDamage.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(

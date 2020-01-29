@@ -17,15 +17,15 @@ class A2EventExtraSpell(ABC):
             self.extraSpellName = parser.getString()
             self.extraSpellSchool = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.extraSpellName, self.extraSpellId, self.extraSpellName = decoder.spell()
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool)
 
     def __str__(self):

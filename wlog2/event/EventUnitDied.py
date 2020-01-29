@@ -11,8 +11,8 @@ class EventUnitDied(AEventBase):
         # self.recapId = parser.getInt(base=16)
         # self.unconsciousOnDeath = parser.getInt(base=16)
 
-    def encode(self, encoder: Encoder) -> bytes:
-        return AEventBase.encode(self, encoder: Encoder)
+    def encode(self, encoder: AEncoder) -> bytes:
+        return AEventBase.encode(self, encoder: AEncoder)
 
     def __str__(self):
         return AEventBase.__str__(self)

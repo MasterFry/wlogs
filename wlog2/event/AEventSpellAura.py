@@ -1,7 +1,7 @@
 
 from ..types import EventType
 from ..types import getAuraTypeName
-from ..encode import *
+from ..encode import AEncoder, ADecoder, SizeType
 
 from ..EventParser import EventParser
 
@@ -24,25 +24,25 @@ class AEventSpellAura(AEventBaseSpell):
                self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
                 self.amount = parser.getInt()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.auraType = decoder.auraType()
         if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
             self.amount = decoder.integer(size=SizeType.AURA_AMOUNT)
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
-            return AEventBaseSpell.encode(self, encoder: Encoder) + \
+            return AEventBaseSpell.encode(self, encoder: AEncoder) + \
                    encoder.auraType(self.auraType) + \
                    encoder.integer(self.amount, size=SizeType.AURA_AMOUNT)
         else:
-            return AEventBaseSpell.encode(self, encoder: Encoder) + \
+            return AEventBaseSpell.encode(self, encoder: AEncoder) + \
                    encoder.auraType(self.auraType)
 
     def __str__(self):

@@ -22,16 +22,16 @@ class A2EventEnchant(ABC):
             self.itemId = parser.getInt()
             self.itemName = parser.getString()
             
-        elif isinstance(parser, Decoder):
+        elif isinstance(parser, ADecoder):
             self.decode(decode)
         else:
             ValueError('Parser not supported: ' + type(parser))
 
-    def decode(self, decoder: Decoder):
+    def decode(self, decoder: ADecoder):
         self.spellName = decoder.string()
         self.itemId, self.itemName = decoder.item()
 
-    def encode(self, encoder: Encoder) -> bytes:
+    def encode(self, encoder: AEncoder) -> bytes:
         return encoder.string(self.spellName) + encoder.item(self.itemId, self.itemName)
 
     def __str__(self):
