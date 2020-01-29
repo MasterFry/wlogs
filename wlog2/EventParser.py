@@ -1,10 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from .EventType import *
-from .AuraType import *
-from .MissType import *
-from .EnvironmentalType import *
+from .types import *
 
 # from wlog.GUID import GUID
 from wlog.Time import Time
@@ -52,6 +49,16 @@ class EventParser(ABC):
             self.lineNumber += 1
             self.bufferIndex = 0
         return len(self.buffer) > self.bufferIndex
+
+    def peekValue(self, delim=',') -> str:
+        value = ''
+        index = self.bufferIndex
+        
+        while self.buffer[index] != delim and self.buffer[index] != '\n':
+            value += self.buffer[index]
+            index += 1
+        
+        return value
 
     def readValue(self, delim=',') -> str:
         value = ''

@@ -1,6 +1,6 @@
-from .AGUID import GUIDType
 from .AGUIDUnitType import AGUIDUnitType
 
+from ..types import GUIDType
 from ..EventParser import EventParser
 
 class GUIDVignette(AGUIDUnitType):

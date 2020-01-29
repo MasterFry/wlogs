@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from wlog2.WLogParser import WLogParser
-from wlog2.EventType import EventType, getEventName
+from wlog2.types import EventType, getEventName
 
 covered = set()
 

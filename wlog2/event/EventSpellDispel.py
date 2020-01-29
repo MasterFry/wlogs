@@ -1,8 +1,11 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
-from .A2EventExtraSpell import A2EventExtraSpell
+
+from ..types import EventType
+from ..types import getAuraTypeName
+
 from ..EventParser import EventParser
-from ..AuraType import getAuraTypeName
+
+from .A2EventExtraSpell import A2EventExtraSpell
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
     def __init__(self, time, parser: EventParser):
@@ -11,8 +14,8 @@ class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
         self.auraType = parser.getAuraType()
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + \
-               A2EventExtraSpell.encode(encoder) + \
+        return AEventBaseSpell.encode(self, encoder) + \
+               A2EventExtraSpell.encode(self, encoder) + \
                encoder.auraType(self.auraType)
 
     def __str__(self):

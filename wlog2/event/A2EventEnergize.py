@@ -1,6 +1,8 @@
 from abc import ABC
 
-from ..EventType import EventType
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 36.0000,0.0000,0,8319
@@ -21,10 +23,10 @@ class A2EventEnergize(ABC):
         self.alternatePowerType = parser.getInt()
 
     def encode(self, encoder) -> bytes:
-        return encoder.floating(self.amount, size=2, digits=4) + \
-               encoder.floating(self.overEnergize, size=2, digits=4) + \
-               encoder.integer(self.powerType, size=1) + \
-               encoder.integer(self.alternatePowerType, size=1)
+        return encoder.floating(self.amount, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
+               encoder.floating(self.overEnergize, size=SizeType.ENERGIZE_AMOUNT, digits=4) + \
+               encoder.integer(self.powerType, size=SizeType.POWER_TYPE) + \
+               encoder.integer(self.alternatePowerType, size=SizeType.ALTERNATE_POWER_TYPE)
 
     def __str__(self):
         return ',{0:.04f},{1:.04f},{2:d},{3:d}'.format(

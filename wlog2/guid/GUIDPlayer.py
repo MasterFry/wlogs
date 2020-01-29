@@ -1,7 +1,11 @@
-from .AGUID import GUIDType
-from .AGUID import AGUID
+from ..types import GUIDType
+from ..types import getGUIDTypeName
 
 from ..EventParser import EventParser
+from ..Encode import Encoder
+from ..Encode import SizeType
+
+from .AGUID import AGUID
 
 # For players: Player-[server ID]-[player UID] (Example: "Player-970-0002FD64")
 
@@ -10,6 +14,11 @@ class GUIDPlayer(AGUID):
         AGUID.__init__(self, GUIDType.PLAYER)
         self.serverID = parser.getInt(delim='-')
         self.playerUID = parser.getInt(delim=',', base=16)
+
+    def encode(self, encoder: Encoder):
+        return encoder.guidType(self.guidType) + \
+               encoder.integer(self.serverID, size=SizeType.GUID_SERVER_ID) + \
+               encoder.integer(self.playerUID, size=SizeType.GUID_PLAYER_UID)
 
     def __str__(self):
         return 'Player-{0:d}-{1:08X}'.format(

@@ -1,9 +1,11 @@
 from abc import ABC
 
-from ..EventType import EventType
+from ..types import EventType
+from ..types import MissType
+from ..types import getMissTypeName
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
-from ..MissType import MissType
-from ..MissType import getMissTypeName
 
 class A2EventMissed(ABC):
     def __init__(self, eventType, parser: EventParser):
@@ -29,14 +31,14 @@ class A2EventMissed(ABC):
         if self.missType == MissType.ABSORB:
             return encoder.missType(self.missType) + \
                    encoder.boolean(self.isOffHand) + \
-                   encoder.integer(self.amountMissed, size=1) + \
-                   encoder.integer(self.critical, size=1)
+                   encoder.integer(self.amountMissed, size=SizeType.MISSED_AMOUNT) + \
+                   encoder.integer(self.critical, size=SizeType.MISSED_CRITICAL)
 
         elif self.missType == MissType.RESIST or \
              self.missType == MissType.BLOCK:
             return encoder.missType(self.missType) + \
                    encoder.boolean(self.isOffHand) + \
-                   encoder.integer(self.amountMissed, size=1)
+                   encoder.integer(self.amountMissed, size=SizeType.MISSED_AMOUNT)
 
         else:
             return encoder.missType(self.missType) + \

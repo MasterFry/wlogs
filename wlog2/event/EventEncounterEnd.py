@@ -1,5 +1,8 @@
-from ..EventType import EventType
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
 from .AEventEncounter import AEventEncounter
 
 # 1/22 19:39:52.829  ENCOUNTER_END,663,"Lucifron",9,40,1
@@ -10,7 +13,7 @@ class EventEncounterEnd(AEventEncounter):
         self.success = True if parser.readValue() == '1' else False
 
     def encode(self, encoder) -> bytes:
-        return AEventEncounter.encode(encoder) + encoder.boolean(self.success)
+        return AEventEncounter.encode(self, encoder) + encoder.boolean(self.success)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_END

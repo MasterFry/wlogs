@@ -1,5 +1,9 @@
-from ..EventType import EventType
+
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
+
 from .AEventEncounter import AEventEncounter
 
 # 1/22 19:39:52.829  ENCOUNTER_START,663,"Lucifron",9,40,409
@@ -10,7 +14,7 @@ class EventEncounterStart(AEventEncounter):
         self.p4 = parser.getInt()
 
     def encode(self, encoder) -> bytes:
-        return AEventEncounter.encode(encoder) + encoder.integer(self.p4, size=1)
+        return AEventEncounter.encode(self, encoder) + encoder.integer(self.p4, size=SizeType.ENCOUNTER_START_P4)
 
     def getEventType(self) -> EventType:
         return EventType.ENCOUNTER_START

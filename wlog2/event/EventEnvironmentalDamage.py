@@ -1,10 +1,12 @@
-from ..EventType import EventType
-from .AEventBase import AEventBase
-from .AEventAdvanced import AEventAdvanced
-from .A2EventDamage import A2EventDamage
-from ..EventParser import EventParser
-from ..EnvironmentalType import getEnvironmentalTypeName
 
+from ..types import EventType
+from ..types import getEnvironmentalTypeName
+
+from ..EventParser import EventParser
+
+from .A2EventDamage import A2EventDamage
+from .AEventAdvanced import AEventAdvanced
+from .AEventBase import AEventBase
 
 class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
     def __init__(self, time, parser: EventParser):
@@ -14,10 +16,10 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         A2EventDamage.__init__(self, EventType.ENVIRONMENTAL_DAMAGE, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventBase.encode(encoder) + \
-               AEventAdvanced.encode(encoder) + \
+        return AEventBase.encode(self, encoder) + \
+               AEventAdvanced.encode(self, encoder) + \
                encoder.environmentalType(self.environmentalType) + \
-               A2EventDamage.encode(encoder)
+               A2EventDamage.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self) + AEventAdvanced.__str__(self) + ',{0:s}'.format(

@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventAdvancedSpell import AEventAdvancedSpell
-from .A2EventEnergize import A2EventEnergize
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .A2EventEnergize import A2EventEnergize
+from .AEventAdvancedSpell import AEventAdvancedSpell
 
 class EventSpellEnergize(AEventAdvancedSpell, A2EventEnergize):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventSpellEnergize(AEventAdvancedSpell, A2EventEnergize):
         A2EventEnergize.__init__(self, EventType.SPELL_ENERGIZE, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventAdvancedSpell.encode(encoder) + A2EventEnergize.encode(encoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventEnergize.encode(self, encoder)
         
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventEnergize.__str__(self)

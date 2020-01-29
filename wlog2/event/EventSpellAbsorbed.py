@@ -1,8 +1,11 @@
-from .AEvent import string
-from ..EventType import EventType
-from .AEventBase import AEventBase
+from ..types import EventType
+from ..guid import isGUID
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
-from wlog.GUID import GUID
+
+from .AEvent import string
+from .AEventBase import AEventBase
 
 # BASE,                          Player-4701-0094E8DE,"Beemo-Mograine",0x514,0x0, 10193,"Mana Shield",0x40, 570,1593
 # BASE, 21333,"Lava Breath",0x4, Player-4701-00B48D7F,"Qopy-Mograine",0x511,0x0,  13033,"Ice Barrier",0x10, 524,722
@@ -11,17 +14,15 @@ class EventSpellAbsorbed(AEventBase):
     def __init__(self, time, parser: EventParser):
         AEventBase.__init__(self, time, EventType.SPELL_ABSORBED, parser)
 
-        value = parser.readValue()
-        try:
-            self.extraGUID = GUID(value)
+        if isGUID(parser.peekValue()):
             self.hasBaseSpell = False
-        except ValueError:
-            self.spellId = int(value)
+        else:
+            self.hasBaseSpell = True
+            self.spellId = parser.getInt()
             self.spellName = parser.getString()
             self.spellSchool = parser.getInt(base=16)
-            self.extraGUID = parser.getGUID()
-            self.hasBaseSpell = True
 
+        self.extraGUID = parser.getGUID()
         self.extraName = parser.getString()
         self.extraFlags = parser.getInt(base=16)
         self.extraRaidFlags = parser.getInt(base=16)
@@ -32,14 +33,14 @@ class EventSpellAbsorbed(AEventBase):
         self.p5 = parser.getInt()
 
     def encode(self, encoder) -> bytes:
-        code = AEventBase.encode(encoder)
+        code = AEventBase.encode(self, encoder)
         if self.hasBaseSpell:
             code += encoder.spell(self.spellId, self.spellName, self.spellSchool)
         return code + \
                encoder.entity(self.extraGUID, self.extraName, self.extraFlags, self.extraRaidFlags) + \
                encoder.spell(self.extraSpellId, self.extraSpellName, self.extraSpellSchool) + \
-               encoder.integer(self.amount, size=1) + \
-               encoder.integer(self.p5, size=1)
+               encoder.integer(self.amount, size=SizeType.SPELL_ABSORBED_AMOUNT) + \
+               encoder.integer(self.p5, size=SizeType.SPELL_ABSORBED_P5)
 
     def __str__(self):
         if self.hasBaseSpell:

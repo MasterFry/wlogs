@@ -1,6 +1,8 @@
 from abc import ABC
 
-from ..EventType import EventType
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 296,296,0,0,nil
@@ -24,10 +26,10 @@ class A2EventHeal(ABC):
         self.critical = parser.readValue() == '1'
 
     def encode(self, encoder) -> bytes:
-        return encoder.floating(self.amount, size=2, digits=4) + \
-               encoder.floating(self.overEnergize, size=2, digits=4) + \
-               encoder.integer(self.powerType, size=1) + \
-               encoder.integer(self.p1, size=1) + \
+        return encoder.floating(self.amount, size=SizeType.HEAL_AMOUNT, digits=4) + \
+               encoder.floating(self.overhealing, size=SizeType.HEAL_AMOUNT, digits=4) + \
+               encoder.integer(self.absorbed, size=SizeType.HEAL_AMOUNT) + \
+               encoder.integer(self.p1, size=SizeType.HEAL_P1) + \
                encoder.boolean(self.critical)
 
 

@@ -1,3 +1,4 @@
+from .AGUID import AGUID
 from .GUIDNull import GUIDNull
 from .GUIDPlayer import GUIDPlayer
 from .GUIDCreature import GUIDCreature
@@ -19,3 +20,10 @@ GUID_TABLE = {
     'Item'            : GUIDItem,
     'Corpse'          : GUIDCorpse
 }
+
+from re import compile
+
+REGEX_GUID = compile('(0{16})|(Player-[0-9]+-[0-9A-F]{8})|(Item-[0-9]+-0-[0-9A-F]{16})|((Corpse|Creature|GameObject|Pet|Vehicle|Vignette)-0-[0-9]+-[0-9]+-[0-9]+-[0-9]+-[0-9A-F]{10})')
+
+def isGUID(string) -> bool:
+    return REGEX_GUID.match(string) is not None

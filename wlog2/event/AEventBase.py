@@ -1,8 +1,12 @@
+
+from ..types import EventType
+
+from ..Encode import Encoder
+from ..Encode import SizeType
+from ..EventParser import EventParser
+
 from .AEvent import AEvent
 from .AEvent import string
-from ..EventType import EventType
-from ..EventParser import EventParser
-from ..Encode import Encoder
 
 # 1 : Source GUID
 #       Player-4701-00B442E4
@@ -34,7 +38,7 @@ class AEventBase(AEvent):
         self.destRaidFlags = parser.getInt(base=16)
 
     def encode(self, encoder) -> bytes:
-        return AEvent.encode(encoder) + \
+        return AEvent.encode(self, encoder) + \
             encoder.entity(self.srcGUID, self.srcName, self.srcFlags, self.srcRaidFlags) + \
             encoder.entity(self.destGUID, self.destName, self.destFlags, self.destRaidFlags)
 

@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventAdvancedSpell import AEventAdvancedSpell
-from .A2EventDamage import A2EventDamage
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .A2EventDamage import A2EventDamage
+from .AEventAdvancedSpell import AEventAdvancedSpell
 
 class EventSpellPeriodicDamage(AEventAdvancedSpell, A2EventDamage):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventSpellPeriodicDamage(AEventAdvancedSpell, A2EventDamage):
         A2EventDamage.__init__(self, EventType.SPELL_PERIODIC_DAMAGE, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventAdvancedSpell.encode(encoder) + A2EventDamage.encode(encoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventDamage.encode(self, encoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventDamage.__str__(self)

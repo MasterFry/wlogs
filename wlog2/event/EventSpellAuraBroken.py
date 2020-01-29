@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
+
+from ..types import EventType
+from ..types import getAuraTypeName
+
 from ..EventParser import EventParser
-from ..AuraType import getAuraTypeName
+
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellAuraBroken(AEventBaseSpell):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventSpellAuraBroken(AEventBaseSpell):
         self.auraType = parser.getAuraType()
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + encoder.auraType(self.auraType)
+        return AEventBaseSpell.encode(self, encoder) + encoder.auraType(self.auraType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',' + getAuraTypeName(self.auraType)

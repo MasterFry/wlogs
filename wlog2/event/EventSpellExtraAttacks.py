@@ -1,6 +1,10 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
+
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
+
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellExtraAttacks(AEventBaseSpell):
     def __init__(self, time, parser: EventParser):
@@ -8,7 +12,7 @@ class EventSpellExtraAttacks(AEventBaseSpell):
         self.amount = parser.getInt()
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + encoder.integer(self.amount, size=1)
+        return AEventBaseSpell.encode(self, encoder) + encoder.integer(self.amount, size=SizeType.EXTRA_ATTACK_AMOUNT)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d}'.format(

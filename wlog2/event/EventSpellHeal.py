@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventAdvancedSpell import AEventAdvancedSpell
-from .A2EventHeal import A2EventHeal
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .A2EventHeal import A2EventHeal
+from .AEventAdvancedSpell import AEventAdvancedSpell
 
 class EventSpellHeal(AEventAdvancedSpell, A2EventHeal):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventSpellHeal(AEventAdvancedSpell, A2EventHeal):
         A2EventHeal.__init__(self, EventType.SPELL_HEAL, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + A2EventHeal.encode(encoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventHeal.encode(self, encoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventHeal.__str__(self)

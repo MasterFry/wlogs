@@ -1,6 +1,11 @@
-from .AEventBase import AEventBase
-from ..EventType import EventType
+
+from ..types import EventType
+from ..types import GUIDType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
+
+from .AEventBase import AEventBase
 
 # 1 :  unitGUID
 #       Creature-0-4469-409-26884-11671-0004A8A101
@@ -39,32 +44,33 @@ from ..EventParser import EventParser
 
 class AEventAdvanced(AEventBase):
     def __init__(self, parser: EventParser):
-        self.unitGUID = parser.getGUID()    # 1
-        self.ownerGUID = parser.getGUID()   # 2
-        self.currHP = parser.getInt()       # 3
-        assert(parser.getInt() == 100)      # 4
-        assert(parser.getInt() == 0)        # 5
-        assert(parser.getInt() == 0)        # 6
-        assert(parser.getInt() == 0)        # 7
-        assert(parser.getInt() == -1)       # 8
-        assert(parser.getInt() == 0)        # 9
-        assert(parser.getInt() == 0)        # 10
-        assert(parser.getInt() == 0)        # 11
-        self.coord1 = parser.getFloat()     # 12
-        self.coord2 = parser.getFloat()     # 13
-        self.mapId = parser.getInt()        # 14
-        self.facing = parser.getFloat()     # 15
-        self.level = parser.getInt()        # 16
+        self.unitGUID = parser.getGUID()  # 1
+        self.ownerGUID = parser.getGUID() # 2
+        self.currHP = parser.getInt()     # 3
+        maxHP = parser.getInt()           # 4
+        assert(maxHP == 100 or (maxHP == 0 and self.unitGUID.guidType == GUIDType.NULL))
+        assert(parser.getInt() == 0)      # 5
+        assert(parser.getInt() == 0)      # 6
+        assert(parser.getInt() == 0)      # 7
+        assert(parser.getInt() == -1)     # 8
+        assert(parser.getInt() == 0)      # 9
+        assert(parser.getInt() == 0)      # 10
+        assert(parser.getInt() == 0)      # 11
+        self.coord1 = parser.getFloat()   # 12
+        self.coord2 = parser.getFloat()   # 13
+        self.mapId = parser.getInt()      # 14
+        self.facing = parser.getFloat()   # 15
+        self.level = parser.getInt()      # 16
 
     def encode(self, encoder) -> bytes:
         return encoder.guid(self.unitGUID) + \
                encoder.guid(self.ownerGUID) + \
-               encoder.integer(self.currHP, size=1) + \
-               encoder.floating(self.coord1, size=2, digits=2, signed=True) + \
-               encoder.floating(self.coord2, size=2, digits=2, signed=True) + \
-               encoder.integer(self.mapId, size=1) + \
-               encoder.floating(self.facing, size=2, digits=4) + \
-               encoder.integer(self.level, size=1)
+               encoder.integer(self.currHP, size=SizeType.HP) + \
+               encoder.floating(self.coord1, size=SizeType.COORDINATE, digits=2, signed=True) + \
+               encoder.floating(self.coord2, size=SizeType.COORDINATE, digits=2, signed=True) + \
+               encoder.integer(self.mapId, size=SizeType.MAP_ID) + \
+               encoder.floating(self.facing, size=SizeType.FACING, digits=4) + \
+               encoder.integer(self.level, size=SizeType.LEVEL)
 
     def __str__(self):
         return ',{0:s},{1:s},{2:d},100,0,0,0,-1,0,0,0,{3:06.02f},{4:06.02f},{5:d},{6:06.04f},{7:d}'.format(

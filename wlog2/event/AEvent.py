@@ -1,9 +1,10 @@
 from abc import ABC
 from abc import abstractmethod
-
 from wlog import Time
-from ..EventType import EventType
-from ..EventType import getEventName
+
+from ..types import EventType
+from ..types import getEventName
+
 from ..Encode import Encoder
 
 # Unknown Parameters:
@@ -11,6 +12,7 @@ from ..Encode import Encoder
 # A2EventDamage: p2, p3
 # EventEncounterStart: p4
 # EventSpellAbsorbed: p5
+# A2EventDrain: p6
 
 def string(s: str):
     return 'nil' if s is None else '"' + s + '"'

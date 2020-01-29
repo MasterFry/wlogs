@@ -1,7 +1,11 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
+
+from ..types import EventType
+from ..types import getAuraTypeName
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
-from ..AuraType import getAuraTypeName
+
+from .AEventBaseSpell import AEventBaseSpell
 
 class AEventSpellAura(AEventBaseSpell):
     def __init__(self, time, eventType, parser: EventParser):
@@ -23,7 +27,7 @@ class AEventSpellAura(AEventBaseSpell):
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
             return AEventBaseSpell.encode(self, encoder) + \
                    encoder.auraType(self.auraType) + \
-                   encoder.integer(self.amount, size=1)
+                   encoder.integer(self.amount, size=SizeType.AURA_AMOUNT)
         else:
             return AEventBaseSpell.encode(self, encoder) + \
                    encoder.auraType(self.auraType)

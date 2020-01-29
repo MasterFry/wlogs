@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
-from .A2EventEnchant import A2EventEnchant
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .A2EventEnchant import A2EventEnchant
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventEnchantRemoved(AEventBaseSpell, A2EventEnchant):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventEnchantRemoved(AEventBaseSpell, A2EventEnchant):
         A2EventEnchant.__init__(self, EventType.ENCHANT_REMOVED, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + A2EventEnchant.encode(encoder)
+        return AEventBaseSpell.encode(self, encoder) + A2EventEnchant.encode(self, encoder)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + A2EventEnchant.__str__(self)

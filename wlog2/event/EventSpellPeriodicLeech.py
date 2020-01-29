@@ -1,7 +1,10 @@
-from ..EventType import EventType
-from .AEventAdvancedSpell import AEventAdvancedSpell
-from .A2EventDrain import A2EventDrain
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .A2EventDrain import A2EventDrain
+from .AEventAdvancedSpell import AEventAdvancedSpell
 
 class EventSpellPeriodicLeech(AEventAdvancedSpell, A2EventDrain):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventSpellPeriodicLeech(AEventAdvancedSpell, A2EventDrain):
         A2EventDrain.__init__(self, EventType.SPELL_PERIODIC_LEECH, parser)
 
     def encode(self, encoder) -> bytes:
-        return AEventAdvancedSpell.encode(encoder) + A2EventDrain.encode(encoder)
+        return AEventAdvancedSpell.encode(self, encoder) + A2EventDrain.encode(self, encoder)
 
     def __str__(self):
         return AEventAdvancedSpell.__str__(self) + A2EventDrain.__str__(self)

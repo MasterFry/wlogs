@@ -1,7 +1,11 @@
+
+from ..types import EventType
+
+from ..Encode import SizeType
+from ..EventParser import EventParser
+
 from .AEvent import AEvent
 from .AEvent import string
-from ..EventType import EventType
-from ..EventParser import EventParser
 
 # 1/22 19:39:52.829  ENCOUNTER_START,663,"Lucifron",9,40,409
 # 1/22 19:39:52.829  ENCOUNTER_END,663,"Lucifron",9,40,1
@@ -16,9 +20,9 @@ class AEventEncounter(AEvent):
 
     def encode(self, encoder) -> bytes:
         return AEvent.encode(self, encoder) + \
-               encoder.integer(self.encounterId, size=1) + \
-               encoder.integer(self.difficultyId, size=1) + \
-               encoder.integer(self.playerCount, size=1)
+               encoder.integer(self.encounterId, size=SizeType.ENCOUNTER_ID) + \
+               encoder.integer(self.difficultyId, size=SizeType.DIFFICULTY_ID) + \
+               encoder.integer(self.playerCount, size=SizeType.PLAYER_COUNT)
 
     def __str__(self):
         return AEvent.__str__(self) + ',{0:d},{1:s},{2:d},{3:d}'.format(

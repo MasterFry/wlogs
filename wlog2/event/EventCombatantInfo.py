@@ -1,6 +1,10 @@
-from .AEvent import AEvent
-from ..EventType import EventType
+
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
+
+from .AEvent import AEvent
 
 # 0 : Timestamp
 #       1/22 20:39:53.422  
@@ -91,7 +95,7 @@ class EventCombatantInfo(AEvent):
         assert(parser.readValue() == '0')   # 21
         assert(parser.readValue() == '0')   # 22
         assert(parser.readValue() == '0')   # 23
-        self.armor = parser.getInt()        # 24
+        self.armor = parser.getInt()        # 24 Can be negative apparently
         assert(parser.readValue() == '0')   # 25
 
         remains = parser.readValue(delim='\n') # 26 - 30
@@ -101,14 +105,14 @@ class EventCombatantInfo(AEvent):
         self.buffs = '[]'
         
     def encode(self, encoder) -> bytes:
-        return AEvent.encode(encoder) + \
+        return AEvent.encode(self, encoder) + \
                encoder.guid(self.playerGUID) + \
-               encoder.integer(self.strength, size=1) + \
-               encoder.integer(self.agility, size=1) + \
-               encoder.integer(self.stamina, size=1) + \
-               encoder.integer(self.intellect, size=1) + \
-               encoder.integer(self.spirit, size=1) + \
-               encoder.integer(self.armor, size=1) + \
+               encoder.integer(self.strength, size=SizeType.COMBATANT_STATS) + \
+               encoder.integer(self.agility, size=SizeType.COMBATANT_STATS) + \
+               encoder.integer(self.stamina, size=SizeType.COMBATANT_STATS) + \
+               encoder.integer(self.intellect, size=SizeType.COMBATANT_STATS) + \
+               encoder.integer(self.spirit, size=SizeType.COMBATANT_STATS) + \
+               encoder.integer(self.armor, size=SizeType.COMBATANT_STATS, signed=True) + \
                encoder.string(self.gear) + \
                encoder.string(self.buffs) # TODO gear and buffs
 

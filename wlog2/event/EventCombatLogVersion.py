@@ -1,7 +1,11 @@
-from .AEvent import AEvent
-from ..EventType import EventType
+
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
 from ..EventParser import EventParsingError
+
+from .AEvent import AEvent
 
 # 1/22 19:26:49.388  COMBAT_LOG_VERSION,9,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,1.13.3,PROJECT_ID,2
 
@@ -21,11 +25,11 @@ class EventCombatLogVersion(AEvent):
         self.projectId = parser.getInt()
 
     def encode(self, encoder) -> bytes:
-        return AEvent.encode(encoder) + \
-               encoder.integer(self.version, size=1) + \
+        return AEvent.encode(self, encoder) + \
+               encoder.integer(self.version, size=SizeType.COMBATLOG_VERSION) + \
                encoder.boolean(self.advancedLogEnabled) + \
                encoder.string(self.build) + \
-               encoder.integer(self.projectId, size=1)
+               encoder.integer(self.projectId, size=SizeType.COMBATLOG_PROJECT_ID)
 
     def __str__(self):
         return AEvent.__str__(self) + ',{0:d},ADVANCED_LOG_ENABLED,{1:s},BUILD_VERSION,{2:s},PROJECT_ID,{3:d}'.format(

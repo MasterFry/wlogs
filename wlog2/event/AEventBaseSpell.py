@@ -1,7 +1,10 @@
-from .AEvent import string
-from ..EventType import EventType
-from .AEventBase import AEventBase
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .AEvent import string
+from .AEventBase import AEventBase
 
 class AEventBaseSpell(AEventBase):
     def __init__(self, time, eventType, parser: EventParser):

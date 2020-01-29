@@ -1,6 +1,8 @@
 from abc import ABC
 
-from ..EventType import EventType
+from ..types import EventType
+
+from ..Encode import SizeType
 from ..EventParser import EventParser
 
 # 986,896,-1,16,0,0,0,nil,nil,nil
@@ -38,13 +40,13 @@ class A2EventDamage(ABC):
         self.crushing = parser.readValue() == '1'
 
     def encode(self, encoder) -> bytes:
-        return encoder.integer(self.amount, size=1) + \
-               encoder.integer(self.p2, size=1) + \
-               encoder.integer(self.p3, size=1) + \
-               encoder.integer(self.school, size=1) + \
-               encoder.integer(self.resisted, size=1) + \
-               encoder.integer(self.blocked, size=1) + \
-               encoder.integer(self.absorbed, size=1) + \
+        return encoder.integer(self.amount, size=SizeType.DAMAGE_AMOUNT) + \
+               encoder.integer(self.p2, size=SizeType.DAMAGE_P2) + \
+               encoder.integer(self.p3, size=SizeType.DAMAGE_P3, signed=True) + \
+               encoder.integer(self.school, size=SizeType.SPELL_SCHOOL) + \
+               encoder.integer(self.resisted, size=SizeType.DAMAGE_AMOUNT, signed=True) + \
+               encoder.integer(self.blocked, size=SizeType.DAMAGE_AMOUNT) + \
+               encoder.integer(self.absorbed, size=SizeType.DAMAGE_AMOUNT) + \
                encoder.boolean([self.critical, self.glancing, self.crushing])
 
     def __str__(self):

@@ -1,6 +1,9 @@
-from ..EventType import EventType
-from .AEventBase import AEventBase
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .AEventBase import AEventBase
 
 class EventUnitDied(AEventBase):
     def __init__(self, time, parser: EventParser):
@@ -9,7 +12,7 @@ class EventUnitDied(AEventBase):
         # self.unconsciousOnDeath = parser.getInt(base=16)
 
     def encode(self, encoder) -> bytes:
-        return AEventBase.encode(encoder)
+        return AEventBase.encode(self, encoder)
 
     def __str__(self):
         return AEventBase.__str__(self)

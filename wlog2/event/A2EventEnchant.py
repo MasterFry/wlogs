@@ -1,8 +1,10 @@
 from abc import ABC
 
-from .AEvent import string
-from ..EventType import EventType
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .AEvent import string
 
 #  1:  spellName
 #  2:  itemId

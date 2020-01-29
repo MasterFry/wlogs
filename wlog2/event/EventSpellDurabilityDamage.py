@@ -1,7 +1,10 @@
-from .AEvent import string
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .AEvent import string
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellDurabilityDamage(AEventBaseSpell):
     def __init__(self, time, parser: EventParser):
@@ -10,7 +13,7 @@ class EventSpellDurabilityDamage(AEventBaseSpell):
         self.itemName = parser.getString()
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + encoder.item(self.itemId, self.itemName)
+        return AEventBaseSpell.encode(self, encoder) + encoder.item(self.itemId, self.itemName)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',{0:d},{1:s}'.format(

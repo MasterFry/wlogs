@@ -1,6 +1,9 @@
-from ..EventType import EventType
-from .AEventBaseSpell import AEventBaseSpell
+
+from ..types import EventType
+
 from ..EventParser import EventParser
+
+from .AEventBaseSpell import AEventBaseSpell
 
 class EventSpellCastFailed(AEventBaseSpell):
     def __init__(self, time, parser: EventParser):
@@ -8,7 +11,7 @@ class EventSpellCastFailed(AEventBaseSpell):
         self.failedType = parser.getString()
 
     def encode(self, encoder) -> bytes:
-        return AEventBaseSpell.encode(encoder) + encoder.string(self.failedType)
+        return AEventBaseSpell.encode(self, encoder) + encoder.string(self.failedType)
 
     def __str__(self):
         return AEventBaseSpell.__str__(self) + ',"{0:s}"'.format(
