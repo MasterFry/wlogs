@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import AEncoder
+from ..encode.AEncoder import AEncoder
 
 from ..EventParser import EventParser
 
@@ -19,7 +19,7 @@ class EventEnchantRemoved(AEventBaseSpell, A2EventEnchant):
         return AEventBaseSpell.__str__(self) + A2EventEnchant.__str__(self)
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other) and A2EventEnchant.__eq__(other)
+        return AEventBaseSpell.__eq__(self, other) and A2EventEnchant.__eq__(self, other)
         
     def __ne__(self, other):
         return not self.__eq__(other)

@@ -1,7 +1,9 @@
 
 from ..types import EventType
 from ..types import getAuraTypeName
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -58,13 +60,13 @@ class AEventSpellAura(AEventBaseSpell):
             )
 
     def __eq__(self, other):
-        if not AEventBaseSpell.__eq__(other):
+        if not AEventBaseSpell.__eq__(self, other):
             return False
-        if self.amount != other.amount:
+        if self.auraType != other.auraType:
             return False
         if self.eventType == EventType.SPELL_AURA_APPLIED_DOSE or \
            self.eventType == EventType.SPELL_AURA_REMOVED_DOSE:
-            return self.auraType == other.auraType
+            return self.amount == other.amount
         return True
 
     def __ne__(self, other):

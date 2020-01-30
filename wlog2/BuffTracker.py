@@ -1,7 +1,10 @@
 from wlog import parseLuaObjects
-from wlog import Time
+from .Time import Time
 
-from ..guid import *
+from .guid import *
+from .types import *
+
+from .UnitFlag import UnitFlag
 
 class BuffLog:
     def __init__(self, time, buffs):
@@ -9,7 +12,7 @@ class BuffLog:
         self.buffs = buffs # = { GUID : [spellIDs..], GUID : [spellIDs..] , .. }
 
 
-class BuffTracker(BuffDict):
+class BuffTracker:
     def __init__(self):
         # Structure:
         # buffs = { destGUID: { spellId: (time, srcGUID), ..}, ..}
@@ -29,7 +32,7 @@ class BuffTracker(BuffDict):
         if playerGUID in self.buffs:
             for spellId in self.buffs[playerGUID]:
                 if self.buffs[playerGUID][spellId][1] is not None:
-                    buffs[spellId] = self.buffs[playerGUID][spellId][1]
+                    buffs[spellId] = self.buffs[playerGUID][spellId]
         
         return buffs
 
@@ -57,6 +60,8 @@ class BuffTracker(BuffDict):
         if self.nextBuffLogTime() < time:
             self.setNextBuffLog()
         destGUID = str(destGUID)
+        # if spellId == 17538:
+        #     print('MONGOOSE at %s on %s from %s.' % (str(time), str(destGUID), str(srcGUID)))
         if destGUID not in self.buffs:
             self.buffs[destGUID] = dict()
         self.buffs[destGUID][spellId] = (time, srcGUID)
@@ -75,8 +80,8 @@ class BuffTracker(BuffDict):
                 self.buffs[destGUID][spellId] = (time, None)
     
     def loadBuffLog(self, fname: str):
-        print('Loading from %s...' % self.fname)
-        with open(self.fname) as file:
+        print('Loading from %s...' % fname)
+        with open(fname) as file:
             # luaData = { Time : { GUID : [spellIDs..], GUID : [spellIDs..] , .. } , ..}
             luaData = parseLuaObjects(file.read())
             assert('BuffLog_SavedBuffs' in luaData)
@@ -88,7 +93,7 @@ class BuffTracker(BuffDict):
                 self.buffLogs.append(buffLog)
 
         self.buffLogs.sort(key=lambda x: x.time)
-        print('Done loading %s.' % self.fname)
+        print('Done loading %s.' % fname)
 
     def nextBuffLogTime(self) -> Time:
         if self.buffLogIndex < len(self.buffLogs):

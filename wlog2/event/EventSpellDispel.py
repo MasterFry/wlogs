@@ -1,7 +1,8 @@
 
 from ..types import EventType
 from ..types import getAuraTypeName
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 
@@ -35,8 +36,8 @@ class EventSpellDispel(AEventBaseSpell, A2EventExtraSpell):
         )
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other) and \
-               A2EventExtraSpell.__eq__(other)    and \
+        return AEventBaseSpell.__eq__(self, other) and \
+               A2EventExtraSpell.__eq__(self, other)    and \
                self.auraType == other.auraType
         
     def __ne__(self, other):

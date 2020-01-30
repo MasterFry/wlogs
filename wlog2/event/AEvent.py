@@ -1,10 +1,12 @@
 from abc import ABC
 from abc import abstractmethod
-from wlog import Time
+from ..Time import Time
 
 from ..types import EventType
 from ..types import getEventName
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 # Unknown Parameters:
 # A2EventHeal: p1

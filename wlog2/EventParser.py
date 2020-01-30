@@ -3,8 +3,7 @@ from abc import abstractmethod
 
 from .types import *
 
-# from wlog.GUID import GUID
-from wlog import Time
+from .Time import Time
 
 
 class EventParsingError(Exception):
@@ -140,6 +139,44 @@ class EventParser(ABC):
         if value == 'nil':
             return None
         raise EventParsingError('Invalid String value: ' + value)
+
+    def getContainer(self) -> list:
+        elements = list()
+        layer = list()
+
+        c = self.getChar()
+        if c != '(' and c != '[' and c != '{':
+            raise EventParsingError('Container must start with ( , [ or { .')
+        layer.append(c)
+
+        CONT_START = ['(', '[', '{']
+        CONT_END = { ')': '(', ']': '[', '}': '{' }
+        element = ''
+        c = self.getChar()
+        while c != '\n' and c != '':
+            if c == ',' and len(layer) == 0:
+                break
+
+            if c == ',' and len(layer) == 1:
+                elements.append(element)
+                element = ''
+            elif c in CONT_START:
+                layer.append(c)
+                element += c
+            elif c in CONT_END:
+                if layer.pop() != CONT_END[c]:
+                    raise EventParsingError('Container inconsistency!')
+                if len(layer) > 0:
+                    element += c
+            else:
+                element += c
+            
+            c = self.getChar()
+        
+        if element != '':
+            elements.append(element)
+        
+        return elements
 
     @abstractmethod
     def getGUID(self):

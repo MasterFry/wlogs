@@ -1,7 +1,8 @@
 
 from ..types import EventType
 from ..types import getEnvironmentalTypeName
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 
@@ -39,8 +40,8 @@ class EventEnvironmentalDamage(AEventAdvanced, A2EventDamage):
         ) + A2EventDamage.__str__(self)
 
     def __eq__(self, other):
-        return AEventAdvanced.__eq__(other) and \
-               A2EventDamage.__eq__(other) and \
+        return AEventAdvanced.__eq__(self, other) and \
+               A2EventDamage.__eq__(self, other) and \
                self.environmentalType == other.environmentalType
         
     def __ne__(self, other):

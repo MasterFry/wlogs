@@ -1,7 +1,12 @@
+import numpy as np
+
 from wlog import UnitFlag
+from .Time import Time
+from wlog import TIME_EPSILON_CMP_ENCOUNTER
 
 from .BuffTracker import BuffTracker
 from .WLogParser import WLogParser
+from .Encounter import Encounter
 from .types import *
 
 
@@ -17,15 +22,11 @@ class WLog:
         self.eventBlocks = None
         self.encounters = None
         self.loggerGUID = None
-        self.buffLogFile = BuffLogFile('')
 
-    def setBuffLogFile(self, buffLogFile: BuffLogFile):
-        self.buffLogFile = buffLogFile
-
-    def merge(self, other: WLog):
+    def merge(self, other):
         assert(isinstance(other, WLog))
 
-        print('Merging %s <== %s...' % (self.fname, other.fname))
+        print('[WLOG]: Merging %s <== %s...' % (self.fname, other.fname))
 
         # use a specific time epsilon for comparing encounters
         Time.setEpsilon(TIME_EPSILON_CMP_ENCOUNTER)
@@ -59,26 +60,32 @@ class WLog:
                 assert(False and 'Needs to be tested!')
                 # i1 -= 1
 
-        print('Done merging %s <== %s.' % (self.fname, other.fname))
+        print('[WLOG]: Done merging %s <== %s.' % (self.fname, other.fname))
     
     def save(self, fname: str):
         assert(self.encounters is not None)
-        assert(len(self.encounters) == (len(self.eventBlocks) + 1))
-        print('Saving to %s...' % fname)
+        assert((len(self.encounters) + 1) == len(self.eventBlocks))
+        print('[WLOG]: Saving to %s...' % fname)
 
         with open(fname, 'w') as file:
-            file.write(self.logVersion)
+            file.write(str(self.logVersion))
+            file.write('\n')
             for i in range(len(self.encounters)):
                 # for event in self.eventBlocks[i]:
-                #     file.write(event)
+                #     file.write(str(event))
+                    # file.write('\n')
                 self.encounters[i].writeTo(file)
             # for event in self.eventBlocks[-1]:
-            #     file.write(event)
+            #     file.write(str(event))
+                # file.write('\n')
 
-        print('Done Saving %s.' % fname)
+        print('[WLOG]: Done Saving %s.' % fname)
 
-    def load(self, buffTracker: BuffTracker):
+    def load(self, buffTracker: BuffTracker=None):
         print('[WLOG]: Loading %s...' % self.fname)
+
+        if buffTracker is None:
+            buffTracker = BuffTracker()
         
         with WLogParser(self.fname) as parser:
             
@@ -148,7 +155,20 @@ class WLog:
                 raise CorruptionError('No COMBATANT_INFO found!')
 
             # load events of the encounter
+            if event.eventType == EventType.ENCOUNTER_END:
+                end = event
+                break
+            if event.eventType == EventType.COMBAT_LOG_VERSION or \
+                event.eventType == EventType.COMBATANT_INFO or \
+                event.eventType == EventType.ENCOUNTER_START:
+                raise CorruptionError('Unexcpected %s at line: %d' % (event.eventType.name, parser.lineNumber))
+
+            buffTracker.checkEvent(event)
+            events.append(event)
+
             while parser.hasNext():
+                event = parser.getEvent()
+
                 if event.eventType == EventType.ENCOUNTER_END:
                     end = event
                     break
@@ -159,11 +179,10 @@ class WLog:
 
                 buffTracker.checkEvent(event)
                 events.append(event)
-
-                event = parser.getEvent()
                 
             if end is None:
+                print(start)
+                print(end)
                 raise CorruptionError('Unexcpected end of log file inside an encounter!')
 
             self.encounters.append(Encounter(start, end, cinfo, events))
-

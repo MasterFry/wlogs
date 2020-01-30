@@ -1,6 +1,7 @@
 
 from ..types import EventType
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 
@@ -30,7 +31,7 @@ class EventSpellCastFailed(AEventBaseSpell):
         )
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other)
+        return AEventBaseSpell.__eq__(self, other)
         
     def __ne__(self, other):
         return not self.__eq__(other)

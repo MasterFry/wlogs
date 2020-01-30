@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import AEncoder
+from ..encode.AEncoder import AEncoder
 
 from ..EventParser import EventParser
 
@@ -19,7 +19,7 @@ class EventSpellPeriodicHeal(AEventAdvancedSpell, A2EventHeal):
         return AEventAdvancedSpell.__str__(self) + A2EventHeal.__str__(self)
 
     def __eq__(self, other):
-        return AEventAdvancedSpell.__eq__(other) and A2EventHeal.__eq__(other)
+        return AEventAdvancedSpell.__eq__(self, other) and A2EventHeal.__eq__(self, other)
 
     def __ne__(self, other):
         return not self.__eq__(other)

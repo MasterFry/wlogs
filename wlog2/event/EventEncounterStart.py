@@ -1,6 +1,8 @@
 
 from ..types import EventType
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 

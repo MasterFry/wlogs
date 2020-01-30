@@ -1,7 +1,8 @@
 from abc import ABC
 
 from ..types import EventType
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 

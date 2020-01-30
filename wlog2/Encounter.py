@@ -1,4 +1,9 @@
-from .events import *
+import numpy as np
+
+from wlog import UnitFlag
+from .Time import Time, TIME_EPSILON_CMP_ENCOUNTER
+
+from .event import *
 from .encode import AEncoder
 from .encode import ADecoder
 
@@ -10,8 +15,11 @@ class Encounter:
         self.start: EventEncounterStart= start
         self.end: EventEncounterEnd= end
         self.cinfo = cinfo
-        self.cinfo.sort()
+        self.cinfo.sort(key=lambda x: str(x.playerGUID))
         self.events = events
+
+    def getName(self) -> str:
+        return self.start.encounterName
         
     def merge(self, other, selfGUID, otherGUID):
         # Merges <other> into <self>. <self> is the "Main" Encounter when merging.
@@ -64,7 +72,7 @@ class Encounter:
         # merge buffs
         for i in range(len(self.cinfo)):
             assert(self.cinfo[i].playerGUID == other.cinfo[i].playerGUID)
-            self.cinfo[i].merge(other.cinfo[i])
+            self.cinfo[i].mergeBuffs(other.cinfo[i])
        
         # calculate the matrix for common events
         matrix = np.zeros((len(self.events) + 1, len(other.events) + 1), dtype=np.uint32)
@@ -111,54 +119,27 @@ class Encounter:
         count_self = 0
         count_other = 0
         while i1 > 0 and i2 > 0:
-            assert(i >= 0)
             if self.events[i1 - 1] == other.events[i2 - 1]:
                 if (self.events[i1 - 1].srcGUID == otherGUID and self.events[i1 - 1].destGUID != selfGUID) or \
                    (self.events[i1 - 1].destGUID == otherGUID and self.events[i1 - 1].srcGUID != selfGUID):
-                    try:
-                        events[i] = other.events[i2 - 1]
-                    except IndexError:
-                        print('IndexError: len(events)=%d, len(self.events)=%d, len(other.events)=%d' % (len(events), len(self.events), len(other.events)))
-                        print('DEBUG: i=%d, i1=%d, i2=%d' % (i, i1, i2))
-                        raise IndexError
+                    events[i] = other.events[i2 - 1]
                 else:
-                    try:
-                        events[i] = self.events[i1 - 1]
-                    except IndexError:
-                        print('IndexError: len(events)=%d, len(self.events)=%d, len(other.events)=%d' % (len(events), len(self.events), len(other.events)))
-                        print('DEBUG: i=%d, i1=%d, i2=%d' % (i, i1, i2))
-                        raise IndexError
-                if not (matrix[i1][i2] == matrix[i1 - 1][i2 - 1] + 1):
-                    print(i1, i2, matrix[i1][i2], matrix[i1 - 1][i2 - 1] + 1)
-                    assert(False)
+                    events[i] = self.events[i1 - 1]
                 i1 -= 1
                 i2 -= 1
                 count_common += 1
             elif matrix[i1 - 1][i2] == matrix[i1][i2]:
-                try:
-                    events[i] = self.events[i1 - 1]
-                except IndexError:
-                    print('IndexError: len(events)=%d, len(self.events)=%d, len(other.events)=%d' % (len(events), len(self.events), len(other.events)))
-                    print('DEBUG: i=%d, i1=%d, i2=%d' % (i, i1, i2))
-                    raise IndexError
-                if not (matrix[i1][i2] == matrix[i1 - 1][i2]):
-                    print(i1, i2, matrix[i1][i2], matrix[i1 - 1][i2])
-                    assert(False)
+                events[i] = self.events[i1 - 1]
                 i1 -= 1
                 count_self += 1
             else:
-                try:
-                    events[i] = other.events[i2 - 1]
-                except IndexError:
-                    print('IndexError: len(events)=%d, len(self.events)=%d, len(other.events)=%d' % (len(events), len(self.events), len(other.events)))
-                    print('DEBUG: i=%d, i1=%d, i2=%d' % (i, i1, i2))
-                    raise IndexError
-                if not (matrix[i1][i2] == matrix[i1][i2 - 1]):
-                    print(i1, i2, matrix[i1][i2], matrix[i1][i2 - 1])
-                    assert(False)
+                events[i] = other.events[i2 - 1]
                 i2 -= 1
                 count_other += 1
+
             i -= 1
+            
+        self.events = events
 
         print('count_self:', count_self)
         print('count_other:', count_other)
@@ -168,19 +149,23 @@ class Encounter:
         assert(total == count_self + count_other + count_common)
 
     def writeTo(self, file):
-        file.write(self.start)
-        file.write(self.end)
-        for e in self.cinfo:
-            file.write(e)
-        for e in self.events:
-            file.write(e)
+        file.write(str(self.start))
+        file.write('\n')
+        for event in self.cinfo:
+            file.write(str(event))
+            file.write('\n')
+        for event in self.events:
+            file.write(str(event))
+            file.write('\n')
+        file.write(str(self.end))
+        file.write('\n')
     
     def getDuration(self):
         return self.end.time - self.start.time
 
     def __eq__(self, other):
         if not isinstance(other, Encounter) or \
-           self.start.encounterID != other.start.encounterID or \
+           self.start.encounterId != other.start.encounterId or \
            self.getDuration() != other.getDuration() or \
            len(self.cinfo) != len(other.cinfo):
             return False

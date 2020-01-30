@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import AEncoder
+from ..encode.AEncoder import AEncoder
 
 from ..EventParser import EventParser
 
@@ -19,7 +19,7 @@ class EventSpellPeriodicMissed(AEventBaseSpell, A2EventMissed):
         return AEventBaseSpell.__str__(self) + A2EventMissed.__str__(self)
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(self) and A2EventMissed.__eq__(self)
+        return AEventBaseSpell.__eq__(self, other) and A2EventMissed.__eq__(self, other)
         
     def __ne__(self, other):
         return not self.__eq__(other)

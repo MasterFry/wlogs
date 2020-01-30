@@ -1,6 +1,8 @@
 from ..types import EventType
 from ..guid import isGUID
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -88,13 +90,13 @@ class EventSpellAbsorbed(AEventBase):
             )
 
     def __eq__(self, other):
+        if not AEventBase.__eq__(self, other):
+            return False
         if self.hasBaseSpell and ( \
            not other.hasBaseSpell or \
            self.spellId != other.spellId):
             return False
-        return AEventBase.__eq__(other)          and \
-               self.extraGUID == other.extraGUID and \
-               self.spellId == other.spellId     and \
+        return self.extraGUID == other.extraGUID and \
                self.amount == other.amount       and \
                self.p5 == other.p5
 

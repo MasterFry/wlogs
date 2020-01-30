@@ -20,7 +20,7 @@ class WLogParser(EventParser):
     def getEvent(self) -> AEvent:
         time = self.getTime()
         eventType = self.getEventType()
-        return EVENT_TABLE[getEventName(eventType)](time, self) 
+        return EVENT_TABLE[getEventName(eventType)](time, self)
 
     def getGUID(self) -> AGUID:
         value = self.getChar()

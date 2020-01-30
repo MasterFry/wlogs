@@ -1,7 +1,10 @@
-from wlog import Time
+from ..Time import Time
 
+from ..guid import parseGUID
 from ..types import EventType
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -100,11 +103,31 @@ class EventCombatantInfo(AEvent):
             self.armor = parser.getInt()        # 24 Can be negative apparently
             assert(parser.readValue() == '0')   # 25
 
-            remains = parser.readValue(delim='\n') # 26 - 30
-            assert(remains[:16] == '(),(0,0,0,0),[],')
-            assert(remains[-2:] == '[]') # TODO
-            self.gear = remains[16:-3]          # 29
+            c = parser.getContainer()
+            assert(len(c) == 0)
+            c = parser.getContainer()
+            assert(len(c) == 4)
+            assert(c[0] == '0')
+            assert(c[1] == '0')
+            assert(c[2] == '0')
+            assert(c[3] == '0')
+            c = parser.getContainer()
+            assert(len(c) == 0)
+
+            self.gear = ','.join(parser.getContainer())
+
+            buffs = parser.getContainer() # = [GUID,spellId,GUID,spellId,...]
             self.buffs = dict() # = { spellId: (time, srcGUID), ..}
+            for i in range(0, len(buffs), 2):
+                guid = parseGUID(buffs[i])
+                spellId = int(buffs[i + 1])
+                self.buffs[spellId] = (self.time, guid)
+
+            # remains = parser.readValue(delim='\n') # 26 - 30
+            # assert(remains[:16] == '(),(0,0,0,0),[],')
+            # assert(remains[-2:] == '[]') # TODO
+            # self.gear = remains[16:-3]          # 29
+            # self.buffs = dict() # = { spellId: (time, srcGUID), ..}
             
         elif isinstance(parser, ADecoder):
             self.decode(decode)
@@ -150,12 +173,12 @@ class EventCombatantInfo(AEvent):
         assert(isinstance(other, EventCombatantInfo))
         for spellId in other.buffs:
             if spellId not in self.buffs or \
-                self.buffs[spellId][0] < other.buffs[spellId]:
+               self.buffs[spellId][0] < other.buffs[spellId][0]:
                 self.buffs[spellId] = other.buffs[spellId]
 
     def __str__(self):
         return AEvent.__str__(self) + \
-            ',{0:s},{1:d},{2:d},{3:d},{4:d},{5:d},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{6:d},0,(),(0,0,0,0),[],{7:s},[{8:s}]'.format(
+            ',{0:s},{1:d},{2:d},{3:d},{4:d},{5:d},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{6:d},0,(),(0,0,0,0),[],[{7:s}],[{8:s}]'.format(
                 str(self.playerGUID),
                 self.strength,
                 self.agility,
@@ -164,11 +187,11 @@ class EventCombatantInfo(AEvent):
                 self.spirit,
                 self.armor,
                 self.gear,
-                ','.join(['{0:s},{1:d}'.format(self.buffs[spellId][1], spellId) for spellId in self.buffs])
+                ','.join(['{0:s},{1:d}'.format(str(self.buffs[spellId][1]), spellId) for spellId in self.buffs])
             )
 
     def __eq__(self, other):
-        return AEvent.__eq__(other) and \
+        return AEvent.__eq__(self, other) and \
                self.strength == other.strength and \
                self.agility == other.agility and \
                self.stamina == other.stamina and \

@@ -1,6 +1,7 @@
 
 from ..types import EventType
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 
@@ -36,7 +37,7 @@ class AEventBaseSpell(AEventBase):
         )
 
     def __eq__(self, other):
-        return AEventBase.__eq__(other) and self.spellId == other.spellId
+        return AEventBase.__eq__(self, other) and self.spellId == other.spellId
 
     def __ne__(self, other):
         return not self.__eq__(other)

@@ -2,7 +2,9 @@ from abc import ABC
 from abc import abstractmethod
 
 from ..types import GUIDType
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 # For players: Player-[server ID]-[player UID] (Example: "Player-970-0002FD64")
 # For Unit Type Names: [Unit type]-0-[server ID]-[instance ID]-[zone UID]-[ID]-[spawn UID] 

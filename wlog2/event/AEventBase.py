@@ -1,8 +1,10 @@
 
 from ..types import EventType
 
-from ..encode import AEncoder
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -67,7 +69,7 @@ class AEventBase(AEvent):
         )
 
     def __eq__(self, other):
-        return AEvent.__eq__(other) and \
+        return AEvent.__eq__(self, other) and \
                self.srcGUID == other.srcGUID and \
                self.destGUID == other.destGUID
 

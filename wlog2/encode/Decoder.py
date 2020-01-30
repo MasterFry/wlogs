@@ -1,4 +1,4 @@
-from wlog import Time
+from ..Time import Time
 
 from ..types import *
 from ..guid import *

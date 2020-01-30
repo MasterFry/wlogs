@@ -1,6 +1,8 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -23,7 +25,7 @@ class GUIDItem(AGUID):
 
         elif isinstance(parser, list):
             self.serverID = int(parser[0])
-            self.spawnUID = int(parser[1])
+            self.spawnUID = int(parser[1], base=16)
 
         else:
             ValueError('Parser not supported: ' + type(parser))

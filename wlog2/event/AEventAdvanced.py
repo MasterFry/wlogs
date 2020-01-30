@@ -1,7 +1,9 @@
 
 from ..types import EventType
 from ..types import GUIDType
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -89,7 +91,7 @@ class AEventAdvanced(AEventBase):
                encoder.integer(self.level, size=SizeType.LEVEL)
 
     def __str__(self):
-        return ',{0:s},{1:s},{2:d},{3:d},0,0,0,-1,0,0,0,{4:06.02f},{5:06.02f},{6:d},{7:06.04f},{8:d}'.format(
+        return ',{0:s},{1:s},{2:d},{3:s},0,0,0,-1,0,0,0,{4:.02f},{5:.02f},{6:d},{7:.04f},{8:d}'.format(
             str(self.unitGUID),
             str(self.ownerGUID),
             self.currHP,
@@ -102,7 +104,7 @@ class AEventAdvanced(AEventBase):
         )
 
     def __eq__(self, other):
-        return AEventBase.__eq__(other) and \
+        return AEventBase.__eq__(self, other) and \
                self.unitGUID == other.unitGUID and \
                self.ownerGUID == other.ownerGUID and \
                self.mapId == other.mapId

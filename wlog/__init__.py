@@ -2,9 +2,11 @@ from .Buffs import PlayerBuffs
 from .Encounter import Encounter
 from .Event import Event
 from .GUID import GUID
-from .Time import Time
 from .UnitFlag import UnitFlag
 from .WLogFile import WLogFile
+
+from .Time import TIME_EPSILON_CMP_ENCOUNTER
+from .Time import Time
 
 from .Lua import LuaObjectError
 from .Lua import parseLuaObjectsFromFile

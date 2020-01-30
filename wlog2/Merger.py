@@ -4,7 +4,7 @@ from time import clock
 
 from wlog import endsWith
 
-from .WLog import WLogParser
+from .WLog import WLog
 from .BuffTracker import BuffTracker
 
 class Merger:
@@ -38,7 +38,7 @@ class Merger:
         for fname in self.buffLogFiles:
             buffTracker.loadBuffLog(fname)
         
-        wLogs = [WLogFile(x) for x in self.wLogFiles]
+        wLogs = [WLog(x) for x in self.wLogFiles]
         for wLog in wLogs:
             buffTracker.reset()
             wLog.load(buffTracker)
@@ -50,7 +50,6 @@ class Merger:
         # Merge all the WLogFiles together
         wLog = wLogs[0]
         for i in range(1, len(wLogs)):
-            print('%s <== %s' % (self.wLogFiles[0], self.wLogFiles[i]))
             start = clock()
             wLog.merge(wLogs[i])
             end = clock()

@@ -1,6 +1,8 @@
 from ..types import GUIDType
 from ..types import getGUIDTypeName
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -30,7 +32,7 @@ class AGUIDUnitType(AGUID):
             self.instanceID = int(parser[1])
             self.zoneUID    = int(parser[2])
             self.ID         = int(parser[3])
-            self.spawnUID   = int(parser[4])
+            self.spawnUID   = int(parser[4], base=16)
 
         else:
             ValueError('Parser not supported: ' + type(parser))

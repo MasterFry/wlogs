@@ -1,6 +1,8 @@
 
 from ..types import EventType
-from ..encode import AEncoder, ADecoder, SizeType
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
+from ..encode.SizeType import SizeType
 
 from ..EventParser import EventParser
 
@@ -30,7 +32,7 @@ class EventSpellExtraAttacks(AEventBaseSpell):
         )
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other) and self.amount == other.amount
+        return AEventBaseSpell.__eq__(self, other) and self.amount == other.amount
         
     def __ne__(self, other):
         return not self.__eq__(other)

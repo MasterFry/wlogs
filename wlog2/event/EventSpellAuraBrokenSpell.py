@@ -1,7 +1,8 @@
 
 from ..types import EventType
 from ..types import getAuraTypeName
-from ..encode import AEncoder, ADecoder
+from ..encode.AEncoder import AEncoder
+from ..encode.ADecoder import ADecoder
 
 from ..EventParser import EventParser
 
@@ -41,7 +42,7 @@ class EventSpellAuraBrokenSpell(AEventBaseSpell):
         )
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(other) and \
+        return AEventBaseSpell.__eq__(self, other) and \
                self.extraSpellId == other.extraSpellId and \
                self.auraType == other.auraType
         

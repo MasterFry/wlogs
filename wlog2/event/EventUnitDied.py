@@ -1,6 +1,6 @@
 
 from ..types import EventType
-from ..encode import AEncoder
+from ..encode.AEncoder import AEncoder
 
 from ..EventParser import EventParser
 
@@ -23,8 +23,8 @@ class EventUnitDied(AEventBase):
         # )
 
     def __eq__(self, other):
-        return AEventBase.__eq__(other)
-        # return AEventBase.__eq__(other)       and \
+        return AEventBase.__eq__(self, other)
+        # return AEventBase.__eq__(self, other)       and \
         #        self.recapId == other.recapId and \
         #        self.unconsciousOnDeath == other.unconsciousOnDeath
         
