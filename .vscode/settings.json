@@ -43,6 +43,7 @@
     "typeinfo": "cpp",
     "iostream": "cpp",
     "cstring": "cpp",
-    "map": "cpp"
+    "map": "cpp",
+    "utils.h": "c"
   }
 }

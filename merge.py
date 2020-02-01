@@ -9,7 +9,7 @@ from wlog import endsWith
 
 m = Merger()
 
-DIR = 'cur/01_22_MC/'
+DIR = 'cur/01_29_MC/'
 for fname in listdir(DIR):
     if endsWith(fname, '.txt'):
         m.addWLogFile(DIR + fname)

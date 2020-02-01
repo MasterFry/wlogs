@@ -71,13 +71,13 @@ class WLog:
             file.write(str(self.logVersion))
             file.write('\n')
             for i in range(len(self.encounters)):
-                # for event in self.eventBlocks[i]:
-                #     file.write(str(event))
-                    # file.write('\n')
+                for event in self.eventBlocks[i]:
+                    file.write(str(event))
+                    file.write('\n')
                 self.encounters[i].writeTo(file)
-            # for event in self.eventBlocks[-1]:
-            #     file.write(str(event))
-                # file.write('\n')
+            for event in self.eventBlocks[-1]:
+                file.write(str(event))
+                file.write('\n')
 
         print('[WLOG]: Done Saving %s.' % fname)
 
