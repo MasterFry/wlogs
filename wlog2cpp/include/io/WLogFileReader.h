@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "StringBuilder.h"
+#include "time.h"
 
 #include <cstdio>
 
@@ -55,7 +56,7 @@ public:
   string_t readValue(char delim = ',');
   ssize_t readSigned(char delim = ',');
   size_t readUnsigned(char delim = ',', size_t base = 10);
-  float readFloat();
+  float readFloat(char delim = ',');
   string_t readString();
 
   AuraType readAuraType();
@@ -65,8 +66,9 @@ public:
   MissType readMissType();
 
   AGUID* readGUID();
+  time_t readTime();
 
-// time, container
+// container
 
 };
 

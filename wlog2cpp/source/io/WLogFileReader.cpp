@@ -104,10 +104,10 @@ size_t WLogFileReader::readUnsigned(char delim, size_t base)
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-float WLogFileReader::readFloat()
+float WLogFileReader::readFloat(char delim)
 {
   ssize_t before = readSigned('.');
-  ssize_t after = readSigned(',');
+  ssize_t after = readSigned(delim);
 
   if(after < 0)
     throw WLogIOException("Invalid value for float!");
@@ -166,3 +166,19 @@ AGUID* WLogFileReader::readGUID()
     case GUIDType::CORPSE     : return new GUIDCorpse(this);
   }
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+time_t WLogFileReader::readTime()
+{
+  size_t month = readUnsigned('/');
+  size_t day = readUnsigned(' ');
+  size_t hour = readUnsigned(':');
+  size_t minute = readUnsigned(':');
+  float second = readFloat(' ');
+
+  if(getChar() != ' ')
+    throw WLogIOException("Second space missing after Timestamp!");
+  
+  return time_t(month, day, hour, minute, second);
+}
+

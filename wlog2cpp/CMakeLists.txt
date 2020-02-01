@@ -1,5 +1,5 @@
 include_directories(
-    include
+    include/
     include/event
     include/guid
     include/io
