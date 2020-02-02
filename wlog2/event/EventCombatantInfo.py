@@ -187,7 +187,9 @@ class EventCombatantInfo(AEvent):
                 self.spirit,
                 self.armor,
                 self.gear,
-                ','.join(['{0:s},{1:d}'.format(str(self.buffs[spellId][1]), spellId) for spellId in self.buffs])
+                # ','.join(['{0:s},{1:d}'.format('0000000000000000', spellId) for spellId in self.buffs])
+                ','.join(['{0:s},{1:d}'.format(str(self.playerGUID), spellId) for spellId in self.buffs])
+                # ','.join(['{0:s},{1:d}'.format(str(self.buffs[spellId][1]), spellId) for spellId in self.buffs])
             )
 
     def __eq__(self, other):
