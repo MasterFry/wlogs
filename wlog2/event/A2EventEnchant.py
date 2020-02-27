@@ -18,7 +18,6 @@ class A2EventEnchant(ABC):
             eventType == EventType.ENCHANT_APPLIED or \
             eventType == EventType.ENCHANT_REMOVED
         )
-        raise ValueError("Entry for confirmation required")
         if isinstance(parser, EventParser):
             self.spellName = parser.getString()
             self.itemId = parser.getInt()

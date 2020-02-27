@@ -5,16 +5,15 @@
 
 using namespace types;
 
-
 class EventSpellPeriodicMissed : public AEventBaseSpell, public A2EventMissed
 {
 
 public:
 
-  EventSpellPeriodicMissed(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellPeriodicMissed(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_PERIODIC_MISSED, reader),
+    A2EventMissed(EventType::SPELL_PERIODIC_MISSED, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSpellPeriodicMissed() = default;
@@ -30,16 +29,16 @@ public:
 
 inline bool EventSpellPeriodicMissed::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && A2EventMissed::operator==(other);
 }
 
 inline bool EventSpellPeriodicMissed::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || A2EventMissed::operator!=(other);
 }
 
 inline void EventSpellPeriodicMissed::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A2EventMissed::write(file);
 }
-

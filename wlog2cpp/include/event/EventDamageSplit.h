@@ -11,8 +11,8 @@ class EventDamageSplit : public AEventAdvancedSpell, public A2EventDamage
 
 public:
 
-  EventDamageSplit(WLogFileReader* reader) :
-    AEventAdvancedSpell(EventType, reader)
+  EventDamageSplit(time_t time, WLogFileReader* reader) :
+    AEventAdvancedSpell(time, EventType, reader)
   {
     assert(false);
   }

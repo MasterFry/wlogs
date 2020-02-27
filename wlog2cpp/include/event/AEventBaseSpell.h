@@ -10,8 +10,15 @@ class AEventBaseSpell : public AEventBase
 
 protected:
 
-  AEventBaseSpell(EventType type, WLogFileReader* reader) :
-    AEventBase(type, reader)
+  uint32_t spellId;
+  string_t spellName;
+  uint32_t spellSchool;
+
+  AEventBaseSpell(time_t time, EventType eventType, WLogFileReader* reader) :
+    AEventBase(time, eventType, reader),
+    spellId(reader->readUnsigned()),
+    spellName(reader->readString()),
+    spellSchool(reader->readUnsigned(',', 16))
   {
     assert(false);
   }
@@ -41,6 +48,11 @@ inline bool AEventBaseSpell::operator!=(const AEvent& other)
 
 inline void AEventBaseSpell::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBase::write(file);
+  fprintf(file, ",%d,\"%s\",%d",
+    this->spellId,
+    this->spellName,
+    this->spellSchool
+  );
 }
 

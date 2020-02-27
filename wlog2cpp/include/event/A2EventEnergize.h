@@ -1,6 +1,7 @@
 #pragma once
 
-#include "EventType.h"
+#include "AEvent.h"
+#include "WLogFileReader.h"
 
 #include <cstdio>
 
@@ -12,14 +13,26 @@ using namespace types;
 //  3:  powerType
 //  4:  alternatePowerType
 
-class A2EventEnergize
+class A2EventEnergize : public IWriteable
 {
 
 protected:
 
-  A2EventEnergize(EventType type, WLogFileReader* reader) :
+  float amount;
+  float overEnergize;
+  uint32_t powerType;
+  uint32_t alternatePowerType;
+
+  A2EventEnergize(EventType eventType, WLogFileReader* reader) :
+    amount(reader->readFloat()),
+    overEnergize(reader->readFloat()),
+    powerType(reader->readUnsigned()),
+    alternatePowerType(reader->readUnsigned())
   {
-    assert(false);
+    assert(
+      eventType == EventType::SPELL_ENERGIZE ||
+      eventType == EventType::SPELL_PERIODIC_ENERGIZE
+    );
   }
 
   virtual ~A2EventEnergize() = default;
@@ -31,7 +44,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  void write(FILE* file) override;
 
 };
 
@@ -47,6 +60,11 @@ inline bool A2EventEnergize::operator!=(const AEvent& other)
 
 inline void A2EventEnergize::write(FILE* file)
 {
-  fprintf(file, "", this);
+  fprintf(file, ",%.04f,%.04f,%d,%d",
+    this->amount,
+    this->overEnergize,
+    this->powerType,
+    this->alternatePowerType
+  );
 }
 

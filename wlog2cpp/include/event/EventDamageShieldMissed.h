@@ -11,8 +11,8 @@ class EventDamageShieldMissed : public AEventBaseSpell, public A2EventMissed
 
 public:
 
-  EventDamageShieldMissed(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventDamageShieldMissed(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType, reader)
   {
     assert(false);
   }

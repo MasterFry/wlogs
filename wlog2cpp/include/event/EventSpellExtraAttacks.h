@@ -4,16 +4,19 @@
 
 using namespace types;
 
-
 class EventSpellExtraAttacks : public AEventBaseSpell
 {
 
+protected:
+
+  uint32_t amount;
+
 public:
 
-  EventSpellExtraAttacks(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellExtraAttacks(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_EXTRA_ATTACKS, reader),
+    amount(reader->readUnsigned())
   {
-    assert(false);
   }
 
   virtual ~EventSpellExtraAttacks() = default;
@@ -29,16 +32,17 @@ public:
 
 inline bool EventSpellExtraAttacks::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && this->amount == ((EventSpellExtraAttacks*) &other)->amount;
 }
 
 inline bool EventSpellExtraAttacks::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || this->amount != ((EventSpellExtraAttacks*) &other)->amount;
 }
 
 inline void EventSpellExtraAttacks::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  fprintf(file, ",%d", this->amount);
 }
 

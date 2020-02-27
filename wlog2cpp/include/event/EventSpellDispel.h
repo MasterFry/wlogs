@@ -1,20 +1,25 @@
 #pragma once
 
+#include "AuraType.h"
 #include "AEventBaseSpell.h"
 #include "A2EventExtraSpell.h"
 
 using namespace types;
 
-
 class EventSpellDispel : public AEventBaseSpell, public A2EventExtraSpell
 {
 
+protected:
+
+  AuraType auraType;
+
 public:
 
-  EventSpellDispel(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellDispel(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_DISPEL, reader),
+    A2EventExtraSpell(EventType::SPELL_DISPEL, reader),
+    auraType(reader->readAuraType())
   {
-    assert(false);
   }
 
   virtual ~EventSpellDispel() = default;
@@ -30,16 +35,21 @@ public:
 
 inline bool EventSpellDispel::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && 
+         A2EventExtraSpell::operator==(other) && 
+         this->auraType == ((EventSpellDispel*) &other)->auraType;
 }
 
 inline bool EventSpellDispel::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || 
+         A2EventExtraSpell::operator!=(other) || 
+         this->auraType != ((EventSpellDispel*) &other)->auraType;
 }
 
 inline void EventSpellDispel::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A2EventExtraSpell::write(file);
+  fprintf(file, ",%s", getCName(this->auraType));
 }
-

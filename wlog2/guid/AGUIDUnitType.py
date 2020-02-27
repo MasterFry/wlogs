@@ -10,7 +10,8 @@ from .AGUID import AGUID
 
 # For Unit Type Names: [Unit type]-0-[server ID]-[instance ID]-[zone UID]-[ID]-[spawn UID] 
 #   Unit Type Names: "Creature", "Pet", "GameObject", "Vehicle", and "Vignette"
-#   (Example: "Creature-0-970-0-11-31146-000136DF91")
+#   (Example: "Creature-0-970-0-11-31146-000136DF91",
+#             "Corpse-0-4469-409-28648-0-00004D971C")
 
 class AGUIDUnitType(AGUID):
     def __init__(self, guidType: GUIDType, parser):

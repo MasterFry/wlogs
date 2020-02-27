@@ -1,6 +1,6 @@
 from os.path import exists
 from os.path import isdir
-from time import clock
+from time import process_time
 
 from .WLogFile import WLogFile
 from .Buffs import BuffLogFile
@@ -54,9 +54,9 @@ class Merger:
             print(self.wLogFiles[0], 'X')
             for i in range(1, len(wLogs)):
                 print('X', self.wLogFiles[i])
-                start = clock()
+                start = process_time()
                 wLog.merge(wLogs[i])
-                end = clock()
+                end = process_time()
                 print(end - start, 's') # seconds
 
         wLog.save(self.outPath)

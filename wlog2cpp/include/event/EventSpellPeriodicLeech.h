@@ -5,16 +5,15 @@
 
 using namespace types;
 
-
 class EventSpellPeriodicLeech : public AEventAdvancedSpell, public A2EventDrain
 {
 
 public:
 
-  EventSpellPeriodicLeech(WLogFileReader* reader) :
-    AEventAdvancedSpell(EventType, reader)
+  EventSpellPeriodicLeech(time_t time, WLogFileReader* reader) :
+    AEventAdvancedSpell(time, EventType::SPELL_PERIODIC_LEECH, reader),
+    A2EventDrain(EventType::SPELL_PERIODIC_LEECH, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSpellPeriodicLeech() = default;
@@ -30,16 +29,16 @@ public:
 
 inline bool EventSpellPeriodicLeech::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventAdvancedSpell::operator==(other) && A2EventDrain::operator==(other);
 }
 
 inline bool EventSpellPeriodicLeech::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventAdvancedSpell::operator!=(other) || A2EventDrain::operator!=(other);
 }
 
 inline void EventSpellPeriodicLeech::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventAdvancedSpell::write(file);
+  A2EventDrain::write(file);
 }
-

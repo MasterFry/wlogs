@@ -1,0 +1,2 @@
+python merge.py
+pause

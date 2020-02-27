@@ -5,21 +5,21 @@ from ..encode.AEncoder import AEncoder
 from ..EventParser import EventParser
 
 from .A2EventEnchant import A2EventEnchant
-from .AEventBaseSpell import AEventBaseSpell
+from .AEventBase import AEventBase
 
-class EventEnchantRemoved(AEventBaseSpell, A2EventEnchant):
+class EventEnchantRemoved(AEventBase, A2EventEnchant):
     def __init__(self, time, parser):
-        AEventBaseSpell.__init__(self, time, EventType.ENCHANT_REMOVED, parser)
+        AEventBase.__init__(self, time, EventType.ENCHANT_REMOVED, parser)
         A2EventEnchant.__init__(self, EventType.ENCHANT_REMOVED, parser)
 
     def encode(self, encoder: AEncoder) -> bytes:
-        return AEventBaseSpell.encode(self, encoder) + A2EventEnchant.encode(self, encoder)
+        return AEventBase.encode(self, encoder) + A2EventEnchant.encode(self, encoder)
 
     def __str__(self):
-        return AEventBaseSpell.__str__(self) + A2EventEnchant.__str__(self)
+        return AEventBase.__str__(self) + A2EventEnchant.__str__(self)
 
     def __eq__(self, other):
-        return AEventBaseSpell.__eq__(self, other) and A2EventEnchant.__eq__(self, other)
+        return AEventBase.__eq__(self, other) and A2EventEnchant.__eq__(self, other)
         
     def __ne__(self, other):
         return not self.__eq__(other)

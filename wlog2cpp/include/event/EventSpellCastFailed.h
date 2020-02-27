@@ -1,19 +1,23 @@
 #pragma once
 
+#include "std.h"
 #include "AEventBaseSpell.h"
 
 using namespace types;
 
-
 class EventSpellCastFailed : public AEventBaseSpell
 {
 
+protected:
+
+  string_t failedType;
+
 public:
 
-  EventSpellCastFailed(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellCastFailed(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_CAST_FAILED, reader),
+    failedType(reader->readString())
   {
-    assert(false);
   }
 
   virtual ~EventSpellCastFailed() = default;
@@ -29,16 +33,16 @@ public:
 
 inline bool EventSpellCastFailed::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && this->failedType == ((EventSpellCastFailed*) &other)->failedType;
 }
 
 inline bool EventSpellCastFailed::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || this->failedType != ((EventSpellCastFailed*) &other)->failedType;
 }
 
 inline void EventSpellCastFailed::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  fprintf(file, ",\"%s\"", failedType);
 }
-

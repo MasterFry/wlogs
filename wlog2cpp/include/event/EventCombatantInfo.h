@@ -72,8 +72,8 @@ class EventCombatantInfo : public AEvent
 
 public:
 
-  EventCombatantInfo(WLogFileReader* reader) :
-    AEvent(EventType, reader)
+  EventCombatantInfo(time_t time, WLogFileReader* reader) :
+    AEvent(time, EventType, reader)
   {
     assert(false);
   }

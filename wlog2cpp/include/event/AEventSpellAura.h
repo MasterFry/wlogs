@@ -1,19 +1,26 @@
 #pragma once
 
+#include "AuraType.h"
 #include "AEventBaseSpell.h"
 
 using namespace types;
-
 
 class AEventSpellAura : public AEventBaseSpell
 {
 
 protected:
 
-  AEventSpellAura(EventType type, WLogFileReader* reader) :
-    AEventBaseSpell(type, reader)
+  AuraType auraType;
+
+  AEventSpellAura(time_t time, EventType eventType, WLogFileReader* reader) :
+    AEventBaseSpell(time, eventType, reader),
+    auraType(reader->readAuraType())
   {
-    assert(false);
+    assert(
+      eventType == EventType::SPELL_AURA_APPLIED ||
+      eventType == EventType::SPELL_AURA_REMOVED ||
+      eventType == EventType::SPELL_AURA_REFRESH
+    );
   }
 
   virtual ~AEventSpellAura() = default;
@@ -41,6 +48,6 @@ inline bool AEventSpellAura::operator!=(const AEvent& other)
 
 inline void AEventSpellAura::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  fprintf(file, ",%s", getCName(this->auraType));
 }
-

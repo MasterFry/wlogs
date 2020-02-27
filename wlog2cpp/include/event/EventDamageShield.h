@@ -11,8 +11,8 @@ class EventDamageShield : public AEventAdvancedSpell, public A2EventDamage
 
 public:
 
-  EventDamageShield(WLogFileReader* reader) :
-    AEventAdvancedSpell(EventType, reader)
+  EventDamageShield(time_t time, WLogFileReader* reader) :
+    AEventAdvancedSpell(time, EventType, reader)
   {
     assert(false);
   }

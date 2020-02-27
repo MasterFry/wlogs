@@ -1,7 +1,7 @@
 #pragma once
 
+#include "time.h"
 #include "EventType.h"
-#include "WLogFileReader.h"
 
 #include <cstdio>
 
@@ -14,14 +14,18 @@ using namespace types;
 // EventSpellAbsorbed: p5
 // A2EventDrain: p6
 
-class AEvent
+class AEvent : public IWriteable
 {
 
 protected:
 
-  AEvent(EventType type, WLogFileReader* reader) :
+  time_t time;
+  EventType eventType;
+
+  AEvent(time_t time, EventType eventType) :
+    time(time),
+    eventType(eventType)
   {
-    assert(false);
   }
 
   virtual ~AEvent() = default;
@@ -33,7 +37,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  virtual void write(FILE* file) override;
 
 };
 
@@ -49,6 +53,7 @@ inline bool AEvent::operator!=(const AEvent& other)
 
 inline void AEvent::write(FILE* file)
 {
-  fprintf(file, "", this);
+  this->time.write(file);
+  fputs(getCName(this->eventType), file);
 }
 

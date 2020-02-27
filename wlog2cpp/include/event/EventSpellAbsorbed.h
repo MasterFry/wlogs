@@ -1,5 +1,6 @@
 #pragma once
 
+#include "std.h"
 #include "AEventBase.h"
 
 using namespace types;
@@ -10,12 +11,44 @@ using namespace types;
 class EventSpellAbsorbed : public AEventBase
 {
 
+protected:
+
+  bool hasBaseSpell;
+  uint32_t spellId;
+  string_t spellName;
+  uint32_t spellSchool;
+
+  AGUID* extraGUID;
+  string_t extraName;
+  uint32_t extraFlags;
+  uint32_t extraRaidFlags;
+
+  uint32_t extraSpellId;
+  string_t extraSpellName;
+  uint32_t extraSpellSchool;
+
+  uint32_t amount;
+  uint32_t p5;
+
 public:
 
-  EventSpellAbsorbed(WLogFileReader* reader) :
-    AEventBase(EventType, reader)
+  EventSpellAbsorbed(time_t time, WLogFileReader* reader) :
+    AEventBase(time, EventType::SPELL_ABSORBED, reader)
   {
     assert(false);
+    // TODO
+    
+    extraGUID = reader->readGUID();
+    extraName = reader->readString();
+    extraFlags = reader->readUnsigned(',', 16);
+    extraRaidFlags = reader->readUnsigned(',', 16);
+    
+    extraSpellId = reader->readUnsigned();
+    extraSpellName = reader->readString();
+    extraSpellSchool = reader->readUnsigned();
+
+    amount = reader->readUnsigned();
+    p5 = reader->readUnsigned();
   }
 
   virtual ~EventSpellAbsorbed() = default;

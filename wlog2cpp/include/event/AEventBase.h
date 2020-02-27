@@ -1,6 +1,9 @@
 #pragma once
 
+#include "std.h"
 #include "AEvent.h"
+#include "AGUID.h"
+#include "WLogFileReader.h"
 
 using namespace types;
 
@@ -26,10 +29,26 @@ class AEventBase : public AEvent
 
 protected:
 
-  AEventBase(EventType type, WLogFileReader* reader) :
-    AEvent(type, reader)
+  AGUID* srcGUID;
+  string_t srcName;
+  uint32_t srcFlags;
+  uint32_t srcRaidFlags;
+  AGUID* destGUID;
+  string_t destName;
+  uint32_t destFlags;
+  uint32_t destRaidFlags;
+
+  AEventBase(time_t time, EventType eventType, WLogFileReader* reader) :
+    AEvent(time, eventType),
+    srcGUID(reader->readGUID()),
+    srcName(reader->readString()),
+    srcFlags(reader->readUnsigned(',', 16)),
+    srcRaidFlags(reader->readUnsigned(',', 16)),
+    destGUID(reader->readGUID()),
+    destName(reader->readString()),
+    destFlags(reader->readUnsigned(',', 16)),
+    destRaidFlags(reader->readUnsigned(',', 16))
   {
-    assert(false);
   }
 
   virtual ~AEventBase() = default;
@@ -57,6 +76,18 @@ inline bool AEventBase::operator!=(const AEvent& other)
 
 inline void AEventBase::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEvent::write(file);
+  this->srcGUID->write(file);
+  fprintf(file, ",\"%s\",%#x,%#x",
+    this->srcName,
+    this->srcFlags,
+    this->srcRaidFlags
+  );
+  this->destGUID->write(file);
+  fprintf(file, ",\"%s\",%#x,%#x",
+    this->destName,
+    this->destFlags,
+    this->destRaidFlags
+  );
 }
 

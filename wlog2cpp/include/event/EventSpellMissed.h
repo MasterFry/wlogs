@@ -11,8 +11,9 @@ class EventSpellMissed : public AEventBaseSpell, public A2EventMissed
 
 public:
 
-  EventSpellMissed(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellMissed(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_MISSED, reader),
+    A2EventMissed(EventType::SPELL_MISSED, reader)
   {
     assert(false);
   }
@@ -30,16 +31,17 @@ public:
 
 inline bool EventSpellMissed::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && A2EventMissed::operator==(other);
 }
 
 inline bool EventSpellMissed::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || A2EventMissed::operator!=(other);
 }
 
 inline void EventSpellMissed::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A2EventMissed::write(file);
 }
 

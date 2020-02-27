@@ -11,8 +11,8 @@ class EventEnchantApplied : public AEventBaseSpell, public A2EventEnchant
 
 public:
 
-  EventEnchantApplied(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventEnchantApplied(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType, reader)
   {
     assert(false);
   }

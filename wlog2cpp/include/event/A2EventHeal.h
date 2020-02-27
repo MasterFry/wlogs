@@ -1,6 +1,7 @@
 #pragma once
 
-#include "EventType.h"
+#include "AEvent.h"
+#include "WLogFileReader.h"
 
 #include <cstdio>
 
@@ -14,14 +15,28 @@ using namespace types;
 //  4:  ?
 //  5:  critical: nil / 1
 
-class A2EventHeal
+class A2EventHeal : public IWriteable
 {
 
 protected:
 
-  A2EventHeal(EventType type, WLogFileReader* reader) :
+  uint32_t amount;
+  uint32_t overhealing;
+  uint32_t absorbed;
+  uint32_t p1;
+  bool critical;
+
+  A2EventHeal(EventType eventType, WLogFileReader* reader) :
+    amount(reader->readUnsigned()),
+    overhealing(reader->readUnsigned()),
+    absorbed(reader->readUnsigned()),
+    p1(reader->readUnsigned()),
+    critical(reader->readValue() == "1")
   {
-    assert(false);
+    assert(
+      eventType == EventType::SPELL_HEAL ||
+      eventType == EventType::SPELL_PERIODIC_HEAL
+    );
   }
 
   virtual ~A2EventHeal() = default;
@@ -33,7 +48,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  void write(FILE* file) override;
 
 };
 
@@ -49,6 +64,12 @@ inline bool A2EventHeal::operator!=(const AEvent& other)
 
 inline void A2EventHeal::write(FILE* file)
 {
-  fprintf(file, "", this);
+  fprintf(file, ",%d,%d,%d,%d,%d",
+    this->amount,
+    this->overhealing,
+    this->absorbed,
+    this->p1,
+    this->critical
+  );
 }
 

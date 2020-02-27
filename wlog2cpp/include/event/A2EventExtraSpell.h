@@ -1,20 +1,33 @@
 #pragma once
 
-#include "EventType.h"
+#include "std.h"
+#include "AEvent.h"
+#include "WLogFileReader.h"
 
 #include <cstdio>
 
 using namespace types;
 
 
-class A2EventExtraSpell
+class A2EventExtraSpell : public IWriteable
 {
 
 protected:
 
-  A2EventExtraSpell(EventType type, WLogFileReader* reader) :
+  uint32_t extraSpellId;
+  string_t extraSpellName;
+  uint32_t extraSpellSchool;
+
+  A2EventExtraSpell(EventType eventType, WLogFileReader* reader) :
+    extraSpellId(reader->readUnsigned()),
+    extraSpellName(reader->readString()),
+    extraSpellSchool(reader->readUnsigned())
   {
-    assert(false);
+    assert(
+      eventType == EventType::SPELL_DISPEL ||
+      eventType == EventType::SPELL_INTERRUPT ||
+      eventType == EventType::SPELL_AURA_BROKEN_SPELL
+    );
   }
 
   virtual ~A2EventExtraSpell() = default;
@@ -26,7 +39,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  void write(FILE* file) override;
 
 };
 
@@ -42,6 +55,10 @@ inline bool A2EventExtraSpell::operator!=(const AEvent& other)
 
 inline void A2EventExtraSpell::write(FILE* file)
 {
-  fprintf(file, "", this);
+  fprintf(file, ",%d,\"%s\",%d",
+    this->extraSpellId,
+    this->extraSpellName.c_str(),
+    this->extraSpellSchool
+  );
 }
 

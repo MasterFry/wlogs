@@ -1,19 +1,25 @@
 #pragma once
 
+#include "AuraType.h"
 #include "AEventBaseSpell.h"
+#include "A2EventExtraSpell.h"
 
 using namespace types;
 
-
-class EventSpellAuraBrokenSpell : public AEventBaseSpell
+class EventSpellAuraBrokenSpell : public AEventBaseSpell, public A2EventExtraSpell
 {
+
+protected:
+
+  AuraType auraType;
 
 public:
 
-  EventSpellAuraBrokenSpell(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellAuraBrokenSpell(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_AURA_BROKEN_SPELL, reader),
+    A2EventExtraSpell(EventType::SPELL_AURA_BROKEN_SPELL, reader),
+    auraType(reader->readAuraType())
   {
-    assert(false);
   }
 
   virtual ~EventSpellAuraBrokenSpell() = default;
@@ -29,16 +35,21 @@ public:
 
 inline bool EventSpellAuraBrokenSpell::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) &&
+         A2EventExtraSpell::operator==(other) &&
+         this->auraType == ((EventSpellAuraBrokenSpell*) &other)->auraType;
 }
 
 inline bool EventSpellAuraBrokenSpell::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) ||
+         A2EventExtraSpell::operator!=(other) ||
+         this->auraType != ((EventSpellAuraBrokenSpell*) &other)->auraType;
 }
 
 inline void EventSpellAuraBrokenSpell::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A2EventExtraSpell::write(file);
+  fprintf(file, ",%s", getCName(this->auraType));
 }
-

@@ -1,20 +1,46 @@
 #pragma once
 
-#include "EventType.h"
+#include "AEvent.h"
+#include "WLogFileReader.h"
 
 #include <cstdio>
 
 using namespace types;
 
 
-class A2EventMissed
+class A2EventMissed : public IWriteable
 {
 
 protected:
 
-  A2EventMissed(EventType type, WLogFileReader* reader) :
+  MissType missType;
+  bool isOffHand;
+  uint32_t amountMissed;
+  uint32_t critical;
+
+  A2EventMissed(EventType eventType, WLogFileReader* reader) :
+    missType(reader->readMissType()),
+    isOffHand(reader->readValue() == "1"),
+    amountMissed(0),
+    critical(0)
   {
-    assert(false);
+    assert(
+      eventType == EventType::SWING_MISSED          ||
+      eventType == EventType::RANGE_MISSED          ||
+      eventType == EventType::SPELL_MISSED          ||
+      eventType == EventType::SPELL_PERIODIC_MISSED ||
+      eventType == EventType::DAMAGE_SHIELD_MISSED
+    );
+
+    if(this->missType == MissType::ABSORB)
+    {
+      this->amountMissed = reader->readUnsigned();
+      this->critical = reader->readUnsigned();
+    }
+    else if(this->missType == MissType::RESIST || this->missType == MissType::BLOCK)
+    {
+      this->amountMissed = reader->readUnsigned();
+    }
   }
 
   virtual ~A2EventMissed() = default;
@@ -26,7 +52,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  void write(FILE* file) override;
 
 };
 
@@ -39,9 +65,3 @@ inline bool A2EventMissed::operator!=(const AEvent& other)
 {
   assert(false);
 }
-
-inline void A2EventMissed::write(FILE* file)
-{
-  fprintf(file, "", this);
-}
-

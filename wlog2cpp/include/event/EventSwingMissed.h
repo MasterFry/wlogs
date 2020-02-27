@@ -5,16 +5,15 @@
 
 using namespace types;
 
-
 class EventSwingMissed : public AEventBase, public A2EventMissed
 {
 
 public:
 
-  EventSwingMissed(WLogFileReader* reader) :
-    AEventBase(EventType, reader)
+  EventSwingMissed(time_t time, WLogFileReader* reader) :
+    AEventBase(time, EventType::SWING_MISSED, reader),
+    A2EventMissed(EventType::SWING_MISSED, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSwingMissed() = default;
@@ -30,16 +29,16 @@ public:
 
 inline bool EventSwingMissed::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBase::operator==(other) && A2EventMissed::operator==(other);
 }
 
 inline bool EventSwingMissed::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBase::operator!=(other) || A2EventMissed::operator!=(other);
 }
 
 inline void EventSwingMissed::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBase::write(file);
+  A2EventMissed::write(file);
 }
-

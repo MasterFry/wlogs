@@ -23,7 +23,7 @@ class WLog:
         self.encounters = None
         self.loggerGUID = None
 
-    def merge(self, other):
+    def merge(self, other, merge_output=False):
         assert(isinstance(other, WLog))
 
         print('[WLOG]: Merging %s <== %s...' % (self.fname, other.fname))
@@ -50,15 +50,18 @@ class WLog:
         encounters = list()
         while i1 > 0 and i2 > 0:
             if self.encounters[i1 - 1] == other.encounters[i2 - 1]:
-                self.encounters[i1 - 1].merge(other.encounters[i2 - 1], self.loggerGUID, other.loggerGUID)
+                print('merge:', self.encounters[i1 - 1].start.encounterName)
+                self.encounters[i1 - 1].merge(other.encounters[i2 - 1], self.loggerGUID, other.loggerGUID, merge_output)
                 i1 -= 1
                 i2 -= 1
-            # elif matrix[i1][i2] == matrix[i1][i2 - 1]:
-            #     self.encounters.insert(i1, self.convertEncounter(other.init_time, other.encounters[i2]))
-            #     i2 -= 1
+            elif matrix[i1][i2] == matrix[i1][i2 - 1]:
+                print('insert:', other.convertEncounter[i2 - 1].start.encounterName)
+                self.encounters.insert(i1, self.convertEncounter(other.init_time, other.encounters[i2]))
+                i2 -= 1
             else:
-                assert(False and 'Needs to be tested!')
-                # i1 -= 1
+                print('keep:', self.encounters[i1 - 1].start.encounterName)
+                i1 -= 1
+                # assert(False and 'Needs to be tested!')
 
         print('[WLOG]: Done merging %s <== %s.' % (self.fname, other.fname))
     

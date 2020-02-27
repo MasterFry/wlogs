@@ -9,12 +9,16 @@ using namespace types;
 class EventEncounterStart : public AEventEncounter
 {
 
+protected:
+
+  uint32_t p4;
+
 public:
 
-  EventEncounterStart(WLogFileReader* reader) :
-    AEventEncounter(EventType, reader)
+  EventEncounterStart(time_t time, WLogFileReader* reader) :
+    AEventEncounter(time, EventType::ENCOUNTER_START, reader),
+    p4(reader->readUnsigned())
   {
-    assert(false);
   }
 
   virtual ~EventEncounterStart() = default;
@@ -40,6 +44,7 @@ inline bool EventEncounterStart::operator!=(const AEvent& other)
 
 inline void EventEncounterStart::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventEncounter::write(file);
+  fprintf(file, ",%d", this->p4);
 }
 

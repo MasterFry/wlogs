@@ -9,12 +9,16 @@ using namespace types;
 class EventEncounterEnd : public AEventEncounter
 {
 
+protected:
+
+  bool success;
+
 public:
 
-  EventEncounterEnd(WLogFileReader* reader) :
-    AEventEncounter(EventType, reader)
+  EventEncounterEnd(time_t time, WLogFileReader* reader) :
+    AEventEncounter(time, EventType::ENCOUNTER_END, reader),
+    success(reader->readValue() == "1")
   {
-    assert(false);
   }
 
   virtual ~EventEncounterEnd() = default;
@@ -40,6 +44,7 @@ inline bool EventEncounterEnd::operator!=(const AEvent& other)
 
 inline void EventEncounterEnd::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventEncounter::write(file);
+  fprintf(file, ",%c", this->success ? '1' : '0');
 }
 

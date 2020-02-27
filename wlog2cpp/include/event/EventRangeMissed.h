@@ -11,8 +11,8 @@ class EventRangeMissed : public AEventBaseSpell, public A2EventMissed
 
 public:
 
-  EventRangeMissed(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventRangeMissed(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType, reader)
   {
     assert(false);
   }

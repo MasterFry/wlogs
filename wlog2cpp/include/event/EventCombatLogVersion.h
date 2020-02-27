@@ -11,8 +11,8 @@ class EventCombatLogVersion : public AEvent
 
 public:
 
-  EventCombatLogVersion(WLogFileReader* reader) :
-    AEvent(EventType, reader)
+  EventCombatLogVersion(time_t time, WLogFileReader* reader) :
+    AEvent(time, EventType, reader)
   {
     assert(false);
   }

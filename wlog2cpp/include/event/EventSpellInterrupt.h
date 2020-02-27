@@ -5,16 +5,15 @@
 
 using namespace types;
 
-
 class EventSpellInterrupt : public AEventBaseSpell, public A2EventExtraSpell
 {
 
 public:
 
-  EventSpellInterrupt(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellInterrupt(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_INTERRUPT, reader),
+    A2EventExtraSpell(EventType::SPELL_INTERRUPT, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSpellInterrupt() = default;
@@ -30,16 +29,16 @@ public:
 
 inline bool EventSpellInterrupt::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && A2EventExtraSpell::operator==(other);
 }
 
 inline bool EventSpellInterrupt::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || A2EventExtraSpell::operator!=(other);
 }
 
 inline void EventSpellInterrupt::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A2EventExtraSpell::write(file);
 }
-

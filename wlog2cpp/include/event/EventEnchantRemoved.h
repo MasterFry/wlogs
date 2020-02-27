@@ -11,8 +11,8 @@ class EventEnchantRemoved : public AEventBaseSpell, public A2EventEnchant
 
 public:
 
-  EventEnchantRemoved(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventEnchantRemoved(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType, reader)
   {
     assert(false);
   }

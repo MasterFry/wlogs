@@ -1,19 +1,25 @@
 #pragma once
 
+#include "std.h"
 #include "AEventBaseSpell.h"
 
 using namespace types;
 
-
 class EventSpellDurabilityDamage : public AEventBaseSpell
 {
 
+protected:
+
+  uint32_t itemId;
+  string_t itemName;
+
 public:
 
-  EventSpellDurabilityDamage(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellDurabilityDamage(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_DURABILITY_DAMAGE, reader),
+    itemId(reader->readUnsigned()),
+    itemName(reader->readString())
   {
-    assert(false);
   }
 
   virtual ~EventSpellDurabilityDamage() = default;
@@ -29,16 +35,19 @@ public:
 
 inline bool EventSpellDurabilityDamage::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && this->itemId == ((EventSpellDurabilityDamage*) &other)->itemId;
 }
 
 inline bool EventSpellDurabilityDamage::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || this->itemId != ((EventSpellDurabilityDamage*) &other)->itemId;
 }
 
 inline void EventSpellDurabilityDamage::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  fprintf(file, ",%d,\"%s\"",
+    this->itemId,
+    this->itemName
+  );
 }
-

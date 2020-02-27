@@ -10,8 +10,8 @@ class EventPartyKill : public AEventBase
 
 public:
 
-  EventPartyKill(WLogFileReader* reader) :
-    AEventBase(EventType, reader)
+  EventPartyKill(time_t time, WLogFileReader* reader) :
+    AEventBase(time, EventType, reader)
   {
     assert(false);
   }

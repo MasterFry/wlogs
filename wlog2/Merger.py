@@ -1,6 +1,6 @@
 from os.path import exists
 from os.path import isdir
-from time import clock
+from time import process_time
 
 from wlog import endsWith
 
@@ -50,10 +50,10 @@ class Merger:
         # Merge all the WLogFiles together
         wLog = wLogs[0]
         for i in range(1, len(wLogs)):
-            start = clock()
+            start = process_time()
             wLog.merge(wLogs[i])
-            end = clock()
-            print(end - start, 's') # seconds
+            end = process_time()
+            print('[WLOG]: Merge time: %.03f s' % (end - start))
 
         wLog.save(self.outPath)
 

@@ -12,8 +12,8 @@ from .EventParser import EventParser
 
 class Encounter:
     def __init__(self, start, end, cinfo, events):
-        self.start: EventEncounterStart= start
-        self.end: EventEncounterEnd= end
+        self.start: EventEncounterStart = start
+        self.end: EventEncounterEnd = end
         self.cinfo = cinfo
         self.cinfo.sort(key=lambda x: str(x.playerGUID))
         self.events = events
@@ -21,7 +21,7 @@ class Encounter:
     def getName(self) -> str:
         return self.start.encounterName
         
-    def merge(self, other, selfGUID, otherGUID):
+    def merge(self, other, selfGUID, otherGUID, merge_output=False): # TODO optimize ALG
         # Merges <other> into <self>. <self> is the "Main" Encounter when merging.
         Time.setEpsilon(TIME_EPSILON_CMP_ENCOUNTER)
         assert(self == other)
@@ -110,10 +110,11 @@ class Encounter:
         i2 = len(other.events)
         i = len(events) - 1
 
-        print('self:', len(self.events))
-        print('other:', len(other.events))
-        print('common:', common)
-        print('total:', total)
+        if merge_output:
+            print('self:', len(self.events))
+            print('other:', len(other.events))
+            print('common:', common)
+            print('total:', total)
 
         count_common = 0
         count_self = 0
@@ -141,10 +142,11 @@ class Encounter:
             
         self.events = events
 
-        print('count_self:', count_self)
-        print('count_other:', count_other)
-        print('count_common:', count_common)
-        print('count_total:', count_self + count_other + count_common)
+        if merge_output:
+            print('count_self:', count_self)
+            print('count_other:', count_other)
+            print('count_common:', count_common)
+            print('count_total:', count_self + count_other + count_common)
         assert(common == count_common)
         assert(total == count_self + count_other + count_common)
 

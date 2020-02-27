@@ -1,6 +1,8 @@
 #pragma once
 
-#include "EventType.h"
+#include "std.h"
+#include "AEvent.h"
+#include "WLogFileReader.h"
 
 #include <cstdio>
 
@@ -10,14 +12,24 @@ using namespace types;
 //  2:  itemId
 //  3:  itemName
 
-class A2EventEnchant
+class A2EventEnchant : public IWriteable
 {
 
 protected:
 
-  A2EventEnchant(EventType type, WLogFileReader* reader) :
+  string_t spellName;
+  uint32_t itemId;
+  string_t itemName;
+
+  A2EventEnchant(EventType eventType, WLogFileReader* reader) :
+    spellName(reader->readString()),
+    itemId(reader->readUnsigned()),
+    itemName(reader->readString())
   {
-    assert(false);
+    assert(
+      eventType == EventType::ENCHANT_APPLIED ||
+      eventType == EventType::ENCHANT_REMOVED
+    );
   }
 
   virtual ~A2EventEnchant() = default;
@@ -29,7 +41,7 @@ public:
   virtual bool operator==(const AEvent& other);
   virtual bool operator!=(const AEvent& other);
 
-  virtual void write(FILE* file);
+  void write(FILE* file) override;
 
 };
 
@@ -45,6 +57,10 @@ inline bool A2EventEnchant::operator!=(const AEvent& other)
 
 inline void A2EventEnchant::write(FILE* file)
 {
-  fprintf(file, "", this);
+  fprintf(file, ",\"%s\",%d,\"%s\"", 
+    this->spellName.c_str(), 
+    this->itemId, 
+    this->itemName.c_str()
+  );
 }
 

@@ -1,20 +1,21 @@
 #pragma once
 
-#include "AEventAdvanced.h"
+#include "AEventBase.h"
+#include "A1EventAdvanced.h"
 #include "A2EventDamage.h"
 
 using namespace types;
 
-
-class EventSwingDamage : public AEventAdvanced, public A2EventDamage
+class EventSwingDamage : public AEventBase, public A1EventAdvanced, public A2EventDamage
 {
 
 public:
 
-  EventSwingDamage(WLogFileReader* reader) :
-    AEventAdvanced(EventType, reader)
+  EventSwingDamage(time_t time, WLogFileReader* reader) :
+    AEventBase(time, EventType::SWING_DAMAGE, reader),
+    A1EventAdvanced(reader),
+    A2EventDamage(EventType::SWING_DAMAGE, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSwingDamage() = default;
@@ -30,16 +31,17 @@ public:
 
 inline bool EventSwingDamage::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBase::operator==(other) && A1EventAdvanced::operator==(other) && A2EventDamage::operator==(other);
 }
 
 inline bool EventSwingDamage::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBase::operator!=(other) || A1EventAdvanced::operator!=(other) || A2EventDamage::operator!=(other);
 }
 
 inline void EventSwingDamage::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBase::write(file);
+  A1EventAdvanced::write(file);
+  A2EventDamage::write(file);
 }
-

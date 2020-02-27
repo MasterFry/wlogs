@@ -1,5 +1,6 @@
 #pragma once
 
+#include "std.h"
 #include "AEvent.h"
 
 using namespace types;
@@ -12,10 +13,22 @@ class AEventEncounter : public AEvent
 
 protected:
 
-  AEventEncounter(EventType type, WLogFileReader* reader) :
-    AEvent(type, reader)
+  uint32_t encounterId;
+  string_t encounterName;
+  uint8_t difficultyId;
+  uint8_t playerCount;
+
+  AEventEncounter(time_t time, EventType eventType, WLogFileReader* reader) :
+    AEvent(time, eventType),
+    encounterId(reader->readUnsigned()),
+    encounterName(reader->readString()),
+    difficultyId(reader->readUnsigned()),
+    playerCount(reader->readUnsigned())
   {
-    assert(false);
+    assert(
+      eventType == EventType::ENCOUNTER_START ||
+      eventType == EventType::ENCOUNTER_END
+    );
   }
 
   virtual ~AEventEncounter() = default;
@@ -43,6 +56,11 @@ inline bool AEventEncounter::operator!=(const AEvent& other)
 
 inline void AEventEncounter::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEvent::write(file);
+  fprintf(file, ",%d,\"%s\",%d,%d",
+    this->encounterId,
+    this->encounterName,
+    this->difficultyId,
+    this->playerCount
+  );
 }
-

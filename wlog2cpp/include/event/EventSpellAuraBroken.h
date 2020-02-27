@@ -1,19 +1,23 @@
 #pragma once
 
+#include "AuraType.h"
 #include "AEventBaseSpell.h"
 
 using namespace types;
 
-
 class EventSpellAuraBroken : public AEventBaseSpell
 {
 
+protected:
+
+  AuraType auraType;
+
 public:
 
-  EventSpellAuraBroken(WLogFileReader* reader) :
-    AEventBaseSpell(EventType, reader)
+  EventSpellAuraBroken(time_t time, WLogFileReader* reader) :
+    AEventBaseSpell(time, EventType::SPELL_AURA_BROKEN, reader),
+    auraType(reader->readAuraType())
   {
-    assert(false);
   }
 
   virtual ~EventSpellAuraBroken() = default;
@@ -29,16 +33,16 @@ public:
 
 inline bool EventSpellAuraBroken::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator==(other) && this->auraType == ((EventSpellAuraBroken*) &other)->auraType;
 }
 
 inline bool EventSpellAuraBroken::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventBaseSpell::operator!=(other) || this->auraType != ((EventSpellAuraBroken*) &other)->auraType;
 }
 
 inline void EventSpellAuraBroken::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  fprintf(file, ",%s", getCName(this->auraType));
 }
-

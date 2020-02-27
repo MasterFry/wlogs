@@ -1,18 +1,18 @@
 #pragma once
 
-#include "AEventAdvanced.h"
+#include "A1EventAdvanced.h"
 #include "A2EventDamage.h"
 
 using namespace types;
 
 
-class EventEnvironmentalDamage : public AEventAdvanced, public A2EventDamage
+class EventEnvironmentalDamage : public A1EventAdvanced, public A2EventDamage
 {
 
 public:
 
-  EventEnvironmentalDamage(WLogFileReader* reader) :
-    AEventAdvanced(EventType, reader)
+  EventEnvironmentalDamage(time_t time, WLogFileReader* reader) :
+    A1EventAdvanced(time, EventType, reader)
   {
     assert(false);
   }

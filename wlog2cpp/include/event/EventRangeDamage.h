@@ -11,8 +11,8 @@ class EventRangeDamage : public AEventAdvancedSpell, public A2EventDamage
 
 public:
 
-  EventRangeDamage(WLogFileReader* reader) :
-    AEventAdvancedSpell(EventType, reader)
+  EventRangeDamage(time_t time, WLogFileReader* reader) :
+    AEventAdvancedSpell(time, EventType, reader)
   {
     assert(false);
   }

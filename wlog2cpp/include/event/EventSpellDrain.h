@@ -5,16 +5,15 @@
 
 using namespace types;
 
-
 class EventSpellDrain : public AEventAdvancedSpell, public A2EventDrain
 {
 
 public:
 
-  EventSpellDrain(WLogFileReader* reader) :
-    AEventAdvancedSpell(EventType, reader)
+  EventSpellDrain(time_t time, WLogFileReader* reader) :
+    AEventAdvancedSpell(time, EventType::SPELL_DRAIN, reader),
+    A2EventDrain(EventType::SPELL_DRAIN, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSpellDrain() = default;
@@ -30,16 +29,16 @@ public:
 
 inline bool EventSpellDrain::operator==(const AEvent& other)
 {
-  assert(false);
+  return AEventAdvancedSpell::operator==(other) && A2EventDrain::operator==(other);
 }
 
 inline bool EventSpellDrain::operator!=(const AEvent& other)
 {
-  assert(false);
+  return AEventAdvancedSpell::operator!=(other) || A2EventDrain::operator!=(other);
 }
 
 inline void EventSpellDrain::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventAdvancedSpell::write(file);
+  A2EventDrain::write(file);
 }
-

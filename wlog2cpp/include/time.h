@@ -30,6 +30,7 @@ typedef struct Time
   uint8_t month();
 
   const char* string();
+  void write(FILE* file);
 
 } __attribute__((__packed__)) time_t;
 
@@ -84,4 +85,9 @@ inline uint8_t time_t::day()
 inline uint8_t time_t::month()
 {
   return (uint8_t) this->month;
+}
+
+inline void time_t::write(FILE* file)
+{
+  fprintf(file, "%d/%d %02d:%02d:%06.03f  ");
 }

@@ -1,19 +1,20 @@
 #pragma once
 
-#include "AEventAdvanced.h"
+#include "AEventBaseSpell.h"
+#include "A1EventAdvanced.h"
 
 using namespace types;
 
 
-class AEventAdvancedSpell : public AEventAdvanced
+class AEventAdvancedSpell : public AEventBaseSpell, public A1EventAdvanced
 {
 
 protected:
 
-  AEventAdvancedSpell(EventType type, WLogFileReader* reader) :
-    AEventAdvanced(type, reader)
+  AEventAdvancedSpell(time_t time, EventType eventType, WLogFileReader* reader) :
+    AEventBaseSpell(time, eventType, reader),
+    A1EventAdvanced(reader)
   {
-    assert(false);
   }
 
   virtual ~AEventAdvancedSpell() = default;
@@ -41,6 +42,7 @@ inline bool AEventAdvancedSpell::operator!=(const AEvent& other)
 
 inline void AEventAdvancedSpell::write(FILE* file)
 {
-  fprintf(file, "", this);
+  AEventBaseSpell::write(file);
+  A1EventAdvanced::write(file);
 }
 

@@ -1,44 +1,21 @@
 #pragma once
 
-#include "AEventSpellAura.h"
+#include "AEventSpellAuraDose.h"
 
 using namespace types;
 
-
-class EventSpellAuraRemovedDose : public AEventSpellAura
+class EventSpellAuraRemovedDose : public AEventSpellAuraDose
 {
 
 public:
 
-  EventSpellAuraRemovedDose(WLogFileReader* reader) :
-    AEventSpellAura(EventType, reader)
+  EventSpellAuraRemovedDose(time_t time, WLogFileReader* reader) :
+    AEventSpellAuraDose(time, EventType::SPELL_AURA_REMOVED_DOSE, reader)
   {
-    assert(false);
   }
 
   virtual ~EventSpellAuraRemovedDose() = default;
   EventSpellAuraRemovedDose(const EventSpellAuraRemovedDose&) = delete;
   EventSpellAuraRemovedDose &operator=(const EventSpellAuraRemovedDose&) = delete;
 
-  bool operator==(const AEvent& other) override;
-  bool operator!=(const AEvent& other) override;
-
-  void write(FILE* file) override;
-
 };
-
-inline bool EventSpellAuraRemovedDose::operator==(const AEvent& other)
-{
-  assert(false);
-}
-
-inline bool EventSpellAuraRemovedDose::operator!=(const AEvent& other)
-{
-  assert(false);
-}
-
-inline void EventSpellAuraRemovedDose::write(FILE* file)
-{
-  fprintf(file, "", this);
-}
-
